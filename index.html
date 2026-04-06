@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="sq" class="dark">
+<head>
+
+<link rel="manifest" href="manifest.json">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kalkulo">
+<link rel="apple-touch-icon" href="https://img.icons8.com/fluency/192/000000/calculator.png">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KALKULO </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { 
+            --accent: #10b981; 
+            --bg: #010204; 
+            --glass: rgba(10, 15, 25, 0.7);
+        }
+        
+        body { 
+            font-family: 'Space Grotesk', sans-serif; 
+            background: var(--bg); 
+            color: #fff; 
+            overflow: hidden; 
+            touch-action: manipulation; 
+        }
+
+        .glass-view {
+            background: var(--glass);
+            backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        /* Navigimi Mobile & Desktop */
+        .mobile-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .active-nav { color: var(--accent); transform: translateY(-5px); }
+        .active-nav svg { filter: drop-shadow(0 0 12px var(--accent)); }
+
+        /* Sfondi Dinamik për Këmbimin */
+        .money-bg {
+            background-image: url('https://www.transparenttextures.com/patterns/carbon-fibre.pattern');
+            background-color: rgba(16, 185, 129, 0.05);
+        }
+
+        /* Inputet Profesionale */
+        input {
+            background: transparent;
+            border-bottom: 2px solid rgba(255,255,255,0.05);
+            transition: all 0.4s ease;
+        }
+        input:focus {
+            border-bottom-color: var(--accent);
+            transform: scale(1.01);
+            outline: none;
+        }
+
+        /* Scrollbar i padukshëm */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        
+        /* Animacionet e Sektorëve */
+        .sector-animate { animation: fadeInUp 0.6s ease forwards; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div id="intro" class="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center p-8 text-center">
+        <h1 id="logo" class="text-7xl font-bold tracking-tighter opacity-0 translate-y-10">KALKULO<span class="text-emerald-500">.</span></h1>
+        <p id="tagline" class="text-gray-400 text-[10px] tracking-[0.6em] uppercase mt-4 opacity-0">Saktësia është gjuha e vetme e platformes tonë.</p>
+        <div class="w-1 h-20 bg-emerald-500/20 mt-12 overflow-hidden rounded-full">
+            <div id="loader" class="w-full h-0 bg-emerald-500 shadow-[0_0_30px_#10b981]"></div>
+        </div>
+    </div>
+
+    <div id="app" class="hidden opacity-0 h-screen flex flex-col overflow-hidden">
+        
+        <header class="p-6 flex justify-between items-center z-40 bg-black/40 backdrop-blur-xl border-b border-white/5">
+            <div class="flex items-center gap-3">
+<div class="relative w-12 h-12 flex items-center justify-center group cursor-pointer transition-all duration-500 hover:rotate-6">
+    <div class="absolute inset-0 bg-emerald-500 blur-xl opacity-20 group-hover:opacity-60 transition-opacity duration-500"></div>
+    
+    <div class="relative w-full h-full bg-gradient-to-br from-emerald-400 via-emerald-500 to-emerald-700 rounded-2xl flex items-center justify-center shadow-[0_10px_30px_rgba(16,185,129,0.4)] border border-white/20 overflow-hidden transform group-hover:scale-110 transition-transform">
+        
+        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_1.5s_infinite]"></div>
+
+        <svg class="w-7 h-7 text-black drop-shadow-md" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 16V8C21 6.89543 20.1046 6 19 6H5C3.89543 6 3 6.89543 3 8V16C3 17.1046 3.89543 18 5 18H19C20.1046 18 21 17.1046 21 16Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M7 14L10 11L13 14L17 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 3V6M12 18V21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="12" cy="12" r="0.5" fill="currentColor"/>
+        </svg>
+    </div>
+</div>
+
+<style>
+    @keyframes shimmer {
+        100% { transform: translateX(100%); }
+    }
+</style>
+                <div class="leading-none">
+                    <h2 class="text-sm font-bold tracking-widest uppercase">KALKULO</h2>
+                    <span class="text-[9px] text-emerald-500 font-bold uppercase tracking-widest"></span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="openSettings()" class="p-3 glass-view rounded-2xl hover:bg-white/5 transition-colors">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <main class="flex-1 relative overflow-hidden p-4 md:p-8 lg:p-12">
+            <div id="view-container" class="h-full w-full max-w-6xl mx-auto glass-view rounded-[3rem] p-6 md:p-12 overflow-y-auto no-scrollbar shadow-2xl relative">
+                <div id="content-inner" class="view-content opacity-0 h-full">
+                    <div class="h-full flex flex-col justify-center items-center text-center space-y-6">
+                        <div class="relative">
+                            <div class="w-32 h-32 border-2 border-emerald-500/20 rounded-full animate-spin-slow"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <div class="w-16 h-16 bg-emerald-500/10 rounded-full flex items-center justify-center">
+                                    <div class="w-4 h-4 bg-emerald-500 rounded-full animate-ping"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <h3 class="text-4xl font-bold tracking-tight">Kalkulo.</h3>
+                        <p class="text-gray-500 max-w-sm font-light">Zgjidhni modulin financiar nga menyja e poshtme për të procesuar të dhënat.</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
+            <div onclick="renderView('trusti', this)" class="mobile-nav-item active-nav min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Trusti</span>
+            </div>
+            <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Këmbimi</span>
+            </div>
+            <div onclick="renderView('paga', this)" class="mobile-nav-item min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Paga</span>
+            </div>
+            <div onclick="renderView('kesco', this)" class="mobile-nav-item min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Energjia</span>
+            </div>
+            <div onclick="renderView('dogana', this)" class="mobile-nav-item min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Dogana</span>
+            </div>
+            <div onclick="renderView('crypto', this)" class="mobile-nav-item min-w-[80px]">
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                <span class="text-[9px] font-bold uppercase tracking-widest">Crypto</span>
+            </div>
+        </nav>
+    </div>
+
+    <div id="settings" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-black/95 backdrop-blur-3xl z-[1100] translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] border-l border-white/10 p-10">
+        <div class="flex justify-between items-center mb-16">
+            <div>
+                <h4 class="text-3xl font-black italic tracking-tighter">CILESIMET</h4>
+                <p class="text-emerald-500 text-[10px] font-bold tracking-[0.3em]">KONFIGURIMI I SISTEMIT</p>
+            </div>
+            <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl">&times;</button>
+        </div>
+        
+        <div class="space-y-10">
+            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
+                <span class="font-medium">Njoftimet</span>
+                <div class="w-12 h-6 bg-emerald-500/20 rounded-full relative cursor-pointer" onclick="this.querySelector('div').classList.toggle('translate-x-6')">
+                    <div class="absolute left-1 top-1 w-4 h-4 bg-emerald-500 rounded-full transition-transform"></div>
+                </div>
+            </div>
+            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
+                <span class="font-medium">Dark Mode</span>
+                <span class="text-emerald-500 font-bold text-xs tracking-widest">AKTIV</span>
+            </div>
+            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
+                <span class="font-medium">Gjuha / Language</span>
+                <div class="flex gap-2">
+                    <span class="text-emerald-500 font-bold border-b-2 border-emerald-500 cursor-pointer text-xs">SQ</span>
+                    <span class="text-gray-600 font-bold cursor-pointer text-xs hover:text-white">EN</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. CORE ENGINE & INTRO ---
+        const tl = gsap.timeline();
+        window.addEventListener('DOMContentLoaded', () => {
+            tl.to("#logo", { opacity: 1, y: 0, duration: 1.5, ease: "power4.out" })
+              .to("#tagline", { opacity: 1, duration: 1 }, "-=0.8")
+              .to("#loader", { h: "100%", duration: 1.8, ease: "expo.inOut" }, "-=1")
+              .to("#intro", { y: "-100%", duration: 1.2, ease: "expo.inOut", delay: 0.5 })
+              .to("#app", { display: "flex", opacity: 1, duration: 1 }, "-=0.5");
+        });
+
+        // --- 2. DYNAMIC CONTENT INJECTION (NO REDUCTION) ---
+        function renderView(view, el) {
+            document.querySelectorAll('.mobile-nav-item').forEach(i => i.classList.remove('active-nav'));
+            if(el) el.classList.add('active-nav');
+
+            const content = document.getElementById('content-inner');
+            gsap.to(content, { opacity: 0, y: 30, duration: 0.4, ease: "power2.in", onComplete: () => {
+                injectData(view, content);
+                gsap.to(content, { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" });
+            }});
+        }
+
+        function injectData(view, container) {
+            let html = "";
+            switch(view) {
+                case 'trusti':
+                    html = `
+                    <div class="space-y-12 sector-animate">
+                        <div class="border-l-4 border-emerald-500 pl-6">
+                            <h2 class="text-5xl font-black tracking-tighter uppercase">Trusti <span class="text-emerald-500">Pensional</span></h2>
+                            <p class="text-gray-500 mt-2 font-light">Llogaritja e kursimeve pensional 5% punëtori + 5% punëdhënësi.</p>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+                            <div class="space-y-8">
+                                <div class="group">
+                                    <label class="text-[10px] uppercase tracking-widest text-emerald-500 font-bold mb-4 block">Paga Bruto Mujore (€)</label>
+                                    <input type="number" id="t-bruto" oninput="calcT()" class="w-full text-7xl font-bold border-none" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <div class="glass-view p-8 rounded-[2rem] flex justify-between items-center border-l-8 border-emerald-500">
+                                    <span class="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Punëtori (5%)</span>
+                                    <span id="t-p" class="text-3xl font-black tracking-tighter">0.00 €</span>
+                                </div>
+                                <div class="glass-view p-8 rounded-[2rem] flex justify-between items-center border-l-8 border-white/20">
+                                    <span class="text-gray-400 font-bold uppercase text-[10px] tracking-widest">Punëdhënësi (5%)</span>
+                                    <span id="t-d" class="text-3xl font-black tracking-tighter">0.00 €</span>
+                                </div>
+                                <div class="bg-emerald-500 p-8 rounded-[2rem] flex justify-between items-center text-black shadow-[0_20px_50px_rgba(16,185,129,0.3)]">
+                                    <span class="font-black uppercase text-xs tracking-widest">Totali Mujor</span>
+                                    <span id="t-t" class="text-4xl font-black tracking-tighter">0.00 €</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'valuta':
+                    html = `
+                    <div class="space-y-10 money-bg p-8 rounded-[3rem] sector-animate">
+                        <h2 class="text-5xl font-black tracking-tighter">KËMBIMI <span class="text-emerald-500">GLOBAL</span></h2>
+                        <input type="number" id="v-in" oninput="calcV()" placeholder="Shuma në Euro" class="w-full text-7xl font-bold border-b-2 border-emerald-500/30 pb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            ${['USD', 'GBP', 'CHF', 'ALL', 'TRY', 'AUD', 'CAD', 'JPY'].map(m => `
+                                <div class="glass-view p-6 rounded-3xl flex justify-between items-center">
+                                    <span class="text-gray-500 font-black">${m}</span>
+                                    <span id="v-${m}" class="text-2xl font-bold text-emerald-500">0.00</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'paga':
+                    html = `
+                    <div class="space-y-12 sector-animate">
+                        <h2 class="text-5xl font-black tracking-tighter">PAGA <span class="text-emerald-500">NETO</span></h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                            <input type="number" id="p-in" oninput="calcP()" placeholder="Paga Bruto" class="text-6xl font-bold w-full">
+                            <div class="space-y-6">
+                                <div class="p-8 glass-view rounded-[2.5rem] bg-emerald-500/5">
+                                    <p class="text-xs font-bold text-emerald-500 mb-2 uppercase tracking-widest">Paga Neto (Për xhep)</p>
+                                    <h3 id="p-neto" class="text-5xl font-black tracking-tighter">0.00 €</h3>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="p-6 glass-view rounded-3xl">
+                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Tatimi ATK</p>
+                                        <p id="p-atk" class="text-xl font-bold text-red-500">0.00 €</p>
+                                    </div>
+                                    <div class="p-6 glass-view rounded-3xl">
+                                        <p class="text-[10px] text-gray-500 uppercase font-bold">Trusti (5%)</p>
+                                        <p id="p-trust" class="text-xl font-bold">0.00 €</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'kesco':
+                    html = `
+                    <div class="space-y-10 sector-animate">
+                        <h2 class="text-5xl font-black tracking-tighter">ENERGJIA <span class="text-yellow-500">KESCO</span></h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-4">
+                                <label class="text-xs uppercase font-bold text-gray-500 tracking-widest">Tarifa e Ditës (kWh)</label>
+                                <input type="number" id="k-d" oninput="calcK()" class="w-full text-4xl font-bold">
+                                <label class="text-xs uppercase font-bold text-gray-500 tracking-widest">Tarifa e Natës (kWh)</label>
+                                <input type="number" id="k-n" oninput="calcK()" class="w-full text-4xl font-bold">
+                            </div>
+                            <div class="p-10 glass-view rounded-[3rem] text-center border-t-8 border-yellow-500">
+                                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mb-4">Vlera e Faturës (Me TVSH)</p>
+                                <h3 id="k-res" class="text-6xl font-black text-yellow-500">0.00 €</h3>
+                                <p class="text-[10px] text-gray-600 mt-6 uppercase tracking-widest italic">Ky kalkulim bazohet në tarifat standarde 2026.</p>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'dogana':
+                    html = `
+                    <div class="space-y-10 sector-animate">
+                        <h2 class="text-5xl font-black tracking-tighter">DOGANA <span class="text-blue-500">VETURA</span></h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <div class="glass-view p-6 rounded-3xl">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Viti i Prodhimit</label>
+                                <select id="d-viti" onchange="calcD()" class="bg-transparent text-xl font-bold w-full outline-none">
+                                    <option class="bg-black">2024</option><option class="bg-black">2023</option><option class="bg-black">2022</option>
+                                    <option class="bg-black">2021</option><option class="bg-black">2020</option>
+                                </select>
+                            </div>
+                            <div class="glass-view p-6 rounded-3xl">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Kubikazha (cm³)</label>
+                                <input type="number" id="d-kub" oninput="calcD()" placeholder="2000" class="text-xl font-bold w-full">
+                            </div>
+                            <div class="glass-view p-6 rounded-3xl">
+                                <label class="text-[10px] font-bold text-gray-500 uppercase block mb-2">Vlera (€)</label>
+                                <input type="number" id="d-vle" oninput="calcD()" placeholder="15000" class="text-xl font-bold w-full">
+                            </div>
+                        </div>
+                        <div class="p-10 bg-blue-600 rounded-[3rem] text-center shadow-2xl">
+                            <p class="text-xs font-black uppercase tracking-[0.4em] mb-2">Totali i Pagesës Doganore</p>
+                            <h3 id="d-res" class="text-6xl font-black">0.00 €</h3>
+                        </div>
+                    </div>`;
+                    break;
+
+                case 'crypto':
+                    html = `
+                    <div class="space-y-10 sector-animate">
+                        <h2 class="text-5xl font-black tracking-tighter">CRYPTO <span class="text-purple-500">ASSETS</span></h2>
+                        <div class="p-8 glass-view rounded-[3rem] border-purple-500/20">
+                            <label class="text-xs font-bold text-purple-500 tracking-widest uppercase block mb-4">Investimi në Euro (€)</label>
+                            <input type="number" id="c-in" oninput="calcC()" class="text-6xl font-bold w-full mb-10">
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Bitcoin (BTC)</p>
+                                    <p id="c-btc" class="text-xl font-black">0.00000</p>
+                                </div>
+                                <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Ethereum (ETH)</p>
+                                    <p id="c-eth" class="text-xl font-black">0.00000</p>
+                                </div>
+                                <div class="p-6 bg-white/5 rounded-3xl border border-white/10">
+                                    <p class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-widest">Solana (SOL)</p>
+                                    <p id="c-sol" class="text-xl font-black">0.00000</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                    break;
+            }
+            container.innerHTML = html;
+        }
+
+        // --- 3. MATH ENGINE (PROFESSIONAL CALCULATIONS) ---
+        function calcT() {
+            const b = parseFloat(document.getElementById('t-bruto').value) || 0;
+            const p = b * 0.05;
+            document.getElementById('t-p').innerText = p.toFixed(2) + " €";
+            document.getElementById('t-d').innerText = p.toFixed(2) + " €";
+            document.getElementById('t-t').innerText = (p * 2).toFixed(2) + " €";
+        }
+
+        function calcV() {
+            const eur = parseFloat(document.getElementById('v-in').value) || 0;
+            const rates = { USD: 1.09, GBP: 0.84, CHF: 0.96, ALL: 102.5, TRY: 35.2, AUD: 1.65, CAD: 1.48, JPY: 161.4 };
+            for(let k in rates) {
+                const el = document.getElementById('v-'+k);
+                if(el) el.innerText = (eur * rates[k]).toFixed(2);
+            }
+        }
+
+        function calcP() {
+            const b = parseFloat(document.getElementById('p-in').value) || 0;
+            const t = b * 0.05; // Trusti
+            let taxable = b - t - 250; // Pragu i ri 250
+            let tax = 0;
+            if(taxable > 0) {
+                if(taxable <= 200) tax = taxable * 0.08;
+                else tax = (200 * 0.08) + ((taxable - 200) * 0.10);
+            }
+            document.getElementById('p-trust').innerText = t.toFixed(2) + " €";
+            document.getElementById('p-atk').innerText = tax.toFixed(2) + " €";
+            document.getElementById('p-neto').innerText = (b - t - tax).toFixed(2) + " €";
+        }
+
+        function calcK() {
+            const d = parseFloat(document.getElementById('k-d').value) || 0;
+            const n = parseFloat(document.getElementById('k-n').value) || 0;
+            let sum = (d * 0.07) + (n * 0.03) + 2.50; // Tarifa fikse
+            document.getElementById('k-res').innerText = (sum * 1.08).toFixed(2) + " €"; // +8% TVSH
+        }
+
+        function calcD() {
+            const kub = parseFloat(document.getElementById('d-kub').value) || 0;
+            const vle = parseFloat(document.getElementById('d-vle').value) || 0;
+            const res = (vle * 0.10) + (kub * 0.50) + (vle * 0.18); // Akciza + TVSH + Dogana (E thjeshtuar)
+            document.getElementById('d-res').innerText = res.toFixed(2) + " €";
+        }
+
+        function calcC() {
+            const inv = parseFloat(document.getElementById('c-in').value) || 0;
+            document.getElementById('c-btc').innerText = (inv / 65000).toFixed(6);
+            document.getElementById('c-eth').innerText = (inv / 3500).toFixed(6);
+            document.getElementById('c-sol').innerText = (inv / 140).toFixed(6);
+        }
+
+        function openSettings() {
+            const s = document.getElementById('settings');
+            s.classList.toggle('translate-x-full');
+        }
+    </script>
+
+    <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('KALKULO: Service Worker u regjistrua me sukses.'))
+        .catch(err => console.log('KALKULO: Dështoi regjistrimi i SW.', err));
+    });
+  }
+</script>
+</body>
+</html>
