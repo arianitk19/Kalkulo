@@ -174,37 +174,152 @@
         </nav>
     </div>
 
-    <div id="settings" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-black/95 backdrop-blur-3xl z-[1100] translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] border-l border-white/10 p-10">
-        <div class="flex justify-between items-center mb-16">
-            <div>
-                <h4 class="text-3xl font-black italic tracking-tighter">CILESIMET</h4>
-                <p class="text-emerald-500 text-[10px] font-bold tracking-[0.3em]">KONFIGURIMI I SISTEMIT</p>
-            </div>
-            <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl">&times;</button>
+   <div id="settings" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-black/95 backdrop-blur-3xl z-[1100] translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] border-l border-white/10 p-10">
+    <div class="flex justify-between items-center mb-16">
+        <div>
+            <h4 id="sett-title" class="text-3xl font-black italic tracking-tighter text-white">CILESIMET</h4>
+            <p id="sett-subtitle" class="text-emerald-500 text-[10px] font-bold tracking-[0.3em]">KONFIGURIMI I SISTEMIT</p>
         </div>
-        
-        <div class="space-y-10">
-            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
-                <span class="font-medium">Njoftimet</span>
-                <div class="w-12 h-6 bg-emerald-500/20 rounded-full relative cursor-pointer" onclick="this.querySelector('div').classList.toggle('translate-x-6')">
-                    <div class="absolute left-1 top-1 w-4 h-4 bg-emerald-500 rounded-full transition-transform"></div>
-                </div>
+        <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl transition-colors">&times;</button>
+    </div>
+    
+    <div class="space-y-6">
+        <div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
+            <span id="label-notifications" class="font-medium text-gray-200">Njoftimet</span>
+            <div id="notif-toggle" onclick="toggleNotifications()" class="w-12 h-6 bg-white/10 rounded-full relative cursor-pointer transition-all duration-300">
+                <div id="notif-circle" class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full transition-all duration-300 transform"></div>
             </div>
-            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
-                <span class="font-medium">Dark Mode</span>
-                <span class="text-emerald-500 font-bold text-xs tracking-widest">AKTIV</span>
+        </div>
+
+        <div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
+            <span id="label-mode" class="font-medium text-gray-200">Tema e Errët</span>
+            <div id="theme-toggle" onclick="toggleTheme()" class="w-12 h-6 bg-emerald-500/20 rounded-full relative cursor-pointer group">
+                <div id="theme-circle" class="absolute left-7 top-1 w-4 h-4 bg-emerald-500 rounded-full transition-all duration-300 shadow-[0_0_10px_#10b981]"></div>
             </div>
-            <div class="flex justify-between items-center p-4 glass-view rounded-2xl">
-                <span class="font-medium">Gjuha / Language</span>
-                <div class="flex gap-2">
-                    <span class="text-emerald-500 font-bold border-b-2 border-emerald-500 cursor-pointer text-xs">SQ</span>
-                    <span class="text-gray-600 font-bold cursor-pointer text-xs hover:text-white">EN</span>
-                </div>
+        </div>
+
+        <div class="flex flex-col gap-4 p-5 glass-view rounded-2xl border border-white/5">
+            <span id="label-lang" class="font-medium text-gray-200">Gjuha / Language</span>
+            <div class="flex bg-white/5 p-1 rounded-xl">
+                <button onclick="setLanguage('sq')" id="lang-sq" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-black">SHQIP</button>
+                <button onclick="setLanguage('en')" id="lang-en" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400">ENGLISH</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-10 left-10 right-10 text-center">
+        <p class="text-[9px] text-gray-600 uppercase tracking-[0.5em]">Kalkulo 2026</p>
+    </div>
+</div>
             </div>
         </div>
     </div>
 
     <script>
+
+// --- SISTEMI I GJUHËS (Lokalizimi) ---
+const langData = {
+    sq: {
+        title: "CILESIMET", sub: "KONFIGURIMI I SISTEMIT", notif: "Njoftimet", mode: "Tema e Errët", lang: "Gjuha / Language",
+        nav_trusti: "Trusti", nav_valuta: "Këmbimi", nav_paga: "Paga", nav_kesco: "Energjia", nav_dogana: "Dogana", nav_crypto: "Crypto"
+    },
+    en: {
+        title: "SETTINGS", sub: "SYSTEM CONFIGURATION", notif: "Notifications", mode: "Dark Mode", lang: "Language / Gjuha",
+        nav_trusti: "Trust", nav_valuta: "Exchange", nav_paga: "Salary", nav_kesco: "Energy", nav_dogana: "Customs", nav_crypto: "Crypto"
+    }
+};
+
+let currentLang = 'sq';
+
+function setLanguage(l) {
+    currentLang = l;
+    // Përditëso tekstet në Settings
+    document.getElementById('sett-title').innerText = langData[l].title;
+    document.getElementById('sett-subtitle').innerText = langData[l].sub;
+    document.getElementById('label-notifications').innerText = langData[l].notif;
+    document.getElementById('label-mode').innerText = langData[l].mode;
+    document.getElementById('label-lang').innerText = langData[l].lang;
+
+    // Përditëso Butonat e Gjuhës
+    const isSq = l === 'sq';
+    document.getElementById('lang-sq').className = isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
+    document.getElementById('lang-en').className = !isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
+
+    // Përditëso Navigimin
+    const navItems = document.querySelectorAll('.mobile-nav-item span');
+    const keys = ['nav_trusti', 'nav_valuta', 'nav_paga', 'nav_kesco', 'nav_dogana', 'nav_crypto'];
+    navItems.forEach((span, i) => { span.innerText = langData[l][keys[i]]; });
+}
+
+// --- SISTEMI I TEMËS (Dark/Light) ---
+let isDarkMode = true;
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    const circle = document.getElementById('theme-circle');
+    const toggleBg = document.getElementById('theme-toggle');
+    
+    if(!isDarkMode) {
+        document.documentElement.classList.remove('dark');
+        circle.style.transform = 'translateX(-24px)';
+        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
+        circle.style.boxShadow = 'none';
+        toggleBg.classList.replace('bg-emerald-500/20', 'bg-black/10');
+        document.body.style.backgroundColor = '#f8fafc';
+        document.body.style.color = '#0f172a';
+    } else {
+        document.documentElement.classList.add('dark');
+        circle.style.transform = 'translateX(0)';
+        circle.classList.replace('bg-gray-400', 'bg-emerald-500');
+        circle.style.boxShadow = '0 0 10px #10b981';
+        toggleBg.classList.replace('bg-black/10', 'bg-emerald-500/20');
+        document.body.style.backgroundColor = '#010204';
+        document.body.style.color = '#fff';
+    }
+}
+
+// --- SISTEMI I NJOFTIMEVE (REAL API) ---
+let notificationsActive = false;
+function toggleNotifications() {
+    const circle = document.getElementById('notif-circle');
+    const toggleBg = document.getElementById('notif-toggle');
+
+    if (!notificationsActive) {
+        // Kërko leje nga sistemi operativ
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                notificationsActive = true;
+                circle.classList.add('translate-x-6');
+                circle.classList.replace('bg-gray-400', 'bg-emerald-500');
+                toggleBg.classList.replace('bg-white/10', 'bg-emerald-500/20');
+                
+                // Dërgo njoftimin e parë real
+                new Notification("KALKULO", {
+                    body: "Njoftimet në KALKULO u aktivizuan me sukses! 🚀",
+                    icon: "https://img.icons8.com/fluency/192/000000/calculator.png"
+                });
+            } else {
+                alert("Ju lutem aktivizoni lejen për njoftime në cilësimet e browser-it.");
+            }
+        });
+    } else {
+        notificationsActive = false;
+        circle.classList.remove('translate-x-6');
+        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
+        toggleBg.classList.replace('bg-emerald-500/20', 'bg-white/10');
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
         // --- 1. CORE ENGINE & INTRO ---
         const tl = gsap.timeline();
         window.addEventListener('DOMContentLoaded', () => {
