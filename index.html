@@ -171,6 +171,22 @@
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Crypto</span>
             </div>
+
+      <div onclick="renderView('subvencione', this)" class="mobile-nav-item min-w-[80px]">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+    </svg>
+    <span class="text-[9px] font-bold uppercase tracking-widest">Subvencionet</span>
+  </div>
+
+   <div onclick="renderView('karburanti', this)" class="mobile-nav-item min-w-[80px]">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 7l-2 2m0 0l2 2m-2-2h5"></path>
+    </svg>
+    <span class="text-[9px] font-bold uppercase tracking-widest">Karburanti</span>
+   </div>
+  
         </nav>
     </div>
 
@@ -491,10 +507,85 @@ function toggleNotifications() {
                         </div>
                     </div>`;
                     break;
+
+case 'subvencione':
+    html = `
+    <div class="space-y-8 sector-animate px-2">
+        <h2 class="text-4xl font-black tracking-tighter uppercase leading-none">SUBVENCIONET <br><span class="text-emerald-500 italic text-2xl">BUJQËSORE 2024</span></h2>
+        <div class="grid gap-6">
+            <div class="glass-view p-6 rounded-3xl border border-white/5">
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-3 block">Kultura (Për Hektar)</label>
+                <select id="s-tipi" onchange="calcS()" class="w-full bg-transparent text-xl font-bold outline-none border-b border-white/10 pb-2">
+                    <option value="216" class="bg-black">Grurë (216€)</option>
+                    <option value="162" class="bg-black">Misër (162€)</option>
+                    <option value="500" class="bg-black">Hardhi Rrushi (500€)</option>
+                    <option value="400" class="bg-black">Pemëtore (400€)</option>
+                </select>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-6 mb-2 block">Sipërfaqja (Ha)</label>
+                <input type="number" id="s-ha" oninput="calcS()" placeholder="0.00" class="w-full bg-transparent text-4xl font-black outline-none">
+            </div>
+            <div class="bg-emerald-600 p-8 rounded-[2.5rem] shadow-[0_20px_40px_rgba(16,185,129,0.2)]">
+                <p class="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-1 text-center">Vlera Totale e Përfitimit</p>
+                <h3 id="s-result" class="text-5xl font-black text-white text-center">0.00 €</h3>
+            </div>
+        </div>
+    </div>`;
+    break;
+
+case 'karburanti':
+    html = `
+    <div class="space-y-8 sector-animate px-2">
+        <h2 class="text-4xl font-black tracking-tighter uppercase leading-none text-orange-500">KARBURANTI</h2>
+        <div class="grid gap-4">
+            <div class="glass-view p-5 rounded-3xl border border-white/5">
+                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Distanca (KM)</label>
+                <input type="number" id="f-km" oninput="calcF()" placeholder="100" class="w-full bg-transparent text-2xl font-bold outline-none">
+            </div>
+            <div class="glass-view p-5 rounded-3xl border border-white/5">
+                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Shpenzimi (L/100km)</label>
+                <input type="number" id="f-sh" oninput="calcF()" placeholder="6.5" class="w-full bg-transparent text-2xl font-bold outline-none">
+            </div>
+            <div class="glass-view p-5 rounded-3xl border border-white/5">
+                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Çmimi Litrit (€)</label>
+                <input type="number" id="f-cm" oninput="calcF()" placeholder="1.35" class="w-full bg-transparent text-2xl font-bold outline-none">
+            </div>
+            <div class="p-8 bg-white rounded-[2.5rem] text-black shadow-xl">
+                <p class="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-1 text-center">Kosto e përllogaritur</p>
+                <h3 id="f-result" class="text-5xl font-black text-center text-orange-600">0.00 €</h3>
+            </div>
+        </div>
+    </div>`;
+    break;
+
+
+
+
+                    
             }
             container.innerHTML = html;
         }
 
+
+
+
+function calcS() {
+    const rate = parseFloat(document.getElementById('s-tipi').value) || 0;
+    const ha = parseFloat(document.getElementById('s-ha').value) || 0;
+    document.getElementById('s-result').innerText = (rate * ha).toFixed(2) + " €";
+}
+
+function calcF() {
+    const km = parseFloat(document.getElementById('f-km').value) || 0;
+    const sh = parseFloat(document.getElementById('f-sh').value) || 0;
+    const cm = parseFloat(document.getElementById('f-cm').value) || 0;
+    const kosto = (km / 100) * sh * cm;
+    document.getElementById('f-result').innerText = kosto.toFixed(2) + " €";
+}
+
+
+
+
+        
         // --- 3. MATH ENGINE (PROFESSIONAL CALCULATIONS) ---
         function calcT() {
             const b = parseFloat(document.getElementById('t-bruto').value) || 0;
