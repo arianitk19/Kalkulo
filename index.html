@@ -508,55 +508,60 @@ function toggleNotifications() {
                     </div>`;
                     break;
 
+
 case 'subvencione':
     html = `
-    <div class="space-y-6 sector-animate pb-20">
+    <div class="space-y-6 sector-animate pb-20 px-2">
         <div class="flex justify-between items-end">
-            <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">SUBVENCIONET<br><span class="text-emerald-500">PROGRAMI 2026</span></h2>
-            <div class="text-right text-[10px] font-bold text-gray-500 bg-white/5 p-2 rounded-lg">MINISTRIA E BUJQËSISË</div>
+            <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">SUBVENCIONET<br><span class="text-emerald-500 italic">PROGRAMI 2026</span></h2>
         </div>
 
-        <div class="glass-view p-6 rounded-[2rem] border border-white/5 space-y-4">
+        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-5 shadow-2xl">
             <div>
-                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Kategoria e Kultivimit</label>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Kultura Bujqësore</label>
                 <select id="s-kategoria" onchange="calcS()" class="w-full bg-transparent text-xl font-bold outline-none border-b border-white/10 pb-2">
-                    <option value="216" class="bg-[#0b0f15]">Grurë (Sipërfaqe mbi 2ha)</option>
-                    <option value="162" class="bg-[#0b0f15]">Misër</option>
-                    <option value="500" class="bg-[#0b0f15]">Hardhi Rrushi</option>
-                    <option value="400" class="bg-[#0b0f15]">Pemëtore (Mollë, Dardhë, etj)</option>
-                    <option value="0.04" class="bg-[#0b0f15]">Qumësht (për litër)</option>
+                    <option value="216" class="bg-[#0b0f15]">Grurë (216€/ha)</option>
+                    <option value="162" class="bg-[#0b0f15]">Misër (162€/ha)</option>
+                    <option value="500" class="bg-[#0b0f15]">Hardhi Rrushi (500€/ha)</option>
+                    <option value="400" class="bg-[#0b0f15]">Pemëtore (400€/ha)</option>
+                    <option value="150" class="bg-[#0b0f15]">Perime në fushë (150€/ha)</option>
                 </select>
             </div>
             
-            <div class="pt-4">
-                <label id="s-label-unit" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Sipërfaqja (Hektarë)</label>
-                <input type="number" id="s-input-val" oninput="calcS()" placeholder="0.00" class="w-full bg-transparent text-5xl font-black outline-none placeholder:text-white/5">
+            <div class="flex items-center justify-between bg-white/5 p-2 rounded-2xl">
+                <span class="text-[10px] font-bold px-3 uppercase text-gray-400">Njësia:</span>
+                <div class="flex bg-black/40 rounded-xl p-1">
+                    <button id="btn-ha" onclick="setUnit('ha')" class="px-4 py-1 rounded-lg text-[10px] font-bold bg-emerald-500 text-white transition-all">HEKTAR</button>
+                    <button id="btn-ari" onclick="setUnit('ari')" class="px-4 py-1 rounded-lg text-[10px] font-bold text-gray-400 transition-all">ARI</button>
+                </div>
+            </div>
+
+            <div>
+                <label id="unit-label" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block">Sipërfaqja në Hektarë</label>
+                <input type="number" id="s-input-val" oninput="calcS()" placeholder="0.00" class="w-full bg-transparent text-5xl font-black outline-none">
+            </div>
+
+            <div onclick="toggleFuel()" id="fuel-toggle" class="flex items-center justify-between p-4 rounded-2xl border border-white/5 bg-white/5 cursor-pointer transition-all">
+                <div class="flex items-center space-x-3">
+                    <i class="fi fi-rr-gas-pump text-orange-500"></i>
+                    <span class="text-[11px] font-bold uppercase italic">Përfshi Subvencionimin e Naftës</span>
+                </div>
+                <div id="fuel-check" class="w-10 h-5 bg-gray-700 rounded-full relative transition-all">
+                    <div class="w-4 h-4 bg-white rounded-full absolute top-0.5 left-1 transition-all" id="fuel-circle"></div>
+                </div>
             </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-            <div class="glass-view p-4 rounded-3xl border border-white/5">
-                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1 italic">Nafta për Bujqësi</p>
-                <h4 id="s-nafta" class="text-xl font-bold text-orange-400">0.00 €</h4>
-            </div>
-            <div class="glass-view p-4 rounded-3xl border border-white/5">
-                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1 italic">Plehrimi/Inputet</p>
-                <h4 id="s-inputet" class="text-xl font-bold text-blue-400">0.00 €</h4>
-            </div>
-        </div>
-
-        <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
-            <div class="relative z-10 text-center uppercase tracking-tighter">
-                <p class="text-[10px] font-bold text-white/60 mb-1 tracking-widest">Totali i Përfitimit</p>
-                <h3 id="s-total" class="text-6xl font-black text-white">0.00 €</h3>
-            </div>
-            <div class="absolute -right-10 -bottom-10 opacity-10 transform rotate-12">
-                <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            </div>
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-900 p-8 rounded-[3rem] shadow-2xl text-center relative overflow-hidden">
+            <p class="text-[10px] font-black uppercase tracking-[0.3em] mb-1 text-white/50">Vlera e parashikuar</p>
+            <h3 id="s-total" class="text-6xl font-black text-white tracking-tighter italic">0.00 €</h3>
+            <p id="s-detail" class="text-[9px] font-bold text-white/40 mt-2 uppercase"></p>
         </div>
     </div>`;
     break;
 
+
+                    
 case 'karburanti':
     html = `
     <div class="space-y-6 sector-animate pb-20 px-2">
@@ -637,32 +642,63 @@ case 'karburanti':
 
 
 
-// LLOGARITJA E SUBVENCIONEVE 2026 (Bazuar ne rregullat e BPZHR)
-function calcS() {
-    const kategoria = parseFloat(document.getElementById('s-kategoria').value) || 0;
-    const sasia = parseFloat(document.getElementById('s-input-val').value) || 0;
-    
-    // Per bujqesi (nëse nuk është qumësht, llogarit naftën dhe inputet si subvencione shtesë)
-    let nafta = 0;
-    let inputet = 0;
-    let total = 0;
+let currentUnit = 'ha'; // Default
+let includeFuel = false;
 
-    if(kategoria > 1) { // Kultura per Hektar
-        nafta = sasia * 36; // Subvencioni për naftë për hektar (standard 2026)
-        inputet = sasia * 150; // Subvencioni shtesë për inpute (plehrim)
-        total = (kategoria * sasia) + nafta + inputet;
-        
-        document.getElementById('s-nafta').innerText = nafta.toFixed(2) + " €";
-        document.getElementById('s-inputet').innerText = inputet.toFixed(2) + " €";
-    } else { // Qumësht ose per njësi
-        total = kategoria * sasia;
-        document.getElementById('s-nafta').innerText = "N/A";
-        document.getElementById('s-inputet').innerText = "N/A";
+function setUnit(unit) {
+    currentUnit = unit;
+    const btnHa = document.getElementById('btn-ha');
+    const btnAri = document.getElementById('btn-ari');
+    const label = document.getElementById('unit-label');
+
+    if(unit === 'ha') {
+        btnHa.className = "px-4 py-1 rounded-lg text-[10px] font-bold bg-emerald-500 text-white";
+        btnAri.className = "px-4 py-1 rounded-lg text-[10px] font-bold text-gray-400";
+        label.innerText = "Sipërfaqja në Hektarë";
+    } else {
+        btnAri.className = "px-4 py-1 rounded-lg text-[10px] font-bold bg-emerald-500 text-white";
+        btnHa.className = "px-4 py-1 rounded-lg text-[10px] font-bold text-gray-400";
+        label.innerText = "Sipërfaqja në Ari (100 Ari = 1 Ha)";
     }
-
-    document.getElementById('s-total').innerText = total.toFixed(2) + " €";
+    calcS();
 }
 
+function toggleFuel() {
+    includeFuel = !includeFuel;
+    const circle = document.getElementById('fuel-circle');
+    const bg = document.getElementById('fuel-check');
+    
+    if(includeFuel) {
+        circle.style.left = '22px';
+        bg.className = "w-10 h-5 bg-orange-500 rounded-full relative transition-all";
+    } else {
+        circle.style.left = '4px';
+        bg.className = "w-10 h-5 bg-gray-700 rounded-full relative transition-all";
+    }
+    calcS();
+}
+
+function calcS() {
+    const ratePerHa = parseFloat(document.getElementById('s-kategoria').value) || 0;
+    let inputVal = parseFloat(document.getElementById('s-input-val').value) || 0;
+    
+    // Konvertimi në Hektar nëse është zgjedhur Ari
+    let surfaceInHa = (currentUnit === 'ari') ? (inputVal / 100) : inputVal;
+    
+    // Llogaritja e bazës
+    let baseSubvencion = surfaceInHa * ratePerHa;
+    
+    // Llogaritja e naftës (Sipas programit 2026: ~36€ shtesë për hektar)
+    let fuelBonus = includeFuel ? (surfaceInHa * 36) : 0;
+    
+    let total = baseSubvencion + fuelBonus;
+
+    // Update UI
+    document.getElementById('s-total').innerText = total.toFixed(2) + " €";
+    document.getElementById('s-detail').innerText = includeFuel 
+        ? `Baza: ${baseSubvencion.toFixed(2)}€ + Nafta: ${fuelBonus.toFixed(2)}€`
+        : `Llogaritur vetëm për bazën e kulturës`;
+}
 
 
         // Ndërrimi i tipit të karburantit
