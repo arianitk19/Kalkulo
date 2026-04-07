@@ -217,18 +217,132 @@
 
     <script>
 
-// --- SISTEMI I GJUHËS (Lokalizimi) ---
 const langData = {
     sq: {
-        title: "CILESIMET", sub: "KONFIGURIMI I SISTEMIT", notif: "Njoftimet", mode: "Tema e Errët", lang: "Gjuha / Language",
-        nav_trusti: "Trusti", nav_valuta: "Këmbimi", nav_paga: "Paga", nav_kesco: "Energjia", nav_dogana: "Dogana", nav_crypto: "Crypto"
+        // Cilësimet (Settings)
+        title: "CILËSIMET",
+        sub: "KONFIGURIMI I SISTEMIT",
+        notif: "Njoftimet",
+        mode: "Tema e Errët",
+        lang: "Gjuha / Language",
+        haptic: "Vibrimi (Haptic)",
+        version: "Version 2026.1.0 Premium",
+        btn_active: "AKTIV",
+
+        // Navigimi (Bottom Bar)
+        nav_trusti: "Trusti",
+        nav_valuta: "Këmbimi",
+        nav_paga: "Paga",
+        nav_kesco: "Energjia",
+        nav_dogana: "Dogana",
+        nav_crypto: "Crypto",
+
+        // Sektori: Trusti
+        t_title: "TRUSTI <span class='text-emerald-500'>PENSIONAL</span>",
+        t_desc: "Llogaritja e kursimeve pensional 5% punëtori + 5% punëdhënësi.",
+        t_label: "Paga Bruto Mujore (€)",
+        t_worker: "Punëtori (5%)",
+        t_employer: "Punëdhënësi (5%)",
+        t_total: "Totali Mujor",
+
+        // Sektori: Këmbimi (Exchange)
+        v_title: "KËMBIMI <span class='text-emerald-500'>GLOBAL</span>",
+        v_placeholder: "Shuma në Euro",
+
+        // Sektori: Paga Neto
+        p_title: "PAGA <span class='text-emerald-500'>NETO</span>",
+        p_placeholder: "Paga Bruto",
+        p_neto_label: "Paga Neto (Për xhep)",
+        p_tax_label: "Tatimi ATK",
+        p_trust_label: "Trusti (5%)",
+
+        // Sektori: Energjia (Kesco)
+        k_title: "ENERGJIA <span class='text-yellow-500'>KESCO</span>",
+        k_day: "Tarifa e Ditës (kWh)",
+        k_night: "Tarifa e Natës (kWh)",
+        k_bill_label: "Vlera e Faturës (Me TVSH)",
+        k_disclaimer: "Ky kalkulim bazohet në tarifat standarde 2026.",
+
+        // Sektori: Dogana
+        d_title: "DOGANA <span class='text-blue-500'>VETURA</span>",
+        d_year: "Viti i Prodhimit",
+        d_cc: "Kubikazha (cm³)",
+        d_value: "Vlera (€)",
+        d_total_label: "Totali i Pagesës Doganore",
+
+        // Sektori: Crypto
+        c_title: "CRYPTO <span class='text-purple-500'>ASSETS</span>",
+        c_invest: "Investimi në Euro (€)",
+
+        // Njoftimet (Real-time Alerts)
+        notif_active_title: "KALKULO",
+        notif_active_msg: "Njoftimet u aktivizuan me sukses! 🚀",
+        notif_calc_title: "Kalkulim i ri",
+        notif_calc_msg: "Rezultatet janë procesuar me saktësi."
     },
     en: {
-        title: "SETTINGS", sub: "SYSTEM CONFIGURATION", notif: "Notifications", mode: "Dark Mode", lang: "Language / Gjuha",
-        nav_trusti: "Trust", nav_valuta: "Exchange", nav_paga: "Salary", nav_kesco: "Energy", nav_dogana: "Customs", nav_crypto: "Crypto"
+        // Settings
+        title: "SETTINGS",
+        sub: "SYSTEM CONFIGURATION",
+        notif: "Notifications",
+        mode: "Dark Mode",
+        lang: "Language / Gjuha",
+        haptic: "Haptic Feedback",
+        version: "Version 2026.1.0 Premium",
+        btn_active: "ACTIVE",
+
+        // Navigation (Bottom Bar)
+        nav_trusti: "Trust",
+        nav_valuta: "Exchange",
+        nav_paga: "Salary",
+        nav_kesco: "Energy",
+        nav_dogana: "Customs",
+        nav_crypto: "Crypto",
+
+        // Sector: Trust
+        t_title: "PENSION <span class='text-emerald-500'>TRUST</span>",
+        t_desc: "Calculation of pension savings 5% employee + 5% employer.",
+        t_label: "Monthly Gross Salary (€)",
+        t_worker: "Employee (5%)",
+        t_employer: "Employer (5%)",
+        t_total: "Monthly Total",
+
+        // Sector: Exchange
+        v_title: "GLOBAL <span class='text-emerald-500'>EXCHANGE</span>",
+        v_placeholder: "Amount in Euro",
+
+        // Sector: Net Salary
+        p_title: "NET <span class='text-emerald-500'>SALARY</span>",
+        p_placeholder: "Gross Salary",
+        p_neto_label: "Net Salary (Take-home)",
+        p_tax_label: "ATK Tax",
+        p_trust_label: "Trust (5%)",
+
+        // Sector: Energy (Kesco)
+        k_title: "ENERGY <span class='text-yellow-500'>KESCO</span>",
+        k_day: "Day Rate (kWh)",
+        k_night: "Night Rate (kWh)",
+        k_bill_label: "Invoice Value (Inc. VAT)",
+        k_disclaimer: "This calculation is based on standard 2026 rates.",
+
+        // Sector: Customs
+        d_title: "CAR <span class='text-blue-500'>CUSTOMS</span>",
+        d_year: "Production Year",
+        d_cc: "Engine Size (cm³)",
+        d_value: "Value (€)",
+        d_total_label: "Total Customs Payment",
+
+        // Sector: Crypto
+        c_title: "CRYPTO <span class='text-purple-500'>ASSETS</span>",
+        c_invest: "Investment in Euro (€)",
+
+        // Notifications
+        notif_active_title: "KALKULO",
+        notif_active_msg: "Notifications activated successfully! 🚀",
+        notif_calc_title: "New Calculation",
+        notif_calc_msg: "Results have been processed accurately."
     }
 };
-
 let currentLang = 'sq';
 
 function setLanguage(l) {
@@ -251,30 +365,35 @@ function setLanguage(l) {
     navItems.forEach((span, i) => { span.innerText = langData[l][keys[i]]; });
 }
 
-// --- SISTEMI I TEMËS (Dark/Light) ---
-let isDarkMode = true;
-function toggleTheme() {
-    isDarkMode = !isDarkMode;
+
+let isDarkMode = localStorage.getItem('k-theme') !== 'light';
+
+function applyTheme() {
+    const root = document.documentElement;
     const circle = document.getElementById('theme-circle');
     const toggleBg = document.getElementById('theme-toggle');
-    
-    if(!isDarkMode) {
-        document.documentElement.classList.remove('dark');
-        circle.style.transform = 'translateX(-24px)';
-        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
-        circle.style.boxShadow = 'none';
-        toggleBg.classList.replace('bg-emerald-500/20', 'bg-black/10');
-        document.body.style.backgroundColor = '#f8fafc';
-        document.body.style.color = '#0f172a';
+
+    if (!isDarkMode) {
+        root.classList.remove('dark');
+        document.body.style.backgroundColor = "#f1f5f9"; // Slate 100 (E këndshme për sytë)
+        document.body.style.color = "#1e293b";
+        circle.style.transform = "translateX(-24px)";
+        circle.classList.replace('bg-emerald-500', 'bg-slate-400');
+        toggleBg.style.backgroundColor = "rgba(0,0,0,0.05)";
     } else {
-        document.documentElement.classList.add('dark');
-        circle.style.transform = 'translateX(0)';
-        circle.classList.replace('bg-gray-400', 'bg-emerald-500');
-        circle.style.boxShadow = '0 0 10px #10b981';
-        toggleBg.classList.replace('bg-black/10', 'bg-emerald-500/20');
-        document.body.style.backgroundColor = '#010204';
-        document.body.style.color = '#fff';
+        root.classList.add('dark');
+        document.body.style.backgroundColor = "#010204";
+        document.body.style.color = "#ffffff";
+        circle.style.transform = "translateX(0)";
+        circle.classList.replace('bg-slate-400', 'bg-emerald-500');
+        toggleBg.style.backgroundColor = "rgba(16,185,129,0.2)";
     }
+}
+
+function toggleTheme() {
+    isDarkMode = !isDarkMode;
+    localStorage.setItem('k-theme', isDarkMode ? 'dark' : 'light');
+    applyTheme();
 }
 
 // --- SISTEMI I NJOFTIMEVE (REAL API) ---
