@@ -144,6 +144,35 @@
                     </div>
                 </div>
             </div>
+
+
+
+
+
+
+
+
+            <div id="ai-assistant-container" class="fixed bottom-28 right-6 z-[60] hidden">
+    <div onclick="openAIChat()" class="w-16 h-16 bg-emerald-500 rounded-full shadow-2xl flex items-center justify-center cursor-pointer hover:scale-110 transition-transform border-4 border-[#010204]">
+        <span class="text-2xl">✏️</span>
+    </div>
+    
+    <div id="ai-chat-window" class="absolute bottom-20 right-0 w-[320px] h-[450px] bg-[#0b0f15]/95 backdrop-blur-xl border border-white/10 rounded-[2rem] shadow-2xl hidden flex-col overflow-hidden">
+        <div class="p-5 border-b border-white/5 flex justify-between items-center bg-emerald-500/10">
+            <span class="font-bold text-xs uppercase tracking-widest text-emerald-500">Shtinja Lapsin AI</span>
+            <button onclick="closeAIChat()" class="text-gray-500">✕</button>
+        </div>
+        <div id="chat-content" class="flex-1 p-4 overflow-y-auto text-[11px] space-y-4 text-gray-300 no-scrollbar">
+            <p class="bg-white/5 p-3 rounded-2xl rounded-tl-none italic">Përshëndetje! Unë jam "Shtinja Lapsin". Në cilën llogari të ndihmoj sot?</p>
+        </div>
+        <div class="p-4 border-t border-white/5 flex space-x-2">
+            <input type="text" id="ai-input" placeholder="Pyet diçka..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[11px] outline-none focus:border-emerald-500">
+            <button onclick="askAI()" class="bg-emerald-500 px-4 rounded-xl">
+                <i class="fi fi-rr-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+</div>
         </main>
 
         <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
@@ -208,7 +237,29 @@
         </div>
         <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl transition-colors">&times;</button>
     </div>
-    
+
+
+
+
+
+<div class="flex items-center justify-between p-4 bg-white/5 rounded-2xl border border-white/10 mt-4">
+    <div class="flex items-center space-x-3">
+        <div class="p-2 bg-emerald-500 rounded-lg shadow-[0_0_15px_rgba(16,185,129,0.4)]">
+            <i class="fi fi-rr-magic-wand text-white"></i>
+        </div>
+        <div>
+            <p class="text-[11px] font-bold uppercase tracking-widest">Shtinja Lapsin AI</p>
+            <p class="text-[8px] text-gray-500">Asistenti virtual inteligjent</p>
+        </div>
+    </div>
+    <div onclick="toggleAI()" id="ai-toggle" class="w-12 h-6 bg-gray-700 rounded-full relative cursor-pointer transition-all duration-300">
+        <div id="ai-circle" class="w-5 h-5 bg-white rounded-full absolute top-0.5 left-1 transition-all duration-300"></div>
+    </div>
+</div>
+
+
+
+       
     <div class="space-y-6">
         <div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
             <span id="label-notifications" class="font-medium text-gray-200">Njoftimet</span>
@@ -903,6 +954,69 @@ function calcF() {
         .catch(err => console.log('KALKULO: Dështoi regjistrimi i SW.', err));
     });
   }
+
+
+
+
+
+
+
+
+
+
+        let aiEnabled = false;
+
+function toggleAI() {
+    aiEnabled = !aiEnabled;
+    const container = document.getElementById('ai-assistant-container');
+    const circle = document.getElementById('ai-circle');
+    const bg = document.getElementById('ai-toggle');
+
+    if(aiEnabled) {
+        container.classList.remove('hidden');
+        circle.style.left = '26px';
+        bg.classList.replace('bg-gray-700', 'bg-emerald-500');
+        if(navigator.vibrate) navigator.vibrate(10);
+    } else {
+        container.classList.add('hidden');
+        circle.style.left = '4px';
+        bg.classList.replace('bg-emerald-500', 'bg-gray-700');
+        document.getElementById('ai-chat-window').classList.add('hidden');
+    }
+}
+
+function openAIChat() {
+    const chat = document.getElementById('ai-chat-window');
+    chat.classList.toggle('hidden');
+    gsap.from("#ai-chat-window", { y: 20, opacity: 0, duration: 0.3 });
+}
+
+function askAI() {
+    const input = document.getElementById('ai-input');
+    const content = document.getElementById('chat-content');
+    
+    if(input.value.trim() === "") return;
+
+    // Shto pyetjen e përdoruesit
+    content.innerHTML += `<p class="bg-emerald-500/20 p-3 rounded-2xl rounded-tr-none text-right ml-10">${input.value}</p>`;
+    
+    // Simulo "mendimin" e AI
+    let userQuery = input.value.toLowerCase();
+    input.value = "";
+    
+    setTimeout(() => {
+        let response = "Interesante... më lër të shikoj rregullat e fundit në Kosovë.";
+        
+        if(userQuery.includes("nafta") || userQuery.includes("karburanti")) {
+            response = "Çmimet e naftës sot në Kosovë po sillen rreth 1.32€ deri 1.35€. Nëse udhëton për Shqipëri, furnizohu këtu sepse atje është rreth 20% më shtrenjtë.";
+        } else if(userQuery.includes("grurë") || userQuery.includes("subvencione")) {
+            response = "Për vitin 2026, Ministria ka rritur përkrahjen për plehërim artificial. Mos harro t'i ruash faturat e TVSH-së sepse kërkohen gjatë kontrollit në teren.";
+        }
+
+        content.innerHTML += `<p class="bg-white/5 p-3 rounded-2xl rounded-tl-none italic mr-10">${response}</p>`;
+        content.scrollTop = content.scrollHeight;
+    }, 1000);
+}
 </script>
 </body>
 </html>
