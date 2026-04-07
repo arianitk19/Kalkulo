@@ -206,16 +206,7 @@
             </div>
         </div>
     </div>
-
-
-<div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
-    <span id="label-haptic" class="font-medium text-gray-200">Vibrimi (Haptic)</span>
-    <div onclick="toggleHaptic()" id="haptic-toggle" class="w-12 h-6 bg-emerald-500/20 rounded-full relative cursor-pointer">
-        <div id="haptic-circle" class="absolute left-7 top-1 w-4 h-4 bg-emerald-500 rounded-full transition-all"></div>
-    </div>
-</div>
-
-       
+    
     <div class="absolute bottom-10 left-10 right-10 text-center">
         <p class="text-[9px] text-gray-600 uppercase tracking-[0.5em]">Kalkulo 2026</p>
     </div>
@@ -238,117 +229,88 @@ const langData = {
     }
 };
 
-const langData = {
-    sq: {
-        title: "CILËSIMET", sub: "KONFIGURIMI I SISTEMIT", notif: "Njoftimet", mode: "Tema e Errët", lang: "Gjuha / Language", haptic: "Vibrimi (Haptic)",
-        nav_trusti: "Trusti", nav_valuta: "Këmbimi", nav_paga: "Paga", nav_kesco: "Energjia", nav_dogana: "Dogana", nav_crypto: "Crypto",
-        trust_title: "Trusti <span class='text-emerald-500'>Pensional</span>", trust_desc: "Llogaritja e kursimeve pensional 5% + 5%.",
-        paga_title: "Paga <span class='text-emerald-500'>Neto</span>", paga_placeholder: "Paga Bruto",
-        btn_active: "AKTIV"
-    },
-    en: {
-        title: "SETTINGS", sub: "SYSTEM CONFIGURATION", notif: "Notifications", mode: "Dark Mode", lang: "Language / Gjuha", haptic: "Haptic Feedback",
-        nav_trusti: "Trust", nav_valuta: "Exchange", nav_paga: "Salary", nav_kesco: "Energy", nav_dogana: "Customs", nav_crypto: "Crypto",
-        trust_title: "Pension <span class='text-emerald-500'>Trust</span>", trust_desc: "Calculation of pension savings 5% + 5%.",
-        paga_title: "Net <span class='text-emerald-500'>Salary</span>", paga_placeholder: "Gross Salary",
-        btn_active: "ACTIVE"
-    }
-};
+let currentLang = 'sq';
 
 function setLanguage(l) {
     currentLang = l;
-    localStorage.setItem('kalkulo-lang', l);
-
-    // Update Settings UI
+    // Përditëso tekstet në Settings
     document.getElementById('sett-title').innerText = langData[l].title;
+    document.getElementById('sett-subtitle').innerText = langData[l].sub;
     document.getElementById('label-notifications').innerText = langData[l].notif;
     document.getElementById('label-mode').innerText = langData[l].mode;
     document.getElementById('label-lang').innerText = langData[l].lang;
-    document.getElementById('label-haptic').innerText = langData[l].haptic;
 
-    // Update Navigimin
+    // Përditëso Butonat e Gjuhës
+    const isSq = l === 'sq';
+    document.getElementById('lang-sq').className = isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
+    document.getElementById('lang-en').className = !isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
+
+    // Përditëso Navigimin
     const navItems = document.querySelectorAll('.mobile-nav-item span');
     const keys = ['nav_trusti', 'nav_valuta', 'nav_paga', 'nav_kesco', 'nav_dogana', 'nav_crypto'];
     navItems.forEach((span, i) => { span.innerText = langData[l][keys[i]]; });
-
-    // RIFRESKO SEKTORIN AKTIV (Që të përkthehet edhe brendia)
-    const activeItem = document.querySelector('.active-nav');
-    if(activeItem) {
-        const view = activeItem.getAttribute('onclick').match(/'([^']+)'/)[1];
-        injectData(view, document.getElementById('content-inner'));
-    }
-    
-    updateLangButtons(l);
 }
-        
 
+// --- SISTEMI I TEMËS (Dark/Light) ---
+let isDarkMode = true;
 function toggleTheme() {
     isDarkMode = !isDarkMode;
-    localStorage.setItem('kalkulo-theme', isDarkMode ? 'dark' : 'light');
-    applyTheme();
-}
-
-function applyTheme() {
     const circle = document.getElementById('theme-circle');
     const toggleBg = document.getElementById('theme-toggle');
     
     if(!isDarkMode) {
         document.documentElement.classList.remove('dark');
         circle.style.transform = 'translateX(-24px)';
-        circle.classList.replace('bg-emerald-500', 'bg-slate-400');
-        toggleBg.classList.replace('bg-emerald-500/20', 'bg-slate-200');
-        // Ngjyra profesionale që nuk vret sytë
-        document.body.style.backgroundColor = '#f1f5f9'; 
-        document.body.style.color = '#1e293b';
+        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
+        circle.style.boxShadow = 'none';
+        toggleBg.classList.replace('bg-emerald-500/20', 'bg-black/10');
+        document.body.style.backgroundColor = '#f8fafc';
+        document.body.style.color = '#0f172a';
     } else {
         document.documentElement.classList.add('dark');
         circle.style.transform = 'translateX(0)';
-        circle.classList.replace('bg-slate-400', 'bg-emerald-500');
-        toggleBg.classList.replace('bg-slate-200', 'bg-emerald-500/20');
+        circle.classList.replace('bg-gray-400', 'bg-emerald-500');
+        circle.style.boxShadow = '0 0 10px #10b981';
+        toggleBg.classList.replace('bg-black/10', 'bg-emerald-500/20');
         document.body.style.backgroundColor = '#010204';
         document.body.style.color = '#fff';
     }
 }
 
-let hapticEnabled = localStorage.getItem('kalkulo-haptic') === 'true';
+// --- SISTEMI I NJOFTIMEVE (REAL API) ---
+let notificationsActive = false;
+function toggleNotifications() {
+    const circle = document.getElementById('notif-circle');
+    const toggleBg = document.getElementById('notif-toggle');
 
-function triggerNotif(title, message) {
-    if (notificationsActive) {
-        new Notification(title, {
-            body: message,
-            icon: "https://img.icons8.com/fluency/192/000000/calculator.png"
+    if (!notificationsActive) {
+        // Kërko leje nga sistemi operativ
+        Notification.requestPermission().then(permission => {
+            if (permission === "granted") {
+                notificationsActive = true;
+                circle.classList.add('translate-x-6');
+                circle.classList.replace('bg-gray-400', 'bg-emerald-500');
+                toggleBg.classList.replace('bg-white/10', 'bg-emerald-500/20');
+                
+                // Dërgo njoftimin e parë real
+                new Notification("KALKULO", {
+                    body: "Njoftimet në KALKULO u aktivizuan me sukses! 🚀",
+                    icon: "https://img.icons8.com/fluency/192/000000/calculator.png"
+                });
+            } else {
+                alert("Ju lutem aktivizoni lejen për njoftime në cilësimet e browser-it.");
+            }
         });
+    } else {
+        notificationsActive = false;
+        circle.classList.remove('translate-x-6');
+        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
+        toggleBg.classList.replace('bg-emerald-500/20', 'bg-white/10');
     }
 }
 
-function toggleHaptic() {
-    hapticEnabled = !hapticEnabled;
-    localStorage.setItem('kalkulo-haptic', hapticEnabled);
-    const circle = document.getElementById('haptic-circle');
-    circle.style.transform = hapticEnabled ? 'translateX(0)' : 'translateX(-24px)';
-    if(hapticEnabled && navigator.vibrate) navigator.vibrate(10);
-}
-
-// Thirrni këtë te calcP() ose calcT()
-// triggerNotif("Kalkulim i ri", "Sapo keni llogaritur pagën neto.");
 
 
-window.addEventListener('load', () => {
-    // Ngarko gjuhën
-    currentLang = localStorage.getItem('kalkulo-lang') || 'sq';
-    setLanguage(currentLang);
-
-    // Ngarko temën
-    const savedTheme = localStorage.getItem('kalkulo-theme');
-    isDarkMode = savedTheme !== 'light';
-    applyTheme();
-
-    // Ngarko njoftimet (leja mbetet në browser)
-    if (Notification.permission === "granted") {
-        notificationsActive = true;
-        document.getElementById('notif-circle').classList.add('translate-x-6');
-    }
-});
 
 
 
