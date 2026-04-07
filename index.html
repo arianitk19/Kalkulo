@@ -978,126 +978,157 @@ function calcF() {
 
 
 
-
+// --- KONFIGURIMI I ALGORITMIT "SHTINJA LAPSIN" ---
 let aiState = {
+    enabled: false,
     initialized: false,
     behavior: null, // 'A', 'B', 'C'
-    isSpeaking: false
+    isListening: false
 };
 
-// 1. Hapja e Chat-it dhe Prezantimi
+// 1. Kontrolli On/Off nga Settings
+function toggleAI() {
+    aiState.enabled = !aiState.enabled;
+    const container = document.getElementById('ai-assistant-container');
+    const circle = document.getElementById('ai-circle');
+    const bg = document.getElementById('ai-toggle');
+
+    if(aiState.enabled) {
+        container.classList.remove('hidden');
+        circle.style.left = '26px';
+        bg.classList.replace('bg-gray-700', 'bg-emerald-500');
+        if(navigator.vibrate) navigator.vibrate(10);
+    } else {
+        container.classList.add('hidden');
+        circle.style.left = '4px';
+        bg.classList.replace('bg-emerald-500', 'bg-gray-700');
+        document.getElementById('ai-chat-window').classList.add('hidden');
+        window.speechSynthesis.cancel(); // Ndalo zërin nëse fiket
+    }
+}
+
+// 2. Hapja e Chat-it dhe Prezantimi Inteligjent
 function openAIChat() {
     const chat = document.getElementById('ai-chat-window');
     chat.classList.toggle('hidden');
     
-    if(!aiState.initialized) {
-        runAIIntroduction();
-        aiState.initialized = true;
+    if(!chat.classList.contains('hidden')) {
+        gsap.from("#ai-chat-window", { y: 30, opacity: 0, duration: 0.4, ease: "back.out(1.7)" });
+        
+        // Nëse hapet për herë të parë, nis prezantimin
+        if(!aiState.initialized) {
+            runAIIntroduction();
+            aiState.initialized = true;
+        }
     }
 }
 
-// 2. Algoritmi i Prezantimit (Instruksionet)
 function runAIIntroduction() {
-    addMessage("ai", "Përshëndetje! Unë jam **Shtinja Lapsin AI**. Jam programuar për saktësi maksimale në ligjet dhe financat e Kosovës. ✏️");
+    addMessage("ai", "Përshëndetje! Unë jam **Shtinja Lapsin AI**. Jam këtu për të të ndihmuar me llogaritje precize bazuar në ligjet e Kosovës. ✏️");
     
     setTimeout(() => {
         addMessage("ai", `Si dëshiron që unë të sillem me ty?<br><br>
-            <button onclick="setBehavior('A')" class="bg-white/10 p-2 rounded-lg mb-2 w-full text-left hover:bg-emerald-500/20 transition-all">**A) Detajist** (Nenet e ligjit & shpjegime)</button>
-            <button onclick="setBehavior('B')" class="bg-white/10 p-2 rounded-lg mb-2 w-full text-left hover:bg-emerald-500/20 transition-all">**B) I Shpejtë** (Vetëm llogaritjet finale)</button>
-            <button onclick="setBehavior('C')" class="bg-white/10 p-2 rounded-lg w-full text-left hover:bg-emerald-500/20 transition-all">**C) Këshillues** (Ide për kursim & investim)</button>
-        `);
-    }, 1000);
+            <div class="space-y-2 mt-2">
+                <button onclick="setBehavior('A')" class="w-full text-left p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-emerald-500/20 transition-all text-[10px]">**A) Detajist** (Shpjegime ligjore)</button>
+                <button onclick="setBehavior('B')" class="w-full text-left p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-emerald-500/20 transition-all text-[10px]">**B) I Shpejtë** (Vetëm rezultatet)</button>
+                <button onclick="setBehavior('C')" class="w-full text-left p-3 bg-white/5 border border-white/10 rounded-xl hover:bg-emerald-500/20 transition-all text-[10px]">**C) Këshillues** (Si të kursesh)</button>
+            </div>`);
+    }, 1200);
 }
 
 function setBehavior(type) {
     aiState.behavior = type;
-    const label = type === 'A' ? 'Detajist' : (type === 'B' ? 'I Shpejtë' : 'Këshillues');
-    addMessage("user", `Zgjodha opsionin: ${label}`);
+    const mode = type === 'A' ? 'Detajist' : (type === 'B' ? 'I Shpejtë' : 'Këshillues');
+    addMessage("user", `Zgjodha: ${mode}`);
     
     setTimeout(() => {
-        addMessage("ai", `U kry! Tani jam në modalitetin **${label}**. Çfarë do të llogarisim sot?`);
-    }, 600);
+        addMessage("ai", `U kry! Modaliteti **${mode}** është aktiv. Çfarë llogarie do të bëjmë?`);
+    }, 800);
 }
 
-// 3. Logjika e Zërit (Web Speech API)
+// 3. Logjika e Zërit (Dëgjimi dhe Leximi)
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-const recognition = new SpeechRecognition();
-recognition.lang = 'sq-AL';
+if(SpeechRecognition) {
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'sq-AL';
 
-function startVoiceRecognition() {
-    recognition.start();
-    const btn = document.getElementById('mic-btn');
-    const status = document.getElementById('voice-status');
-    
-    btn.classList.add('bg-red-500/20', 'border-red-500/40', 'animate-pulse');
-    status.innerText = "Duke dëgjuar...";
-    status.classList.replace('text-gray-600', 'text-red-500');
+    function startVoiceRecognition() {
+        if(!aiState.enabled) return;
+        recognition.start();
+        updateMicUI(true);
+    }
+
+    recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+        document.getElementById('ai-input').value = text;
+        askAI();
+    };
+
+    recognition.onend = () => updateMicUI(false);
 }
 
-recognition.onresult = (event) => {
-    const text = event.results[0][0].transcript;
-    document.getElementById('ai-input').value = text;
-    stopMicUI();
-    askAI();
-};
-
-recognition.onend = () => stopMicUI();
-
-function stopMicUI() {
+function updateMicUI(active) {
     const btn = document.getElementById('mic-btn');
     const status = document.getElementById('voice-status');
-    btn.classList.remove('bg-red-500/20', 'border-red-500/40', 'animate-pulse');
-    status.innerText = "Shtyp për të folur";
-    status.classList.replace('text-red-500', 'text-gray-600');
+    if(active) {
+        btn.classList.add('bg-red-500/20', 'border-red-500/40', 'animate-pulse');
+        status.innerText = "Duke dëgjuar...";
+    } else {
+        btn.classList.remove('bg-red-500/20', 'border-red-500/40', 'animate-pulse');
+        status.innerText = "Shtyp për të folur";
+    }
 }
 
-// 4. Inteligjenca e Përgjigjeve
+function speakResponse(text) {
+    const cleanText = text.replace(/\*\*/g, ''); // Hiq yjet e formatimit
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'sq-AL';
+    window.speechSynthesis.speak(utterance);
+}
+
+// 4. Inteligjenca e Përgjigjeve (Algoritmi i Avancuar)
 function askAI() {
     const input = document.getElementById('ai-input');
     const query = input.value.trim();
-    if(!query) return;
+    if(query === "") return;
 
     addMessage("user", query);
     input.value = "";
 
-    // Algoritmi i Përgjigjeve sipas Kontextit
     setTimeout(() => {
-        let response = generateSmartResponse(query.toLowerCase());
+        let response = getContextualResponse(query.toLowerCase());
         addMessage("ai", response);
-        speakText(response);
-    }, 800);
+        speakResponse(response);
+    }, 1000);
 }
 
-function generateSmartResponse(q) {
+function getContextualResponse(q) {
+    // Inteligjenca bazuar në fjalë kyçe dhe ligjet e Kosovës
     if(q.includes("paga") || q.includes("neto")) {
-        return "Sipas ligjit të vitit 2026, paga llogaritet duke zbritur 5% pensional dhe pastaj tatimin e ri. Nëse ke pagë mbi 500 euro, shkalla e tatimit ndryshon.";
+        return "Në vitin 2026, llogaritja e pagës neto përfshin zbritjen e Trustit prej 5% dhe shkallët e reja tatimore. Mos harro se pragu i parë prej 250 eurove është i liruar nga tatimi.";
     }
-    if(q.includes("shpi") || q.includes("pronë")) {
-        return "Për tatimin në pronë, mos harro: 15,000 eurot e para për objektin ku banon janë falas. Pjesa tjetër tatohet me 0.15%.";
+    if(q.includes("pronë") || q.includes("shtëpi")) {
+        return "Sipas ligjit, për objektin ku banon ke zbritje prej 15,000 euro nga vlera e vlerësuar. Tatimi llogaritet vetëm në pjesën e mbetur.";
     }
-    if(q.includes("nafta") || q.includes("dizel")) {
-        return "Çmimi në tregun e Kosovës sot është rreth 1.34€. Krahasuar me rajonin, jemi 15% më lirë.";
+    if(q.includes("nafta") || q.includes("karburanti")) {
+        return "Çmimet aktuale në Kosovë po lëvizin rreth 1.34 euro për litër. Në krahasim me rajonin, Kosova mbetet destinacioni më i lirë për furnizim.";
     }
-    return "Pyetje interesante! Më lër të bëj llogaritjen precize bazuar në të dhënat aktuale të Republikës së Kosovës.";
+    if(q.includes("grurë") || q.includes("subvencione")) {
+        return "Për subvencionet e vitit 2026, sigurohu që toka të jetë e regjistruar në emrin tënd dhe mbaj faturat e naftës, sepse do të rimbursohesh 36€ për hektar.";
+    }
+    return "Pyetje me rëndësi! Bazuar në rregulloret aktuale në Kosovë, sugjeroj që këtë llogaritje ta bëjmë duke marrë parasysh të gjitha tarifat shtesë.";
 }
 
 function addMessage(sender, text) {
     const content = document.getElementById('chat-content');
-    const div = document.createElement('div');
-    div.className = sender === 'ai' 
-        ? "bg-white/5 p-4 rounded-[1.5rem] rounded-tl-none border border-white/5 shadow-sm fade-in"
-        : "bg-emerald-600 p-4 rounded-[1.5rem] rounded-tr-none text-white ml-auto max-w-[85%] fade-in";
+    const msg = document.createElement('div');
+    msg.className = sender === "ai" 
+        ? "bg-white/5 p-4 rounded-3xl rounded-tl-none border border-white/5 shadow-lg fade-in" 
+        : "bg-emerald-600 p-4 rounded-3xl rounded-tr-none text-white ml-auto max-w-[80%] shadow-lg fade-in";
     
-    div.innerHTML = text;
-    content.appendChild(div);
+    msg.innerHTML = text;
+    content.appendChild(msg);
     content.scrollTop = content.scrollHeight;
-}
-
-function speakText(text) {
-    const synth = window.speechSynthesis;
-    const msg = new SpeechSynthesisUtterance(text.replace(/\*\*/g, ''));
-    msg.lang = 'sq-AL';
-    synth.speak(msg);
 }
 
 
