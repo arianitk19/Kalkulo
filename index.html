@@ -165,13 +165,22 @@
         <div id="chat-content" class="flex-1 p-4 overflow-y-auto text-[11px] space-y-4 text-gray-300 no-scrollbar">
             <p class="bg-white/5 p-3 rounded-2xl rounded-tl-none italic">Përshëndetje! Unë jam "Shtinja Lapsin". Në cilën llogari të ndihmoj sot?</p>
         </div>
-        <div class="p-4 border-t border-white/5 flex space-x-2">
-            <input type="text" id="ai-input" placeholder="Pyet diçka..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[11px] outline-none focus:border-emerald-500">
-            <button onclick="askAI()" class="bg-emerald-500 px-4 rounded-xl">
-                <i class="fi fi-rr-paper-plane"></i>
-            </button>
-        </div>
+      <div class="p-4 border-t border-white/5 space-y-3">
+    <div class="flex items-center justify-center space-x-4 mb-2">
+        <!-- Butoni i Mikrofonit (Për të folur) -->
+        <button id="mic-btn" onclick="startVoiceRecognition()" class="w-12 h-12 bg-emerald-500/20 border border-emerald-500/40 rounded-full flex items-center justify-center animate-pulse">
+            <i class="fi fi-rr-microphone text-emerald-500 text-xl"></i>
+        </button>
+        <p id="voice-status" class="text-[8px] font-bold uppercase text-gray-500 tracking-tighter">Shtyp për të folur</p>
     </div>
+    
+    <div class="flex space-x-2">
+        <input type="text" id="ai-input" placeholder="Ose shkruaj këtu..." class="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-2 text-[11px] outline-none focus:border-emerald-500">
+        <button onclick="askAI()" class="bg-emerald-500 px-4 rounded-xl text-white">
+            <i class="fi fi-rr-paper-plane"></i>
+        </button>
+    </div>
+</div>
 </div>
         </main>
 
@@ -1016,6 +1025,80 @@ function askAI() {
         content.innerHTML += `<p class="bg-white/5 p-3 rounded-2xl rounded-tl-none italic mr-10">${response}</p>`;
         content.scrollTop = content.scrollHeight;
     }, 1000);
+}
+
+
+
+        // 1. RECOGNITION (AI dëgjon çfarë thua)
+const Recognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+const sr = new Recognition();
+sr.lang = 'sq-AL'; // E vendosim në Shqip
+sr.interimResults = false;
+
+function startVoiceRecognition() {
+    sr.start();
+    document.getElementById('voice-status').innerText = "Duke dëgjuar...";
+    document.getElementById('mic-btn').classList.add('bg-red-500/20', 'border-red-500');
+}
+
+sr.onresult = (event) => {
+    const transcript = event.results[0][0].transcript;
+    document.getElementById('ai-input').value = transcript;
+    document.getElementById('voice-status').innerText = "U dëgjua!";
+    
+    setTimeout(() => {
+        askAI(); // E dërgon pyetjen automatikisht sapo ndalon së foluri
+        resetMicUI();
+    }, 500);
+};
+
+function resetMicUI() {
+    document.getElementById('voice-status').innerText = "Shtyp për të folur";
+    document.getElementById('mic-btn').classList.remove('bg-red-500/20', 'border-red-500');
+}
+
+// 2. SYNTHESIS (AI flet përgjigjen)
+function speakResponse(text) {
+    if (!aiEnabled) return; // Nëse asistenti është OFF, nuk flet
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'sq-AL'; 
+    utterance.pitch = 1;
+    utterance.rate = 1;
+    
+    // Gjejmë një zë që tingëllon mirë (nëse sistemi ka zë shqip)
+    window.speechSynthesis.speak(utterance);
+}
+
+// 3. Përditësimi i funksionit askAI() ekzistues
+function askAI() {
+    const input = document.getElementById('ai-input');
+    const content = document.getElementById('chat-content');
+    const query = input.value.trim();
+
+    if(query === "") return;
+
+    content.innerHTML += `<p class="bg-emerald-500/20 p-3 rounded-2xl rounded-tr-none text-right ml-10 text-white">${query}</p>`;
+    input.value = "";
+    
+    // Logjika e përgjigjeve inteligjente
+    setTimeout(() => {
+        let response = "Nuk jam i sigurt për këtë, por mund të kontrolloj ligjin e ri të Kosovës për ty.";
+        
+        if(query.toLowerCase().includes("paga") || query.toLowerCase().includes("neto")) {
+            response = "Për pagat në vitin 2026, mos harro se pragu i tatimit ka ndryshuar. Gjithmonë llogarit kontributin pensional prej pesë përqind para se të nxjerrësh neton.";
+        } else if(query.toLowerCase().includes("pronë") || query.toLowerCase().includes("shpi")) {
+            response = "Tatimi në pronë varet nga zona ku jeton. Mos harro, nëse është shtëpia jote e parë, ke pesëmbëdhjetë mijë euro zbritje nga vlera totale.";
+        } else if(query.toLowerCase().includes("nafta") || query.toLowerCase().includes("dizel")) {
+            response = "Sipas trendit të sotëm, nafta po mban një çmim stabil. Shtinja Lapsin sugjeron të mbushesh rezervuarin në fillim të javës.";
+        }
+
+        content.innerHTML += `<p class="bg-white/5 p-3 rounded-2xl rounded-tl-none italic mr-10">${response}</p>`;
+        content.scrollTop = content.scrollHeight;
+        
+        // KËTU AI FLET PËRGJIGJEN
+        speakResponse(response);
+    }, 800);
 }
 </script>
 </body>
