@@ -172,20 +172,19 @@
                 <span class="text-[9px] font-bold uppercase tracking-widest">Crypto</span>
             </div>
 
-      <div onclick="renderView('subvencione', this)" class="mobile-nav-item min-w-[80px]">
+    <div onclick="renderView('subvencione', this)" class="mobile-nav-item min-w-[80px]">
     <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
     </svg>
-    <span class="text-[9px] font-bold uppercase tracking-widest">Subvencionet</span>
-  </div>
+    <span class="text-[9px] font-bold uppercase tracking-widest text-center">Subvencionet</span>
+</div>
 
-   <div onclick="renderView('karburanti', this)" class="mobile-nav-item min-w-[80px]">
+<div onclick="renderView('karburanti', this)" class="mobile-nav-item min-w-[80px]">
     <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"></path>
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 7l-2 2m0 0l2 2m-2-2h5"></path>
     </svg>
-    <span class="text-[9px] font-bold uppercase tracking-widest">Karburanti</span>
-   </div>
+    <span class="text-[9px] font-bold uppercase tracking-widest text-center">Karburanti</span>
+</div>
   
         </nav>
     </div>
@@ -510,23 +509,48 @@ function toggleNotifications() {
 
 case 'subvencione':
     html = `
-    <div class="space-y-8 sector-animate px-2">
-        <h2 class="text-4xl font-black tracking-tighter uppercase leading-none">SUBVENCIONET <br><span class="text-emerald-500 italic text-2xl">BUJQËSORE 2024</span></h2>
-        <div class="grid gap-6">
-            <div class="glass-view p-6 rounded-3xl border border-white/5">
-                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mb-3 block">Kultura (Për Hektar)</label>
-                <select id="s-tipi" onchange="calcS()" class="w-full bg-transparent text-xl font-bold outline-none border-b border-white/10 pb-2">
-                    <option value="216" class="bg-black">Grurë (216€)</option>
-                    <option value="162" class="bg-black">Misër (162€)</option>
-                    <option value="500" class="bg-black">Hardhi Rrushi (500€)</option>
-                    <option value="400" class="bg-black">Pemëtore (400€)</option>
+    <div class="space-y-6 sector-animate pb-20">
+        <div class="flex justify-between items-end">
+            <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">SUBVENCIONET<br><span class="text-emerald-500">PROGRAMI 2026</span></h2>
+            <div class="text-right text-[10px] font-bold text-gray-500 bg-white/5 p-2 rounded-lg">MINISTRIA E BUJQËSISË</div>
+        </div>
+
+        <div class="glass-view p-6 rounded-[2rem] border border-white/5 space-y-4">
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Kategoria e Kultivimit</label>
+                <select id="s-kategoria" onchange="calcS()" class="w-full bg-transparent text-xl font-bold outline-none border-b border-white/10 pb-2">
+                    <option value="216" class="bg-[#0b0f15]">Grurë (Sipërfaqe mbi 2ha)</option>
+                    <option value="162" class="bg-[#0b0f15]">Misër</option>
+                    <option value="500" class="bg-[#0b0f15]">Hardhi Rrushi</option>
+                    <option value="400" class="bg-[#0b0f15]">Pemëtore (Mollë, Dardhë, etj)</option>
+                    <option value="0.04" class="bg-[#0b0f15]">Qumësht (për litër)</option>
                 </select>
-                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-[0.2em] mt-6 mb-2 block">Sipërfaqja (Ha)</label>
-                <input type="number" id="s-ha" oninput="calcS()" placeholder="0.00" class="w-full bg-transparent text-4xl font-black outline-none">
             </div>
-            <div class="bg-emerald-600 p-8 rounded-[2.5rem] shadow-[0_20px_40px_rgba(16,185,129,0.2)]">
-                <p class="text-[10px] font-bold text-white/60 uppercase tracking-widest mb-1 text-center">Vlera Totale e Përfitimit</p>
-                <h3 id="s-result" class="text-5xl font-black text-white text-center">0.00 €</h3>
+            
+            <div class="pt-4">
+                <label id="s-label-unit" class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Sipërfaqja (Hektarë)</label>
+                <input type="number" id="s-input-val" oninput="calcS()" placeholder="0.00" class="w-full bg-transparent text-5xl font-black outline-none placeholder:text-white/5">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="glass-view p-4 rounded-3xl border border-white/5">
+                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1 italic">Nafta për Bujqësi</p>
+                <h4 id="s-nafta" class="text-xl font-bold text-orange-400">0.00 €</h4>
+            </div>
+            <div class="glass-view p-4 rounded-3xl border border-white/5">
+                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1 italic">Plehrimi/Inputet</p>
+                <h4 id="s-inputet" class="text-xl font-bold text-blue-400">0.00 €</h4>
+            </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-emerald-600 to-emerald-800 p-8 rounded-[2.5rem] shadow-2xl relative overflow-hidden">
+            <div class="relative z-10 text-center uppercase tracking-tighter">
+                <p class="text-[10px] font-bold text-white/60 mb-1 tracking-widest">Totali i Përfitimit</p>
+                <h3 id="s-total" class="text-6xl font-black text-white">0.00 €</h3>
+            </div>
+            <div class="absolute -right-10 -bottom-10 opacity-10 transform rotate-12">
+                <svg class="w-40 h-40" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
             </div>
         </div>
     </div>`;
@@ -534,24 +558,45 @@ case 'subvencione':
 
 case 'karburanti':
     html = `
-    <div class="space-y-8 sector-animate px-2">
-        <h2 class="text-4xl font-black tracking-tighter uppercase leading-none text-orange-500">KARBURANTI</h2>
+    <div class="space-y-6 sector-animate pb-20">
+        <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight text-orange-500 italic text-right">LIVE FUEL<br><span class="text-white text-2xl">TRACKER 2026</span></h2>
+        
+        <div class="flex space-x-3 overflow-x-auto no-scrollbar py-2">
+            <div class="glass-view p-3 rounded-2xl min-w-[120px] border-l-4 border-emerald-500">
+                <p class="text-[8px] font-black text-gray-500 uppercase">Kosova Avg</p>
+                <p class="font-bold">€ 1.34</p>
+            </div>
+            <div class="glass-view p-3 rounded-2xl min-w-[120px] border-l-4 border-blue-500">
+                <p class="text-[8px] font-black text-gray-500 uppercase">Europe Avg</p>
+                <p class="font-bold">€ 1.78</p>
+            </div>
+            <div class="glass-view p-3 rounded-2xl min-w-[120px] border-l-4 border-red-500">
+                <p class="text-[8px] font-black text-gray-500 uppercase">Global Brent</p>
+                <p class="font-bold">$ 82.40</p>
+            </div>
+        </div>
+
         <div class="grid gap-4">
-            <div class="glass-view p-5 rounded-3xl border border-white/5">
-                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Distanca (KM)</label>
-                <input type="number" id="f-km" oninput="calcF()" placeholder="100" class="w-full bg-transparent text-2xl font-bold outline-none">
+            <div class="glass-view p-6 rounded-[2rem] border border-white/5 space-y-6">
+                <div class="flex items-center space-x-4">
+                    <div class="flex-1">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block italic">Distanca</label>
+                        <input type="number" id="f-dist" oninput="calcF()" placeholder="KM" class="w-full bg-transparent text-3xl font-black outline-none border-b border-white/5">
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 block italic">Shpenzimi</label>
+                        <input type="number" id="f-cons" oninput="calcF()" placeholder="L/100" class="w-full bg-transparent text-3xl font-black outline-none border-b border-white/5">
+                    </div>
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-orange-500 uppercase tracking-widest mb-1 block italic">Çmimi aktual ne Kosovë (€)</label>
+                    <input type="number" id="f-price" oninput="calcF()" value="1.34" class="w-full bg-transparent text-5xl font-black outline-none">
+                </div>
             </div>
-            <div class="glass-view p-5 rounded-3xl border border-white/5">
-                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Shpenzimi (L/100km)</label>
-                <input type="number" id="f-sh" oninput="calcF()" placeholder="6.5" class="w-full bg-transparent text-2xl font-bold outline-none">
-            </div>
-            <div class="glass-view p-5 rounded-3xl border border-white/5">
-                <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 block">Çmimi Litrit (€)</label>
-                <input type="number" id="f-cm" oninput="calcF()" placeholder="1.35" class="w-full bg-transparent text-2xl font-bold outline-none">
-            </div>
-            <div class="p-8 bg-white rounded-[2.5rem] text-black shadow-xl">
-                <p class="text-[10px] font-bold text-black/40 uppercase tracking-widest mb-1 text-center">Kosto e përllogaritur</p>
-                <h3 id="f-result" class="text-5xl font-black text-center text-orange-600">0.00 €</h3>
+
+            <div class="p-10 bg-white rounded-[3rem] text-black shadow-2xl relative">
+                <p class="text-[10px] font-black uppercase tracking-[0.4em] mb-2 text-black/40 text-center">Kosto e Udhëtimit</p>
+                <h3 id="f-total" class="text-7xl font-black text-center tracking-tighter">0.00 €</h3>
             </div>
         </div>
     </div>`;
@@ -568,20 +613,41 @@ case 'karburanti':
 
 
 
+// LLOGARITJA E SUBVENCIONEVE 2026 (Bazuar ne rregullat e BPZHR)
 function calcS() {
-    const rate = parseFloat(document.getElementById('s-tipi').value) || 0;
-    const ha = parseFloat(document.getElementById('s-ha').value) || 0;
-    document.getElementById('s-result').innerText = (rate * ha).toFixed(2) + " €";
+    const kategoria = parseFloat(document.getElementById('s-kategoria').value) || 0;
+    const sasia = parseFloat(document.getElementById('s-input-val').value) || 0;
+    
+    // Per bujqesi (nëse nuk është qumësht, llogarit naftën dhe inputet si subvencione shtesë)
+    let nafta = 0;
+    let inputet = 0;
+    let total = 0;
+
+    if(kategoria > 1) { // Kultura per Hektar
+        nafta = sasia * 36; // Subvencioni për naftë për hektar (standard 2026)
+        inputet = sasia * 150; // Subvencioni shtesë për inpute (plehrim)
+        total = (kategoria * sasia) + nafta + inputet;
+        
+        document.getElementById('s-nafta').innerText = nafta.toFixed(2) + " €";
+        document.getElementById('s-inputet').innerText = inputet.toFixed(2) + " €";
+    } else { // Qumësht ose per njësi
+        total = kategoria * sasia;
+        document.getElementById('s-nafta').innerText = "N/A";
+        document.getElementById('s-inputet').innerText = "N/A";
+    }
+
+    document.getElementById('s-total').innerText = total.toFixed(2) + " €";
 }
 
+// LLOGARITJA E KARBURANTIT
 function calcF() {
-    const km = parseFloat(document.getElementById('f-km').value) || 0;
-    const sh = parseFloat(document.getElementById('f-sh').value) || 0;
-    const cm = parseFloat(document.getElementById('f-cm').value) || 0;
-    const kosto = (km / 100) * sh * cm;
-    document.getElementById('f-result').innerText = kosto.toFixed(2) + " €";
+    const dist = parseFloat(document.getElementById('f-dist').value) || 0;
+    const cons = parseFloat(document.getElementById('f-cons').value) || 0;
+    const price = parseFloat(document.getElementById('f-price').value) || 1.34;
+    
+    const kosto = (dist / 100) * cons * price;
+    document.getElementById('f-total').innerText = kosto.toFixed(2) + " €";
 }
-
 
 
 
