@@ -186,7 +186,17 @@
     </svg>
     <span class="text-[9px] font-bold uppercase tracking-widest">Karburanti</span>
 </div>
-  
+
+
+
+<div onclick="renderView('prona', this)" class="mobile-nav-item min-w-[80px]">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+    </svg>
+    <span class="text-[9px] font-bold uppercase tracking-widest">Prona</span>
+</div>
+
+            
         </nav>
     </div>
 
@@ -633,12 +643,110 @@ case 'karburanti':
 
 
 
+                  case 'prona':
+    html = `
+    <div class="space-y-6 sector-animate pb-20 px-2">
+        <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">TATIMI NË <br><span class="text-blue-500 italic">PRONË 2026</span></h2>
+        
+        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-4 shadow-2xl">
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Lloji i Pronës</label>
+                <select id="p-tipi" onchange="calcProna()" class="w-full bg-transparent text-xl font-bold outline-none border-b border-white/10 pb-2">
+                    <option value="0.0015" class="bg-[#0b0f15]">Objekt Banim (0.15%)</option>
+                    <option value="0.0020" class="bg-[#0b0f15]">Objekt Komercial (0.20%)</option>
+                    <option value="0.0010" class="bg-[#0b0f15]">Tokë Bujqësore (0.10%)</option>
+                    <option value="0.0015" class="bg-[#0b0f15]">Tokë Komerciale (0.15%)</option>
+                </select>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="text-[10px] font-bold text-gray-500 uppercase mb-1 block italic">Sipërfaqja (m²)</label>
+                    <input type="number" id="p-m2" oninput="calcProna()" placeholder="80" class="w-full bg-transparent text-2xl font-black outline-none border-b border-white/10">
+                </div>
+                <div>
+                    <label class="text-[10px] font-bold text-gray-500 uppercase mb-1 block italic">Vlera/m² (Sipas Zonës)</label>
+                    <input type="number" id="p-vlefta" oninput="calcProna()" placeholder="600€" class="w-full bg-transparent text-2xl font-black outline-none border-b border-white/10">
+                </div>
+            </div>
+
+            <div class="flex items-center justify-between p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20">
+                <div class="flex flex-col">
+                    <span class="text-[11px] font-bold uppercase italic text-blue-400">Rezidenca Primare</span>
+                    <span class="text-[9px] text-gray-500">Zbritje ligjore 15,000€</span>
+                </div>
+                <input type="checkbox" id="p-primare" onchange="calcProna()" checked class="w-5 h-5 accent-blue-500">
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="glass-view p-5 rounded-[2rem] text-center border border-white/5">
+                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Vlera e Pronës</p>
+                <h4 id="p-total-vlefta" class="text-xl font-black text-white">0.00 €</h4>
+            </div>
+            <div class="glass-view p-5 rounded-[2rem] text-center border border-white/5">
+                <p class="text-[9px] font-bold text-gray-500 uppercase mb-1">Vlera e Tatueshme</p>
+                <h4 id="p-vlefta-tatueshme" class="text-xl font-black text-blue-400">0.00 €</h4>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[3rem] text-black shadow-2xl relative overflow-hidden">
+            <p class="text-[10px] font-black uppercase tracking-[0.4em] mb-1 text-black/40 text-center">Fatura Vjetore e Tatimit</p>
+            <h3 id="p-tatimi" class="text-6xl font-black text-center tracking-tighter">0.00 €</h3>
+            <div class="flex justify-center space-x-4 mt-4 border-t border-black/5 pt-4">
+                <div class="text-center">
+                    <p class="text-[8px] font-bold uppercase opacity-40 italic">Kësti I (Qershor)</p>
+                    <p id="p-kesti1" class="font-bold">0.00 €</p>
+                </div>
+                <div class="text-center">
+                    <p class="text-[8px] font-bold uppercase opacity-40 italic">Kësti II (Shtator)</p>
+                    <p id="p-kesti2" class="font-bold">0.00 €</p>
+                </div>
+            </div>
+        </div>
+        <p class="text-[8px] text-gray-500 text-center italic px-10">Llogaritur sipas normës minimale ligjore në Republikën e Kosovës.</p>
+    </div>`;
+    break;
+                    
+                    
 
                     
             }
             container.innerHTML = html;
         }
 
+
+
+
+function calcProna() {
+    const tipiNorma = parseFloat(document.getElementById('p-tipi').value) || 0;
+    const m2 = parseFloat(document.getElementById('p-m2').value) || 0;
+    const vleraM2 = parseFloat(document.getElementById('p-vlefta').value) || 0;
+    const eshtePrimare = document.getElementById('p-primare').checked;
+
+    // 1. Vlera totale e tregut
+    let vleraTregut = m2 * vleraM2;
+    
+    // 2. Vlera e tatueshme (Zbritja 15,000€ per banim primar)
+    let zbritja = eshtePrimare ? 15000 : 0;
+    let vleraTatueshme = vleraTregut - zbritja;
+    
+    if(vleraTatueshme < 0) vleraTatueshme = 0;
+
+    // 3. Llogaritja e tatimit vjetor
+    let tatimiVjetor = vleraTatueshme * tipiNorma;
+
+    // Përditësimi i UI
+    document.getElementById('p-total-vlefta').innerText = vleraTregut.toLocaleString() + " €";
+    document.getElementById('p-vlefta-tatueshme').innerText = vleraTatueshme.toLocaleString() + " €";
+    document.getElementById('p-tatimi').innerText = tatimiVjetor.toFixed(2) + " €";
+    
+    // Ndarja në dy këste (siç vjen fatura reale nga Komuna)
+    document.getElementById('p-kesti1').innerText = (tatimiVjetor / 2).toFixed(2) + " €";
+    document.getElementById('p-kesti2').innerText = (tatimiVjetor / 2).toFixed(2) + " €";
+}
+
+        
 
 
 
