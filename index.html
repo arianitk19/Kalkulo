@@ -303,14 +303,26 @@ body {
     </div>
 
        
-       
-    <div class="space-y-6">
-        <div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
-            <span id="label-notifications" class="font-medium text-gray-200">Njoftimet</span>
-            <div id="notif-toggle" onclick="toggleNotifications()" class="w-12 h-6 bg-white/10 rounded-full relative cursor-pointer transition-all duration-300">
-                <div id="notif-circle" class="absolute left-1 top-1 w-4 h-4 bg-gray-400 rounded-full transition-all duration-300 transform"></div>
+   <div class="space-y-6">
+    <div class="flex justify-between items-center p-5 bg-[#0a0a0a]/60 backdrop-blur-xl rounded-[2rem] border border-white/5 hover:border-orange-500/20 transition-all duration-500 group">
+        <div class="flex items-center space-x-4">
+            <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/5">
+                <i class="fi fi-rr-bell-ring text-gray-500 group-hover:text-orange-500 transition-colors"></i>
+            </div>
+            <div class="flex flex-col">
+                <span id="label-notifications" class="text-[11px] font-black uppercase tracking-widest text-gray-200">Njoftimet Live</span>
+                <p id="notif-status-sub" class="text-[8px] text-gray-500 font-bold uppercase tracking-tighter mt-0.5">I çaktivizuar</p>
             </div>
         </div>
+
+        <div id="notif-toggle" onclick="NotifEngine.toggle()" class="w-14 h-7 bg-white/5 rounded-full relative cursor-pointer transition-all duration-500 border border-white/10 shadow-inner group-hover:border-orange-500/30">
+            <div id="notif-circle" class="absolute left-1 top-1 w-5 h-5 bg-gray-500 rounded-full transition-all duration-700 cubic-bezier(0.68, -0.55, 0.265, 1.55) shadow-lg flex items-center justify-center">
+                <div class="w-1 h-1 bg-white/20 rounded-full"></div>
+            </div>
+        </div>
+    </div>
+</div>    
+   
 
        <div class="flex justify-between items-center p-5 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-orange-500/30">
     <div class="flex items-center space-x-3">
@@ -363,8 +375,7 @@ body {
 
     <div class="pt-3 border-t border-white/5 relative z-10">
         <p class="text-[10px] text-gray-400 leading-relaxed font-medium uppercase tracking-tight italic">
-            Aktivizoni <span class="text-orange-500 font-bold">"Shtinja Lapsin"</span> për llogaritje automatike, analiza ligjore dhe artikuj inteligjentë në kohë reale.
-        </p>
+            Aktivizoni <span class="text-orange-500 font-bold">"Shtinja Lapsin"</span> 
     </div>
 </div>       
         <div class="flex flex-col gap-4 p-5 glass-view rounded-2xl border border-white/5">
@@ -481,38 +492,97 @@ function toggleTheme() {
     gsap.to("body", { duration: 0.5, backgroundColor: isDarkMode ? "#010204" : "#f1f5f9" });
 }
 
-// --- SISTEMI I NJOFTIMEVE (REAL API) ---
-let notificationsActive = false;
-function toggleNotifications() {
-    const circle = document.getElementById('notif-circle');
-    const toggleBg = document.getElementById('notif-toggle');
 
-    if (!notificationsActive) {
-        // Kërko leje nga sistemi operativ
-        Notification.requestPermission().then(permission => {
+
+        // --- SHTINJA LAPSIN: SMART SCHEDULER v4.0 ---
+
+const NotifEngine = {
+    state: localStorage.getItem('kalkulo_notif_active') === 'true',
+    checkInterval: null,
+
+    init() {
+        // Kontrollon nëse përdoruesi e ka pasur të ndezur më herët
+        if (this.state) {
+            this.updateUI(true);
+            this.startStream();
+        }
+    },
+
+    async toggle() {
+        if (!this.state) {
+            const permission = await Notification.requestPermission();
             if (permission === "granted") {
-                notificationsActive = true;
-                circle.classList.add('translate-x-6');
-                circle.classList.replace('bg-gray-400', 'bg-emerald-500');
-                toggleBg.classList.replace('bg-white/10', 'bg-emerald-500/20');
-                
-                // Dërgo njoftimin e parë real
-                new Notification("KALKULO", {
-                    body: "Njoftimet në KALKULO u aktivizuan me sukses! 🚀",
-                    icon: "https://img.icons8.com/fluency/192/000000/calculator.png"
-                });
+                this.state = true;
+                localStorage.setItem('kalkulo_notif_active', 'true');
+                this.updateUI(true);
+                this.sendImmediateUpdate("Sistemi u aktivizua!", "Do të njoftohesh në mëngjes, drekë dhe mbrëmje. 🚀");
+                this.startStream();
             } else {
-                alert("Ju lutem aktivizoni lejen për njoftime në cilësimet e browser-it.");
+                alert("Ju lutem lejoni njoftimet në settings të browser-it.");
             }
-        });
-    } else {
-        notificationsActive = false;
-        circle.classList.remove('translate-x-6');
-        circle.classList.replace('bg-emerald-500', 'bg-gray-400');
-        toggleBg.classList.replace('bg-emerald-500/20', 'bg-white/10');
-    }
-}
+        } else {
+            this.state = false;
+            localStorage.setItem('kalkulo_notif_active', 'false');
+            this.updateUI(false);
+            clearInterval(this.checkInterval);
+        }
+    },
 
+    updateUI(active) {
+        const circle = document.getElementById('notif-circle');
+        const toggleBg = document.getElementById('notif-toggle');
+        if (!circle || !toggleBg) return;
+
+        if (active) {
+            circle.style.transform = 'translateX(24px)';
+            circle.classList.replace('bg-gray-400', 'bg-orange-500');
+            toggleBg.classList.replace('bg-white/10', 'bg-orange-500/20');
+        } else {
+            circle.style.transform = 'translateX(0px)';
+            circle.classList.replace('bg-orange-500', 'bg-gray-400');
+            toggleBg.classList.replace('bg-orange-500/20', 'bg-white/10');
+        }
+    },
+
+    startStream() {
+        console.log("Stream i njoftimeve u aktivizua...");
+        // Kontrollon çdo 1 minutë nëse është koha për njoftim
+        this.checkInterval = setInterval(() => this.scheduler(), 60000);
+    },
+
+    scheduler() {
+        const now = new Date();
+        const hour = now.getHours();
+        const minute = now.getMinutes();
+
+        // Eviton dërgimin e njoftimit shumë herë brenda të njëjtës minutë
+        if (minute !== 0) return; 
+
+        // ORARET E CAKTUARA
+        if (hour === 9) {
+            this.sendImmediateUpdate("Mirëmëngjesi! ☕", "Hajde kqyri pak financat sot. Kalkulo mbarë!");
+        } else if (hour === 14) {
+            this.sendImmediateUpdate("Pauza e drekës? 🍕", "Gjej 2 minuta kohë për të parë trendet e fundit të Kategorive.");
+        } else if (hour === 21) {
+            this.sendImmediateUpdate("Reflektim i mbrëmjes 🌙", "Mbylli llogaritë e sotme dhe planifiko të nesërmen me Kalkulo.");
+        }
+    },
+
+    sendImmediateUpdate(title, body) {
+        if (Notification.permission === "granted") {
+            new Notification(title, {
+                body: body,
+                icon: 'https://i.imgur.com/8Qj9S1f.png', // Ikona jote mahnitëse
+                badge: 'https://i.imgur.com/8Qj9S1f.png',
+                tag: 'kalkulo-daily',
+                renotify: true
+            });
+        }
+    }
+};
+
+// Startimi automatik kur ngarkohet faqja
+document.addEventListener('DOMContentLoaded', () => NotifEngine.init());
 
 
 
