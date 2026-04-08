@@ -185,81 +185,54 @@ body {
 
 
 
-            
-<div class="flex items-center justify-between p-5 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 hover:border-orange-500/30 transition-all duration-500 group mt-4">
-    <div class="flex items-center space-x-4">
-        <div id="ai-status-glow" class="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center border border-white/5 transition-all duration-500 shadow-inner">
-            <i class="fi fi-rr-magic-wand text-gray-500 group-hover:text-orange-500 transition-colors"></i>
-        </div>
-        <div>
-            <p class="text-[11px] font-black uppercase tracking-widest text-white">Neural Engine AI</p>
-            <p class="text-[8px] text-gray-500 font-bold uppercase italic">Shtinja Lapsin v4.0</p>
-        </div>
-    </div>
-    <div onclick="toggleAI()" id="ai-master-toggle" class="w-14 h-7 bg-gray-800 rounded-full relative cursor-pointer transition-all duration-500 border border-white/5">
-        <div id="ai-master-circle" class="w-5 h-5 bg-white rounded-full absolute top-1 left-1 transition-all duration-500 shadow-lg"></div>
-    </div>
-</div>
-
-<div id="ai-window" class="fixed inset-0 sm:inset-auto sm:bottom-10 sm:right-10 z-[200] hidden flex-col sm:w-[450px] sm:h-[700px] bg-[#05070a]/98 backdrop-blur-3xl sm:rounded-[3rem] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.9)] overflow-hidden">
+            <div id="ai-window" class="fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[999] hidden flex-col sm:w-[420px] sm:h-[650px] bg-black border border-white/10 sm:rounded-[3rem] shadow-[0_0_80px_rgba(0,0,0,0.9)] overflow-hidden animate-in fade-in slide-in-from-bottom-10 duration-500">
     
-    <div class="p-6 border-b border-white/5 bg-gradient-to-r from-orange-500/10 to-transparent flex justify-between items-center">
+    <div class="p-6 bg-gradient-to-b from-orange-500/10 to-transparent border-b border-white/5 flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="relative w-3 h-3 bg-orange-500 rounded-full">
-                <div class="absolute inset-0 bg-orange-500 rounded-full animate-ping opacity-40"></div>
-            </div>
-            <span class="font-black text-[10px] uppercase tracking-[0.3em] text-white">Core Intelligence</span>
+            <div class="w-2 h-2 bg-orange-500 rounded-full animate-pulse shadow-[0_0_10px_#f97316]"></div>
+            <span class="font-black text-[10px] uppercase tracking-[0.4em] text-white">Neural Core v4.0</span>
         </div>
-        <button onclick="closeAI()" class="text-gray-500 hover:text-white transition-all text-xl">✕</button>
+        <button onclick="closeAI()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white/5 text-gray-400 hover:text-white transition-all">✕</button>
     </div>
 
     <div id="ai-dashboard" class="flex-1 overflow-y-auto p-6 space-y-8 no-scrollbar">
-        <div class="text-center space-y-2 animate-in fade-in duration-700">
-            <h2 class="text-2xl font-black text-white italic">Si mund të ndihmoj?</h2>
-            <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Zgjidhni një shërbim inteligjent</p>
+        <div class="text-center py-4">
+            <h2 class="text-2xl font-black text-white italic tracking-tight">Përshëndetje, Faton</h2>
+            <p class="text-[9px] text-orange-500/60 uppercase font-black tracking-[0.2em] mt-1">Sistemi është gati për ty</p>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
-            <button onclick="startService('paga')" class="p-5 bg-white/5 border border-white/5 rounded-3xl hover:bg-orange-500/10 hover:border-orange-500/30 transition-all text-left space-y-3 group">
-                <i class="fi fi-rr-salary text-orange-500 text-xl"></i>
-                <p class="text-[10px] font-black text-white uppercase tracking-tighter">Llogarit Pagën</p>
+            <button onclick="startService('paga')" class="p-5 bg-white/5 border border-white/5 rounded-[2rem] hover:border-orange-500/40 transition-all text-left group">
+                <i class="fi fi-rr-coins text-orange-500 text-xl block mb-2"></i>
+                <span class="text-[10px] font-black text-white uppercase tracking-tighter">Llogarit Pagën</span>
             </button>
-            <button onclick="startService('artikuj')" class="p-5 bg-white/5 border border-white/5 rounded-3xl hover:bg-orange-500/10 hover:border-orange-500/30 transition-all text-left space-y-3 group">
-                <i class="fi fi-rr-document text-orange-500 text-xl"></i>
-                <p class="text-[10px] font-black text-white uppercase tracking-tighter">Lajmet e Fundit</p>
-            </button>
-            <button onclick="startService('dogana')" class="p-5 bg-white/5 border border-white/5 rounded-3xl hover:bg-orange-500/10 hover:border-orange-500/30 transition-all text-left space-y-3 group">
-                <i class="fi fi-rr-box text-orange-500 text-xl"></i>
-                <p class="text-[10px] font-black text-white uppercase tracking-tighter">Info Doganore</p>
-            </button>
-            <button onclick="startService('kursi')" class="p-5 bg-white/5 border border-white/5 rounded-3xl hover:bg-orange-500/10 hover:border-orange-500/30 transition-all text-left space-y-3 group">
-                <i class="fi fi-rr-stats text-orange-500 text-xl"></i>
-                <p class="text-[10px] font-black text-white uppercase tracking-tighter">Kursi Valutor</p>
+            <button onclick="startService('artikuj')" class="p-5 bg-white/5 border border-white/5 rounded-[2rem] hover:border-orange-500/40 transition-all text-left group">
+                <i class="fi fi-rr-document-signed text-orange-500 text-xl block mb-2"></i>
+                <span class="text-[10px] font-black text-white uppercase tracking-tighter">Artikujt AI</span>
             </button>
         </div>
 
-        <div id="ai-articles" class="space-y-4 pt-4 border-t border-white/5">
-            <span class="text-[9px] font-black text-orange-500 uppercase tracking-widest">Artikuj të Sugjeruar</span>
-            <div class="space-y-3">
-                <div class="p-4 bg-orange-500/5 rounded-2xl border border-orange-500/10 text-[11px] text-gray-300 leading-relaxed italic">
-                    "Si ndikon rritja e pagës minimale në llogaritjen e Trustit për vitin 2026?"
-                    <a href="#" class="block mt-2 text-orange-500 font-bold uppercase text-[9px]">Lexo më shumë →</a>
-                </div>
+        <div class="space-y-3">
+            <p class="text-[8px] font-black text-gray-500 uppercase tracking-widest ml-2">Sygjerimet e fundit</p>
+            <div class="p-4 bg-orange-500/5 rounded-2xl border border-orange-500/10 group cursor-pointer hover:bg-orange-500/10 transition-all">
+                <p class="text-[11px] text-gray-300 italic leading-snug">"Si të optimizoni kursimet tuaja pas ndryshimeve të reja tatimore në 2026?"</p>
+                <span class="text-[8px] text-orange-500 font-bold uppercase mt-2 block">Lexo Artikullin →</span>
             </div>
         </div>
     </div>
 
     <div id="ai-chat-area" class="hidden flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar"></div>
 
-    <div class="p-6 bg-[#010204] border-t border-white/5">
-        <div class="flex items-center bg-white/5 border border-white/10 rounded-[2rem] p-1 focus-within:border-orange-500/50 transition-all">
-            <input type="text" id="ai-input" placeholder="Shkruaj pyetjen këtu..." class="flex-1 bg-transparent border-none outline-none text-xs px-5 py-3 text-white placeholder:text-gray-700">
-            <button onclick="askAI()" class="w-12 h-12 bg-orange-500 rounded-full text-black flex items-center justify-center shadow-lg active:scale-90 transition-transform">
-                <i class="fi fi-rr-paper-plane text-lg"></i>
+    <div class="p-6 bg-black border-t border-white/5">
+        <div class="flex items-center bg-white/5 border border-white/10 rounded-3xl p-1.5 focus-within:border-orange-500/40 transition-all">
+            <input type="text" id="ai-input" placeholder="Më pyet për çdo gjë..." class="flex-1 bg-transparent border-none outline-none text-xs px-4 text-white placeholder:text-gray-700">
+            <button onclick="askAI()" class="w-10 h-10 bg-orange-500 rounded-2xl text-black flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                <i class="fi fi-rr-paper-plane"></i>
             </button>
         </div>
     </div>
 </div>
+
         </main>
 
         <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
@@ -332,34 +305,34 @@ body {
 
 
 
-<div class="flex flex-col gap-4 p-5 bg-white/5 backdrop-blur-xl rounded-[2.5rem] border border-white/10 hover:border-orange-500/30 transition-all duration-500 group relative overflow-hidden">
+<div class="flex flex-col gap-4 p-5 bg-[#0a0a0a] backdrop-blur-2xl rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all duration-500 group relative overflow-hidden mt-4">
     
-    <div class="absolute -right-4 -bottom-4 w-24 h-24 bg-orange-500/5 blur-3xl group-hover:bg-orange-500/10 transition-all duration-700"></div>
+    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-orange-500/10 blur-3xl group-hover:bg-orange-500/20 transition-all duration-700"></div>
 
     <div class="flex items-center justify-between relative z-10">
         <div class="flex items-center space-x-4">
-            <div id="ai-icon-bg" class="w-12 h-12 bg-gray-900 rounded-2xl flex items-center justify-center border border-white/5 transition-all duration-500">
+            <div id="ai-status-glow" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 transition-all duration-500">
                 <i id="ai-main-icon" class="fi fi-rr-magic-wand text-gray-500 group-hover:text-orange-500 transition-colors text-lg"></i>
             </div>
             <div>
-                <p id="label-ai-title" class="text-[11px] font-black uppercase tracking-widest text-white" data-i18n="ai-title">Asistenti Neural</p>
+                <p class="text-[11px] font-black uppercase tracking-widest text-white">Neural Engine AI</p>
                 <div class="flex items-center space-x-2">
-                    <span id="ai-status-dot" class="w-1.5 h-1.5 bg-gray-600 rounded-full"></span>
-                    <p id="ai-status-text" class="text-[8px] text-gray-500 font-bold uppercase tracking-tighter" data-i18n="ai-status">I Çaktivizuar</p>
+                    <span id="ai-status-dot" class="w-1.5 h-1.5 bg-gray-600 rounded-full transition-all"></span>
+                    <p id="ai-status-text" class="text-[8px] text-gray-500 font-bold uppercase tracking-tighter">I Çaktivizuar</p>
                 </div>
             </div>
         </div>
 
-        <div onclick="toggleAI()" id="ai-master-toggle" class="w-14 h-7 bg-gray-800 rounded-full relative cursor-pointer transition-all duration-500 border border-white/5 shadow-inner">
-            <div id="ai-master-circle" class="w-5 h-5 bg-white rounded-full absolute top-1 left-1 transition-all duration-500 shadow-lg flex items-center justify-center text-[10px]">
-                <div class="w-1 h-1 bg-gray-200 rounded-full"></div>
+        <div onclick="toggleAI()" id="ai-master-toggle" class="w-14 h-7 bg-white/5 rounded-full relative cursor-pointer transition-all duration-500 border border-white/10 shadow-inner">
+            <div id="ai-master-circle" class="w-5 h-5 bg-white rounded-full absolute top-1 left-1 transition-all duration-500 shadow-lg flex items-center justify-center">
+                <div class="w-1 h-1 bg-gray-400 rounded-full"></div>
             </div>
         </div>
     </div>
 
     <div class="pt-2 border-t border-white/5 relative z-10">
-        <p class="text-[9px] text-gray-500 leading-relaxed font-medium uppercase tracking-tight" data-i18n="ai-desc">
-            Aktivizoni inteligjencën artificiale për llogaritje automatike, analiza të ligjeve dhe ndihmë rreth financave në kohë reale.
+        <p class="text-[9px] text-gray-500 leading-relaxed font-medium uppercase tracking-tight italic">
+            Aktivizoni inteligjencën për analiza financiare dhe artikuj sugjerues.
         </p>
     </div>
 </div>
@@ -1220,158 +1193,121 @@ async function processVisualInvoice(imageData) {
 
 
 
-// --- SHTINJA LAPSIN: NEURAL ENGINE v4 ---
-
+// --- INITIAL STATE ---
 let aiState = {
     enabled: false,
-    mode: 'dashboard', // dashboard ose chat
-    history: []
+    mode: 'dashboard'
 };
 
-// 1. Aktivizimi ne Settings
+// 1. MASTER TOGGLE (Settings & Window Control)
 function toggleAI() {
     aiState.enabled = !aiState.enabled;
+    
+    // UI Elements
+    const windowEl = document.getElementById('ai-window');
+    const toggleBg = document.getElementById('ai-master-toggle');
     const circle = document.getElementById('ai-master-circle');
-    const bg = document.getElementById('ai-master-toggle');
-    const glow = document.getElementById('ai-status-glow');
+    const statusDot = document.getElementById('ai-status-dot');
+    const statusText = document.getElementById('ai-status-text');
+    const icon = document.getElementById('ai-main-icon');
 
     if(aiState.enabled) {
-        bg.classList.replace('bg-gray-800', 'bg-orange-500');
+        // Shfaq Dritaren & Animacionet
+        windowEl.classList.remove('hidden');
+        toggleBg.style.backgroundColor = '#f97316';
         circle.style.transform = 'translateX(28px)';
-        glow.classList.add('shadow-[0_0_20px_rgba(249,115,22,0.3)]', 'border-orange-500/30');
-        document.getElementById('ai-window').classList.remove('hidden');
-        if(navigator.vibrate) navigator.vibrate([10, 30, 10]);
+        statusDot.style.backgroundColor = '#f97316';
+        statusDot.classList.add('animate-pulse');
+        statusText.innerText = "Sistemi Online";
+        statusText.style.color = '#f97316';
+        icon.style.color = '#f97316';
+        
+        if(navigator.vibrate) navigator.vibrate(20);
     } else {
-        bg.classList.replace('bg-orange-500', 'bg-gray-800');
+        // Fshih Dritaren
+        windowEl.classList.add('hidden');
+        toggleBg.style.backgroundColor = 'rgba(255,255,255,0.05)';
         circle.style.transform = 'translateX(0px)';
-        glow.classList.remove('shadow-[0_0_20px_rgba(249,115,22,0.3)]', 'border-orange-500/30');
-        document.getElementById('ai-window').classList.add('hidden');
+        statusDot.style.backgroundColor = '#4b5563';
+        statusDot.classList.remove('animate-pulse');
+        statusText.innerText = "I Çaktivizuar";
+        statusText.style.color = '#6b7280';
+        icon.style.color = '#6b7280';
     }
 }
 
-// 2. Sherbimet e Shpejta (Quick Services)
-function startService(type) {
-    document.getElementById('ai-dashboard').classList.add('hidden');
+// 2. CHAT ENGINE
+function addMessage(sender, text) {
     const chatArea = document.getElementById('ai-chat-area');
-    chatArea.classList.remove('hidden');
-    aiState.mode = 'chat';
-
-    let msg = "";
-    if(type === 'paga') msg = "Po përgatis kalkulatorin e pagave. Për cilën vlerë bruto dëshironi të bëjmë llogaritjen?";
-    if(type === 'artikuj') msg = "Artikujt më të lexuar: 1. Ligji i ri i TVSH 2026, 2. Subvencionet për energji. Cilin dëshironi ta lexoni?";
+    const div = document.createElement('div');
     
-    addMessage("ai", msg);
+    if(sender === 'ai') {
+        div.className = "flex flex-col items-start animate-in slide-in-from-left-2 duration-300";
+        div.innerHTML = `
+            <span class="text-[8px] font-black text-orange-500 uppercase ml-3 mb-1">Neural AI</span>
+            <div class="bg-white/5 border border-white/5 p-4 rounded-[1.8rem] rounded-tl-none text-[11px] text-gray-300 leading-relaxed max-w-[90%]">
+                ${text}
+            </div>
+        `;
+    } else {
+        div.className = "flex flex-col items-end animate-in slide-in-from-right-2 duration-300";
+        div.innerHTML = `
+            <div class="bg-orange-500 p-4 rounded-[1.8rem] rounded-tr-none text-black font-bold text-[11px] max-w-[85%] shadow-lg shadow-orange-500/10">
+                ${text}
+            </div>
+        `;
+    }
+    
+    chatArea.appendChild(div);
+    chatArea.scrollTop = chatArea.scrollHeight;
 }
 
-// 3. Algoritmi i Analizes se Pyetjes (Deep Analysis)
-async function askAI() {
-    const input = document.getElementById('ai-input');
-    const query = input.value.trim();
-    if(query === "") return;
+// 3. SERVICE HANDLER
+function startService(type) {
+    document.getElementById('ai-dashboard').classList.add('hidden');
+    document.getElementById('ai-chat-area').classList.remove('hidden');
+    aiState.mode = 'chat';
 
-    // Switch automatik ne mode chat
+    const serviceMessages = {
+        'paga': "Sistemi i Pagave 2026: Aktiv. Shëno vlerën Bruto për të parë ndikimin e ligjit të ri.",
+        'artikuj': "Po gjeneroj artikujt e personalizuar për ty... Kam gjetur lajme rreth inflacionit dhe kursimeve."
+    };
+
+    addMessage('ai', serviceMessages[type]);
+}
+
+// 4. ANALYZE INPUT
+function askAI() {
+    const input = document.getElementById('ai-input');
+    const val = input.value.trim();
+    if(!val) return;
+
     if(aiState.mode === 'dashboard') {
         document.getElementById('ai-dashboard').classList.add('hidden');
         document.getElementById('ai-chat-area').classList.remove('hidden');
         aiState.mode = 'chat';
     }
 
-    addMessage("user", query);
+    addMessage('user', val);
     input.value = "";
-    
-    const thinkId = addThinking();
 
-    // Simulimi i Algoritmit "Neural"
+    // Simulo mendimin
+    const loadingId = "loading-" + Date.now();
+    const chatArea = document.getElementById('ai-chat-area');
+    chatArea.innerHTML += `<div id="${loadingId}" class="flex space-x-1 p-4 bg-white/5 w-14 rounded-2xl ml-3 animate-pulse">
+        <div class="w-1 h-1 bg-orange-500 rounded-full"></div>
+        <div class="w-1 h-1 bg-orange-500 rounded-full"></div>
+        <div class="w-1 h-1 bg-orange-500 rounded-full"></div>
+    </div>`;
+
     setTimeout(() => {
-        document.getElementById(thinkId).remove();
-        let response = generateAdvancedResponse(query.toLowerCase());
-        addMessage("ai", response);
+        document.getElementById(loadingId).remove();
+        addMessage('ai', "Bazuar në algoritmin tim Neural, kjo kërkesë lidhet me të dhënat financiare të Kosovës për vitin 2026. A dëshironi një llogaritje specifike?");
     }, 1200);
 }
 
-function generateAdvancedResponse(q) {
-    // Memoria dhe Logjika
-    if(q.includes("paga") || q.includes("neto")) {
-        return "📈 **Analiza:** Për vitin 2026, pas heqjes së shkallës së parë tatimore (250€), llogaritja është më favorizuese. Paga juaj neto do të rritet mesatarisht me 2.4% nga viti i kaluar. A dëshironi t'ju dërgoj tabelën e detajuar?";
-    }
-    if(q.includes("dogana") || q.includes("vetura")) {
-        return "🚗 **Info Doganore:** Zhdoganimi i veturave në 2026 varet nga norma e emetimit CO2. Për veturat elektrike, akciza është 0%. Për cilin vit të prodhimit jeni i interesuar?";
-    }
-    return "Pyetje me rëndësi! Bazuar në algoritmin tim të fundit, sugjeroj që këtë ta llogarisim duke përfshirë edhe parametrat e inflacionit aktual në Kosovë.";
-}
-
-// 4. UI Functions
-function addMessage(sender, text) {
-    const area = document.getElementById('ai-chat-area');
-    const div = document.createElement('div');
-    if(sender === "ai") {
-        div.className = "bg-white/5 p-5 rounded-[2rem] rounded-tl-none border border-white/5 text-[11px] leading-relaxed text-gray-300 animate-in slide-in-from-left-2";
-        div.innerHTML = `<span class="text-orange-500 font-black block mb-1 uppercase text-[8px]">Core AI</span> ${text}`;
-    } else {
-        div.className = "bg-orange-500 p-5 rounded-[2rem] rounded-tr-none text-black font-bold text-[11px] ml-auto max-w-[85%] animate-in slide-in-from-right-2";
-        div.innerText = text;
-    }
-    area.appendChild(div);
-    area.scrollTop = area.scrollHeight;
-}
-
-function addThinking() {
-    const id = "think-" + Date.now();
-    const area = document.getElementById('ai-chat-area');
-    area.innerHTML += `<div id="${id}" class="flex gap-1 p-4 bg-white/5 w-16 rounded-2xl animate-pulse">
-        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
-    </div>`;
-    area.scrollTop = area.scrollHeight;
-    return id;
-}
-
 function closeAI() {
-    document.getElementById('ai-window').classList.add('hidden');
-}
-
-
-
-        // --- LOGJIKA E AI BRENDA SETTINGS ---
-
-let aiState = {
-    enabled: false,
-    initialized: false
-};
-
-function toggleAI() {
-    aiState.enabled = !aiState.enabled;
-    
-    const toggleBg = document.getElementById('ai-toggle');
-    const toggleCircle = document.getElementById('ai-circle');
-    const statusIcon = document.getElementById('ai-status-icon');
-    const infoBox = document.getElementById('ai-info-box');
-    const assistantContainer = document.getElementById('ai-assistant-container');
-
-    if(aiState.enabled) {
-        // Efekti Aktiv
-        toggleBg.classList.replace('bg-gray-800', 'bg-emerald-500');
-        toggleCircle.style.transform = 'translateX(28px)';
-        statusIcon.classList.replace('bg-gray-800', 'bg-emerald-500/20');
-        statusIcon.querySelector('i').classList.replace('text-gray-500', 'text-emerald-500');
-        statusIcon.classList.add('border-emerald-500/30', 'shadow-[0_0_15px_rgba(16,185,129,0.2)]');
-        
-        infoBox.classList.remove('hidden');
-        assistantContainer.classList.remove('hidden'); // Shfaq butonin e AI jashte settings
-        
-        if(navigator.vibrate) navigator.vibrate([10, 30, 10]);
-    } else {
-        // Efekti Inaktiv
-        toggleBg.classList.replace('bg-emerald-500', 'bg-gray-800');
-        toggleCircle.style.transform = 'translateX(0px)';
-        statusIcon.classList.replace('bg-emerald-500/20', 'bg-gray-800');
-        statusIcon.querySelector('i').classList.replace('text-emerald-500', 'text-gray-500');
-        statusIcon.classList.remove('border-emerald-500/30', 'shadow-[0_0_15px_rgba(16,185,129,0.2)]');
-        
-        infoBox.classList.add('hidden');
-        assistantContainer.classList.add('hidden'); // Fshih asistentin
-    }
+    toggleAI(); // Kjo do të sinkronizojë edhe switch-in në Settings
 }
 </script>
 </body>
