@@ -378,15 +378,7 @@ body {
             Aktivizoni <span class="text-orange-500 font-bold">"Shtinja Lapsin"</span> 
     </div>
 </div>       
-        <div class="flex flex-col gap-4 p-5 glass-view rounded-2xl border border-white/5">
-            <span id="label-lang" class="font-medium text-gray-200">Gjuha / Language</span>
-            <div class="flex bg-white/5 p-1 rounded-xl">
-                <button onclick="setLanguage('sq')" id="lang-sq" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all bg-emerald-500 text-black">SHQIP</button>
-                <button onclick="setLanguage('en')" id="lang-en" class="flex-1 py-2 rounded-lg text-xs font-bold transition-all text-gray-400">ENGLISH</button>
-            </div>
-        </div>
-    </div>
-
+        
 
 
 <div id="personal-profile" class="space-y-8 p-1 animate-in fade-in zoom-in-95 duration-700">
@@ -460,40 +452,6 @@ body {
     </div>
 
     <script>
-
-// --- SISTEMI I GJUHËS (Lokalizimi) ---
-const langData = {
-    sq: {
-        title: "CILESIMET", sub: "KONFIGURIMI I SISTEMIT", notif: "Njoftimet", mode: "Tema e Errët", lang: "Gjuha / Language",
-        nav_trusti: "Trusti", nav_valuta: "Këmbimi", nav_paga: "Paga", nav_kesco: "Energjia", nav_dogana: "Dogana", nav_crypto: "Crypto"
-    },
-    en: {
-        title: "SETTINGS", sub: "SYSTEM CONFIGURATION", notif: "Notifications", mode: "Dark Mode", lang: "Language / Gjuha",
-        nav_trusti: "Trust", nav_valuta: "Exchange", nav_paga: "Salary", nav_kesco: "Energy", nav_dogana: "Customs", nav_crypto: "Crypto"
-    }
-};
-
-let currentLang = 'sq';
-
-function setLanguage(l) {
-    currentLang = l;
-    // Përditëso tekstet në Settings
-    document.getElementById('sett-title').innerText = langData[l].title;
-    document.getElementById('sett-subtitle').innerText = langData[l].sub;
-    document.getElementById('label-notifications').innerText = langData[l].notif;
-    document.getElementById('label-mode').innerText = langData[l].mode;
-    document.getElementById('label-lang').innerText = langData[l].lang;
-
-    // Përditëso Butonat e Gjuhës
-    const isSq = l === 'sq';
-    document.getElementById('lang-sq').className = isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
-    document.getElementById('lang-en').className = !isSq ? 'flex-1 py-2 rounded-lg text-xs font-bold bg-emerald-500 text-black' : 'flex-1 py-2 rounded-lg text-xs font-bold text-gray-400';
-
-    // Përditëso Navigimin
-    const navItems = document.querySelectorAll('.mobile-nav-item span');
-    const keys = ['nav_trusti', 'nav_valuta', 'nav_paga', 'nav_kesco', 'nav_dogana', 'nav_crypto'];
-    navItems.forEach((span, i) => { span.innerText = langData[l][keys[i]]; });
-}
 
 // --- SISTEMI I AVANCUAR I TEMËS (Dark & Orange) ---
 let isDarkMode = true;
