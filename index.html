@@ -17,7 +17,30 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+@keyframes ticker-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
 
+.animate-ticker {
+    display: inline-flex;
+    animation: ticker-scroll 30s linear infinite;
+}
+
+.hover\:pause:hover {
+    animation-play-state: paused;
+}
+
+.ticker-item {
+    display: flex;
+    items-center;
+    gap: 8px;
+}
+
+
+
+
+        
 
 /* Tranzicion i lëmuar për çdo element */
 body {
@@ -181,6 +204,30 @@ body {
 
 
 
+
+<div class="w-full bg-[#05070a] border-y border-white/5 overflow-hidden h-10 flex items-center relative group">
+    <div class="absolute left-0 z-20 bg-[#05070a] px-4 h-full flex items-center border-r border-white/5">
+        <div class="flex items-center space-x-2">
+            <span class="relative flex h-1.5 w-1.5">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-orange-500"></span>
+            </span>
+            <span class="text-[8px] font-black text-white uppercase tracking-[0.2em]">Live 2026</span>
+        </div>
+    </div>
+
+    <div class="ticker-wrapper flex whitespace-nowrap pl-[100px]">
+        <div id="ticker-content" class="flex space-x-12 animate-ticker hover:pause">
+            </div>
+    </div>
+
+    <div class="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-[#05070a] to-transparent z-10"></div>
+</div>
+            
+
+
+
+            
 
 
 
@@ -1288,6 +1335,52 @@ function closeAI() {
 
 
 
+
+
+
+
+
+        // --- KALKULO: LIVE MARKET ENGINE v1.0 ---
+
+const MarketTicker = {
+    // Të dhënat reale që do të shfaqen (Mund të vijnë nga API)
+    marketData: [
+        { label: "Nafta (L)", value: "1.42€", trend: "down", change: "-0.02" },
+        { label: "BQK EUR/CHF", value: "0.942", trend: "up", change: "+0.003" },
+        { label: "Energjia (Tarifa)", value: "Aktiv", trend: "neutral", change: "Ulët" },
+        { label: "Bitcoin", value: "68,420€", trend: "up", change: "+1.2%" },
+        { label: "Trusti 2026", value: "Në Pritje", trend: "neutral", change: "Qershor" },
+        { label: "Dogana Euro 6", value: "E hapur", trend: "up", change: "Saktë" }
+    ],
+
+    init() {
+        const container = document.getElementById('ticker-content');
+        if (!container) return;
+
+        // Gjenerojmë HTML për një set të dhënash
+        const htmlContent = this.marketData.map(item => `
+            <div class="ticker-item flex items-center space-x-2">
+                <span class="text-[9px] font-black text-gray-500 uppercase tracking-tighter">${item.label}:</span>
+                <span class="text-[10px] font-black text-white">${item.value}</span>
+                <span class="text-[8px] font-bold ${this.getTrendColor(item.trend)}">
+                    ${item.trend === 'up' ? '▲' : item.trend === 'down' ? '▼' : '•'} ${item.change}
+                </span>
+            </div>
+        `).join('');
+
+        // Injektojmë dy herë për efektin Infinity Loop
+        container.innerHTML = htmlContent + htmlContent;
+    },
+
+    getTrendColor(trend) {
+        if (trend === 'up') return 'text-emerald-500';
+        if (trend === 'down') return 'text-red-500';
+        return 'text-orange-500';
+    }
+};
+
+// Starto kur ngarkohet App-i
+document.addEventListener('DOMContentLoaded', () => MarketTicker.init());
 </script>
 </body>
 </html>
