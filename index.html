@@ -241,6 +241,15 @@
     <span class="text-[9px] font-bold uppercase tracking-widest">Prona</span>
 </div>
 
+
+
+
+<div onclick="renderView('wallet', this)" class="mobile-nav-item min-w-[80px]">
+    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9-9c1.657 0 3 4.03 3 9s-1.343 9-3 9m0-18c-1.657 0-3 4.03-3 9s1.343 9 3 9m-9-9a9 9 0 019-9"></path>
+    </svg>
+    <span class="text-[9px] font-bold uppercase tracking-widest text-center">Mirëqenia</span>
+</div>
             
         </nav>
     </div>
@@ -774,9 +783,79 @@ case 'karburanti':
         <p class="text-[8px] text-gray-500 text-center italic px-10">Llogaritur sipas normës minimale ligjore në Republikën e Kosovës.</p>
     </div>`;
     break;
-                    
-                    
 
+
+
+
+                    case 'wallet':
+    html = `
+    <div class="space-y-6 sector-animate pb-20 px-2">
+        <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">SMART <br><span class="text-indigo-500 italic">WALLET</span></h2>
+        
+        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-4">
+            <div>
+                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Paga jote mujore (€)</label>
+                <input type="number" id="w-salary" oninput="calcWallet()" placeholder="500" class="w-full bg-transparent text-4xl font-black outline-none border-b border-white/5">
+            </div>
+            
+            <div class="grid grid-cols-2 gap-4 pt-2">
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <p class="text-[8px] font-bold text-gray-500 uppercase italic">Shporta Bazë (Avg)</p>
+                    <p class="text-lg font-bold">€ 85.40</p>
+                </div>
+                <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <p class="text-[8px] font-bold text-gray-500 uppercase italic">Qiraja Mesatare</p>
+                    <p class="text-lg font-bold">€ 250.00</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-4 shadow-xl">
+             <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Kalkulatori i Inflacionit</p>
+             <div class="flex items-center space-x-4">
+                <input type="number" id="w-old-val" oninput="calcWallet()" placeholder="Vlera e vjetër" class="flex-1 bg-transparent text-2xl font-bold outline-none border-b border-white/5">
+                <span class="text-gray-500 text-xs font-bold">VITI 2020</span>
+             </div>
+             <p class="text-[9px] text-gray-500 italic italic">Në vitin 2026, kjo vlerë do të duhej të ishte:</p>
+             <h4 id="w-new-val" class="text-3xl font-black text-white">0.00 €</h4>
+        </div>
+
+        <div class="bg-indigo-600 p-8 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
+            <p class="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-center">Mbetja pas shpenzimeve bazë</p>
+            <h3 id="w-leftover" class="text-6xl font-black text-center tracking-tighter">0.00 €</h3>
+            <p id="w-advice" class="text-[9px] font-bold text-center mt-4 uppercase opacity-50"></p>
+        </div>
+    </div>`;
+    break;
+                    
+                    
+function calcWallet() {
+    const salary = parseFloat(document.getElementById('w-salary').value) || 0;
+    const oldVal = parseFloat(document.getElementById('w-old-val').value) || 0;
+    
+    // 1. Llogaritja e Inflacionit (Mesatarja kumulative 2020-2026 ~28%)
+    const newVal = oldVal * 1.28;
+    document.getElementById('w-new-val').innerText = newVal.toFixed(2) + " €";
+    
+    // 2. Shpenzimet Bazë në Kosovë (Vlerësim real 2026)
+    const basicNeeds = 85.40 + 250.00 + 60.00; // Shporta + Qira + Energji/Ujë
+    const leftover = salary - basicNeeds;
+    
+    document.getElementById('w-leftover').innerText = leftover.toFixed(2) + " €";
+    
+    // 3. Këshilla Inteligjente
+    const advice = document.getElementById('w-advice');
+    if(leftover < 0) {
+        advice.innerText = "Kujdes: Shpenzimet bazë tejkalojnë pagën tënde!";
+        advice.style.color = "#fca5a5";
+    } else if(leftover < 150) {
+        advice.innerText = "Statusi: Mbajtje e balancës. Kursimi është i vështirë.";
+        advice.style.color = "#fef08a";
+    } else {
+        advice.innerText = "Statusi: Mundësi për kursim apo investim.";
+        advice.style.color = "#86efac";
+    }
+}
                     
             }
             container.innerHTML = html;
