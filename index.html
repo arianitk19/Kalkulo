@@ -235,17 +235,15 @@ body {
 </div>
         </main>
 
-       <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
-    <div id="nav-trusti" onclick="renderView('trusti', this)" class="mobile-nav-item active-nav min-w-[80px] cursor-pointer">
-        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-        </svg>
-        <span class="text-[9px] font-bold uppercase tracking-widest">Trusti</span>
-    </div>
-    </nav>
+            <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
 
-<div id="trusti-content" class="category-section block animate-in fade-in duration-500">
-    </div>
+            <div onclick="renderView('trusti', this)" class="mobile-nav-item active-nav min-w-[80px]">
+
+                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+
+                <span class="text-[9px] font-bold uppercase tracking-widest">Trusti</span>
+
+            </div>
             <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Këmbimi</span>
@@ -1125,84 +1123,6 @@ function calcF() {
 
 
 
-
-
-        let visionEnabled = false;
-
-function toggleVisionAI() {
-    const isChecked = document.getElementById('vision-ai-toggle').checked;
-    const statusText = document.getElementById('vision-status-text');
-    const aiIcon = document.getElementById('ai-circle'); // Ikonë te butoni kryesor
-
-    if(isChecked) {
-        visionEnabled = true;
-        statusText.classList.remove('hidden');
-        gsap.from(statusText, { height: 0, opacity: 0, duration: 0.3 });
-        
-        // Shto një efekt vizual te butoni i AI për të treguar që tani "sheh"
-        aiIcon.classList.add('ring-4', 'ring-emerald-500/50', 'animate-pulse');
-        
-        // AI prezantohet për modulin e ri
-        setTimeout(() => {
-            speakResponse("Sistemi Vision AI u aktivizua. Tani mund të më tregosh çdo faturë fizike përmes kamerës dhe unë do ta analizoj automatikisht.");
-        }, 500);
-    } else {
-        visionEnabled = false;
-        statusText.classList.add('hidden');
-        aiIcon.classList.remove('ring-4', 'ring-emerald-500/50', 'animate-pulse');
-    }
-}
-
-// Funksioni që thirret kur përdoruesi hap kamerën brenda AI
-async function processVisualInvoice(imageData) {
-    if(!visionEnabled) return;
-
-    addMessage("ai", "Sistemi po analizon strukturën e dokumentit... <span class='animate-pulse'>🔍</span>");
-
-    // Algoritmi i avancuar i filtrimit të të dhënave
-    setTimeout(() => {
-        const mockData = {
-            issuer: "KESCO / Korporata Energjetike",
-            period: "Mars 2026",
-            amount: 54.20,
-            tax: 4.34, // 8% TVSH për energji
-            consumption: "420 kWh",
-            advice: "Shpenzimi yt është mbi mesataren e lagjes. Sugjerohet reduktimi i bojlerit gjatë orës 08:00 - 18:00."
-        };
-
-        displayVisionResult(mockData);
-    }, 2500);
-}
-
-
-        function displayVisionResult(data) {
-    const resultHtml = `
-        <div class="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-[2rem] space-y-3">
-            <div class="flex justify-between border-b border-white/5 pb-2">
-                <span class="text-[9px] font-bold text-gray-500 uppercase italic">Lëshuesi</span>
-                <span class="text-[10px] font-black text-white">${data.issuer}</span>
-            </div>
-            <div class="flex justify-between items-center">
-                <h2 class="text-4xl font-black text-white">€ ${data.amount}</h2>
-                <div class="text-right">
-                    <p class="text-[8px] font-bold text-emerald-500 uppercase">Konsumi</p>
-                    <p class="text-xs font-black text-white">${data.consumption}</p>
-                </div>
-            </div>
-            <p class="text-[10px] leading-relaxed text-gray-400 border-t border-white/5 pt-2">
-                <span class="text-emerald-500 font-bold">Analiza:</span> ${data.advice}
-            </p>
-            <button class="w-full bg-emerald-500 text-black py-3 rounded-2xl font-black text-[9px] uppercase tracking-widest mt-2 hover:scale-95 transition-transform">
-                Ruaj në Arkivë 📁
-            </button>
-        </div>
-    `;
-    addMessage("ai", resultHtml);
-    speakResponse(`Analiza u krye. Fatura është nga ${data.issuer} në vlerë prej ${data.amount} euro.`);
-}
-
-
-
 // --- SHTINJA LAPSIN: ADAPTIVE BRAIN v4 (Dark & Orange) ---
 
 // INITIAL STATE
@@ -1368,44 +1288,6 @@ function closeAI() {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// --- FIX: AUTO-INITIALIZE TRUSTI ON LOAD ---
-document.addEventListener('DOMContentLoaded', () => {
-    // 1. Gjejmë elementin e parë në navigacion që ka funksionin renderView
-    const trustiBtn = document.querySelector('div[onclick*="renderView(\'trusti\'"]');
-    
-    if (trustiBtn) {
-        // 2. Aktivizojmë pamjen e Trustit
-        // Thërrasim renderView dhe i kalojmë 'trusti' dhe vetë elementin (this)
-        renderView('trusti', trustiBtn);
-
-        // 3. Sigurohemi që stili vizual "active-nav" është i vendosur
-        trustiBtn.classList.add('active-nav');
-
-        // 4. Animacioni i hyrjes për përmbajtjen që Trusti të duket "Live"
-        if (window.gsap) {
-            gsap.from("#trusti-content", {
-                duration: 0.6,
-                y: 15,
-                opacity: 0,
-                ease: "expo.out",
-                delay: 0.2
-            });
-        }
-    }
-});
 </script>
 </body>
 </html>
