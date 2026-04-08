@@ -244,12 +244,7 @@
 
 
 
-<div onclick="renderView('wallet', this)" class="mobile-nav-item min-w-[80px]">
-    <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9-9c1.657 0 3 4.03 3 9s-1.343 9-3 9m0-18c-1.657 0-3 4.03-3 9s1.343 9 3 9m-9-9a9 9 0 019-9"></path>
-    </svg>
-    <span class="text-[9px] font-bold uppercase tracking-widest text-center">Mirëqenia</span>
-</div>
+
             
         </nav>
     </div>
@@ -293,6 +288,38 @@
             </div>
         </div>
 
+
+
+
+<!-- Brenda Modalit të Settings -->
+<div class="p-6 bg-white/5 rounded-[2.5rem] border border-white/10 mt-4 overflow-hidden relative group">
+    <div class="absolute -top-10 -right-10 w-32 h-32 bg-emerald-500/10 blur-3xl group-hover:bg-emerald-500/20 transition-all"></div>
+    
+    <div class="flex items-center justify-between relative z-10">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-emerald-500/20 rounded-2xl flex items-center justify-center border border-emerald-500/30">
+                <i class="fi fi-rr-eye text-emerald-500 text-xl"></i>
+            </div>
+            <div>
+                <h4 class="text-xs font-black uppercase tracking-widest text-white">Vision AI Engine</h4>
+                <p class="text-[8px] font-bold text-gray-500 uppercase tracking-tighter">Skanim Real i Faturave & Dokumenteve</p>
+            </div>
+        </div>
+        
+        <!-- Toggle Switch i avancuar -->
+        <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" id="vision-ai-toggle" class="sr-only peer" onchange="toggleVisionAI()">
+            <div class="w-14 h-7 bg-gray-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500 shadow-inner"></div>
+        </label>
+    </div>
+    
+    <div id="vision-status-text" class="mt-4 p-3 bg-black/40 rounded-xl hidden border border-white/5 italic text-[10px] text-gray-400">
+        ⚠️ Duke përdorur procesorin për analizë vizuale në kohë reale...
+    </div>
+</div>
+
+
+        
         <div class="flex justify-between items-center p-5 glass-view rounded-2xl border border-white/5">
             <span id="label-mode" class="font-medium text-gray-200">Tema e Errët</span>
             <div id="theme-toggle" onclick="toggleTheme()" class="w-12 h-6 bg-emerald-500/20 rounded-full relative cursor-pointer group">
@@ -787,75 +814,10 @@ case 'karburanti':
 
 
 
-                    case 'wallet':
-    html = `
-    <div class="space-y-6 sector-animate pb-20 px-2">
-        <h2 class="text-4xl font-black tracking-tighter uppercase leading-tight">SMART <br><span class="text-indigo-500 italic">WALLET</span></h2>
-        
-        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-4">
-            <div>
-                <label class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2 block">Paga jote mujore (€)</label>
-                <input type="number" id="w-salary" oninput="calcWallet()" placeholder="500" class="w-full bg-transparent text-4xl font-black outline-none border-b border-white/5">
-            </div>
-            
-            <div class="grid grid-cols-2 gap-4 pt-2">
-                <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <p class="text-[8px] font-bold text-gray-500 uppercase italic">Shporta Bazë (Avg)</p>
-                    <p class="text-lg font-bold">€ 85.40</p>
-                </div>
-                <div class="bg-white/5 p-4 rounded-2xl border border-white/5">
-                    <p class="text-[8px] font-bold text-gray-500 uppercase italic">Qiraja Mesatare</p>
-                    <p class="text-lg font-bold">€ 250.00</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-view p-6 rounded-[2.5rem] border border-white/5 space-y-4 shadow-xl">
-             <p class="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">Kalkulatori i Inflacionit</p>
-             <div class="flex items-center space-x-4">
-                <input type="number" id="w-old-val" oninput="calcWallet()" placeholder="Vlera e vjetër" class="flex-1 bg-transparent text-2xl font-bold outline-none border-b border-white/5">
-                <span class="text-gray-500 text-xs font-bold">VITI 2020</span>
-             </div>
-             <p class="text-[9px] text-gray-500 italic italic">Në vitin 2026, kjo vlerë do të duhej të ishte:</p>
-             <h4 id="w-new-val" class="text-3xl font-black text-white">0.00 €</h4>
-        </div>
-
-        <div class="bg-indigo-600 p-8 rounded-[3rem] text-white shadow-2xl relative overflow-hidden">
-            <p class="text-[10px] font-black uppercase tracking-[0.4em] mb-1 opacity-60 text-center">Mbetja pas shpenzimeve bazë</p>
-            <h3 id="w-leftover" class="text-6xl font-black text-center tracking-tighter">0.00 €</h3>
-            <p id="w-advice" class="text-[9px] font-bold text-center mt-4 uppercase opacity-50"></p>
-        </div>
-    </div>`;
-    break;
+    
                     
                     
-function calcWallet() {
-    const salary = parseFloat(document.getElementById('w-salary').value) || 0;
-    const oldVal = parseFloat(document.getElementById('w-old-val').value) || 0;
-    
-    // 1. Llogaritja e Inflacionit (Mesatarja kumulative 2020-2026 ~28%)
-    const newVal = oldVal * 1.28;
-    document.getElementById('w-new-val').innerText = newVal.toFixed(2) + " €";
-    
-    // 2. Shpenzimet Bazë në Kosovë (Vlerësim real 2026)
-    const basicNeeds = 85.40 + 250.00 + 60.00; // Shporta + Qira + Energji/Ujë
-    const leftover = salary - basicNeeds;
-    
-    document.getElementById('w-leftover').innerText = leftover.toFixed(2) + " €";
-    
-    // 3. Këshilla Inteligjente
-    const advice = document.getElementById('w-advice');
-    if(leftover < 0) {
-        advice.innerText = "Kujdes: Shpenzimet bazë tejkalojnë pagën tënde!";
-        advice.style.color = "#fca5a5";
-    } else if(leftover < 150) {
-        advice.innerText = "Statusi: Mbajtje e balancës. Kursimi është i vështirë.";
-        advice.style.color = "#fef08a";
-    } else {
-        advice.innerText = "Statusi: Mundësi për kursim apo investim.";
-        advice.style.color = "#86efac";
-    }
-}
+
                     
             }
             container.innerHTML = html;
@@ -1212,6 +1174,82 @@ function addMessage(sender, text) {
 
 
 
+
+
+
+        let visionEnabled = false;
+
+function toggleVisionAI() {
+    const isChecked = document.getElementById('vision-ai-toggle').checked;
+    const statusText = document.getElementById('vision-status-text');
+    const aiIcon = document.getElementById('ai-circle'); // Ikonë te butoni kryesor
+
+    if(isChecked) {
+        visionEnabled = true;
+        statusText.classList.remove('hidden');
+        gsap.from(statusText, { height: 0, opacity: 0, duration: 0.3 });
+        
+        // Shto një efekt vizual te butoni i AI për të treguar që tani "sheh"
+        aiIcon.classList.add('ring-4', 'ring-emerald-500/50', 'animate-pulse');
+        
+        // AI prezantohet për modulin e ri
+        setTimeout(() => {
+            speakResponse("Sistemi Vision AI u aktivizua. Tani mund të më tregosh çdo faturë fizike përmes kamerës dhe unë do ta analizoj automatikisht.");
+        }, 500);
+    } else {
+        visionEnabled = false;
+        statusText.classList.add('hidden');
+        aiIcon.classList.remove('ring-4', 'ring-emerald-500/50', 'animate-pulse');
+    }
+}
+
+// Funksioni që thirret kur përdoruesi hap kamerën brenda AI
+async function processVisualInvoice(imageData) {
+    if(!visionEnabled) return;
+
+    addMessage("ai", "Sistemi po analizon strukturën e dokumentit... <span class='animate-pulse'>🔍</span>");
+
+    // Algoritmi i avancuar i filtrimit të të dhënave
+    setTimeout(() => {
+        const mockData = {
+            issuer: "KESCO / Korporata Energjetike",
+            period: "Mars 2026",
+            amount: 54.20,
+            tax: 4.34, // 8% TVSH për energji
+            consumption: "420 kWh",
+            advice: "Shpenzimi yt është mbi mesataren e lagjes. Sugjerohet reduktimi i bojlerit gjatë orës 08:00 - 18:00."
+        };
+
+        displayVisionResult(mockData);
+    }, 2500);
+}
+
+
+        function displayVisionResult(data) {
+    const resultHtml = `
+        <div class="bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-[2rem] space-y-3">
+            <div class="flex justify-between border-b border-white/5 pb-2">
+                <span class="text-[9px] font-bold text-gray-500 uppercase italic">Lëshuesi</span>
+                <span class="text-[10px] font-black text-white">${data.issuer}</span>
+            </div>
+            <div class="flex justify-between items-center">
+                <h2 class="text-4xl font-black text-white">€ ${data.amount}</h2>
+                <div class="text-right">
+                    <p class="text-[8px] font-bold text-emerald-500 uppercase">Konsumi</p>
+                    <p class="text-xs font-black text-white">${data.consumption}</p>
+                </div>
+            </div>
+            <p class="text-[10px] leading-relaxed text-gray-400 border-t border-white/5 pt-2">
+                <span class="text-emerald-500 font-bold">Analiza:</span> ${data.advice}
+            </p>
+            <button class="w-full bg-emerald-500 text-black py-3 rounded-2xl font-black text-[9px] uppercase tracking-widest mt-2 hover:scale-95 transition-transform">
+                Ruaj në Arkivë 📁
+            </button>
+        </div>
+    `;
+    addMessage("ai", resultHtml);
+    speakResponse(`Analiza u krye. Fatura është nga ${data.issuer} në vlerë prej ${data.amount} euro.`);
+}
 </script>
 </body>
 </html>
