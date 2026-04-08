@@ -1220,7 +1220,116 @@ async function processVisualInvoice(imageData) {
 
 
 
+// --- SHTINJA LAPSIN: NEURAL ENGINE v4 ---
 
+let aiState = {
+    enabled: false,
+    mode: 'dashboard', // dashboard ose chat
+    history: []
+};
+
+// 1. Aktivizimi ne Settings
+function toggleAI() {
+    aiState.enabled = !aiState.enabled;
+    const circle = document.getElementById('ai-master-circle');
+    const bg = document.getElementById('ai-master-toggle');
+    const glow = document.getElementById('ai-status-glow');
+
+    if(aiState.enabled) {
+        bg.classList.replace('bg-gray-800', 'bg-orange-500');
+        circle.style.transform = 'translateX(28px)';
+        glow.classList.add('shadow-[0_0_20px_rgba(249,115,22,0.3)]', 'border-orange-500/30');
+        document.getElementById('ai-window').classList.remove('hidden');
+        if(navigator.vibrate) navigator.vibrate([10, 30, 10]);
+    } else {
+        bg.classList.replace('bg-orange-500', 'bg-gray-800');
+        circle.style.transform = 'translateX(0px)';
+        glow.classList.remove('shadow-[0_0_20px_rgba(249,115,22,0.3)]', 'border-orange-500/30');
+        document.getElementById('ai-window').classList.add('hidden');
+    }
+}
+
+// 2. Sherbimet e Shpejta (Quick Services)
+function startService(type) {
+    document.getElementById('ai-dashboard').classList.add('hidden');
+    const chatArea = document.getElementById('ai-chat-area');
+    chatArea.classList.remove('hidden');
+    aiState.mode = 'chat';
+
+    let msg = "";
+    if(type === 'paga') msg = "Po përgatis kalkulatorin e pagave. Për cilën vlerë bruto dëshironi të bëjmë llogaritjen?";
+    if(type === 'artikuj') msg = "Artikujt më të lexuar: 1. Ligji i ri i TVSH 2026, 2. Subvencionet për energji. Cilin dëshironi ta lexoni?";
+    
+    addMessage("ai", msg);
+}
+
+// 3. Algoritmi i Analizes se Pyetjes (Deep Analysis)
+async function askAI() {
+    const input = document.getElementById('ai-input');
+    const query = input.value.trim();
+    if(query === "") return;
+
+    // Switch automatik ne mode chat
+    if(aiState.mode === 'dashboard') {
+        document.getElementById('ai-dashboard').classList.add('hidden');
+        document.getElementById('ai-chat-area').classList.remove('hidden');
+        aiState.mode = 'chat';
+    }
+
+    addMessage("user", query);
+    input.value = "";
+    
+    const thinkId = addThinking();
+
+    // Simulimi i Algoritmit "Neural"
+    setTimeout(() => {
+        document.getElementById(thinkId).remove();
+        let response = generateAdvancedResponse(query.toLowerCase());
+        addMessage("ai", response);
+    }, 1200);
+}
+
+function generateAdvancedResponse(q) {
+    // Memoria dhe Logjika
+    if(q.includes("paga") || q.includes("neto")) {
+        return "📈 **Analiza:** Për vitin 2026, pas heqjes së shkallës së parë tatimore (250€), llogaritja është më favorizuese. Paga juaj neto do të rritet mesatarisht me 2.4% nga viti i kaluar. A dëshironi t'ju dërgoj tabelën e detajuar?";
+    }
+    if(q.includes("dogana") || q.includes("vetura")) {
+        return "🚗 **Info Doganore:** Zhdoganimi i veturave në 2026 varet nga norma e emetimit CO2. Për veturat elektrike, akciza është 0%. Për cilin vit të prodhimit jeni i interesuar?";
+    }
+    return "Pyetje me rëndësi! Bazuar në algoritmin tim të fundit, sugjeroj që këtë ta llogarisim duke përfshirë edhe parametrat e inflacionit aktual në Kosovë.";
+}
+
+// 4. UI Functions
+function addMessage(sender, text) {
+    const area = document.getElementById('ai-chat-area');
+    const div = document.createElement('div');
+    if(sender === "ai") {
+        div.className = "bg-white/5 p-5 rounded-[2rem] rounded-tl-none border border-white/5 text-[11px] leading-relaxed text-gray-300 animate-in slide-in-from-left-2";
+        div.innerHTML = `<span class="text-orange-500 font-black block mb-1 uppercase text-[8px]">Core AI</span> ${text}`;
+    } else {
+        div.className = "bg-orange-500 p-5 rounded-[2rem] rounded-tr-none text-black font-bold text-[11px] ml-auto max-w-[85%] animate-in slide-in-from-right-2";
+        div.innerText = text;
+    }
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+}
+
+function addThinking() {
+    const id = "think-" + Date.now();
+    const area = document.getElementById('ai-chat-area');
+    area.innerHTML += `<div id="${id}" class="flex gap-1 p-4 bg-white/5 w-16 rounded-2xl animate-pulse">
+        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+        <div class="w-1.5 h-1.5 bg-orange-500 rounded-full"></div>
+    </div>`;
+    area.scrollTop = area.scrollHeight;
+    return id;
+}
+
+function closeAI() {
+    document.getElementById('ai-window').classList.add('hidden');
+}
 
 
 
