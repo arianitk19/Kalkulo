@@ -1363,6 +1363,41 @@ function closeAI() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+        // --- AUTO-INITIALIZE FIRST CATEGORY (TRUSTI) ---
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Gjejmë butonin e parë të kategorisë (Trusti)
+    // Sigurohu që ID-ja ose klasa përputhet me kodin tënd
+    const firstCategory = document.querySelector('.category-btn') || document.getElementById('btn-trusti');
+    
+    if (firstCategory) {
+        // 2. Ekzekutojmë funksionin e shfaqjes
+        // Supozojmë se funksioni yt quhet showCategory('trusti')
+        showCategory('trusti'); 
+
+        // 3. Shtojmë stilin "Active" vizualisht menjëherë
+        firstCategory.classList.add('bg-orange-500/10', 'border-orange-500/30', 'text-white');
+        
+        // 4. Një animacion i vogël "Entrance" për përmbajtjen
+        gsap.from("#trusti-content", {
+            duration: 0.8,
+            y: 20,
+            opacity: 0,
+            ease: "power2.out"
+        });
+    }
+});
 </script>
 </body>
 </html>
