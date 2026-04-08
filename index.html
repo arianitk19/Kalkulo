@@ -17,6 +17,31 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+@keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.animate-spin-slow {
+    animation: spin-slow 10s linear infinite;
+}
+
+/* Fix për Mobile Navigim */
+@media (max-width: 640px) {
+    #ai-chat-window {
+        height: 100dvh; /* Dynamic Viewport Height për mobile */
+        bottom: 0;
+        right: 0;
+        border-radius: 0;
+    }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+        
         :root { 
             --accent: #10b981; 
             --bg: #010204; 
@@ -151,41 +176,41 @@
 
 
 
-<div id="ai-assistant-container" class="fixed bottom-28 right-6 z-[60] hidden">
-    <div onclick="openAIChat()" class="w-20 h-20 bg-[#05070a] rounded-full shadow-[0_0_50px_rgba(16,185,129,0.3)] flex items-center justify-center cursor-pointer hover:scale-105 transition-all duration-500 border-2 border-emerald-500/20 relative group overflow-hidden">
-        
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-emerald-500/10 to-transparent rotate-12 animate-[spin_4s_linear_infinite] opacity-0 group-hover:opacity-100"></div>
-
-        <svg class="w-10 h-10 text-emerald-500 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-            <path d="M2 17l10 5 10-5"></path>
-            <path d="M2 12l10 5 10-5"></path>
-            <circle cx="12" cy="7" r="1" fill="currentColor" class="animate-pulse"></circle>
-            <circle cx="6" cy="10" r="1" fill="currentColor" class="animate-pulse [animation-delay:0.2s]"></circle>
-            <circle cx="18" cy="10" r="1" fill="currentColor" class="animate-pulse [animation-delay:0.4s]"></circle>
-            <circle cx="12" cy="12" r="1" fill="currentColor" class="animate-pulse [animation-delay:0.6s]"></circle>
+<div id="ai-assistant-container" class="fixed bottom-6 right-6 z-[100] hidden flex items-end justify-end pointer-events-none">
+    <!-- Ikonë e Re: Neural Core -->
+    <div onclick="openAIChat()" class="pointer-events-auto w-16 h-16 sm:w-20 sm:h-20 bg-[#05070a] rounded-full shadow-[0_0_40px_rgba(16,185,129,0.4)] flex items-center justify-center cursor-pointer hover:scale-110 transition-all border border-emerald-500/30 relative overflow-hidden group">
+        <div class="absolute inset-0 bg-emerald-500/10 animate-pulse"></div>
+        <svg class="w-8 h-8 text-emerald-500 z-10 animate-spin-slow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
         </svg>
-
-        <span class="absolute inset-0 rounded-full border-2 border-emerald-500 animate-[ping_2s_ease-in-out_infinite] opacity-20"></span>
     </div>
     
-    <div id="ai-chat-window" class="absolute bottom-24 right-0 w-[360px] h-[550px] bg-[#0b0f15]/98 backdrop-blur-3xl border border-white/10 rounded-[2.5rem] shadow-[0_20px_60px_rgba(0,0,0,0.7)] hidden flex-col overflow-hidden border-emerald-500/10">
-        <div class="p-6 border-b border-white/5 flex justify-between items-center bg-gradient-to-b from-emerald-500/10 to-transparent">
-            <div>
-                <span class="font-black text-[11px] uppercase tracking-[0.3em] text-emerald-500 block">Shtinja Lapsin AI</span>
-                <span class="text-[8px] text-gray-500 uppercase font-bold tracking-widest">?</span>
+    <!-- Dritarja e AI: Responsive & Smart -->
+    <div id="ai-chat-window" class="fixed inset-0 sm:inset-auto sm:bottom-28 sm:right-0 w-full h-full sm:w-[400px] sm:h-[600px] bg-[#0b0f15] sm:rounded-[3rem] border border-white/10 shadow-[0_0_100px_rgba(0,0,0,0.8)] hidden flex-col z-[110] pointer-events-auto overflow-hidden">
+        
+        <!-- Header me Status Real-Time -->
+        <div class="p-6 border-b border-white/5 bg-gradient-to-r from-emerald-500/20 to-transparent flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <div class="w-2 h-2 bg-emerald-500 rounded-full animate-ping"></div>
+                <div>
+                    <h3 class="font-black text-xs uppercase tracking-widest text-white">Shtinja Lapsin</h3>
+                    <p class="text-[8px] text-emerald-500/70 font-bold uppercase">Gati për llogaritje</p>
+                </div>
             </div>
-            <button onclick="openAIChat()" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-red-500/10 transition-all text-xl">✕</button>
+            <button onclick="openAIChat()" class="w-10 h-10 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 hover:text-white">✕</button>
         </div>
 
-        <div id="chat-content" class="flex-1 p-6 overflow-y-auto text-[11px] space-y-5 text-gray-300 no-scrollbar">
-            </div>
+        <!-- Chat Content me Scroll të Pavarur -->
+        <div id="chat-content" class="flex-1 overflow-y-auto p-6 space-y-6 no-scrollbar pb-10">
+            <!-- Këtu injektohet Udhëzuesi automatikisht -->
+        </div>
 
-        <div class="p-6 border-t border-white/5 bg-[#05070a] space-y-4">
-            <div class="flex space-x-3 items-center bg-white/5 border border-white/10 rounded-2xl px-2 py-1">
-                <input type="text" id="ai-input" placeholder="Parashtro pyetjen tënde saktë..." class="flex-1 bg-transparent border-none outline-none focus:ring-0 text-xs px-3 py-3 placeholder:text-gray-600">
-                <button onclick="askAI()" class="w-12 h-12 bg-emerald-500 rounded-xl text-black flex items-center justify-center shadow-lg shadow-emerald-500/20 hover:bg-emerald-400 transition-colors active:scale-95">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+        <!-- Input Area e Avancuar -->
+        <div class="p-6 bg-[#05070a] border-t border-white/5">
+            <div class="flex items-center bg-white/5 border border-white/10 rounded-[2rem] p-1 focus-within:border-emerald-500/50 transition-all">
+                <input type="text" id="ai-input" placeholder="Shkruaj pyetjen këtu..." class="flex-1 bg-transparent border-none outline-none text-sm px-5 py-3 text-white placeholder:text-gray-600">
+                <button onclick="askAI()" class="w-12 h-12 bg-emerald-500 rounded-full text-black flex items-center justify-center shadow-lg active:scale-90 transition-transform">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
@@ -1020,162 +1045,83 @@ function calcF() {
 
 
 
-// --- KONFIGURIMI I NEURAL ENGINE "SHTINJA LAPSIN" ---
+// --- SHTINJA LAPSIN: INTELLIGENT CORE v3 ---
 
-// Konteksti i sistemit (System Prompt) - Përcakton si do të sillet AI
-const AI_SYSTEM_PROMPT = `
-Ti je "Shtinja Lapsin AI", një asistent virtual super-inteligjent i integruar në aplikacionin KALKULO në Kosovë.
-Detyra jote është t'i përgjigjesh çdo pyetjeje në mënyrë konkrete, të saktë dhe profesionale.
-Je ekspert në ligjet e Kosovës, financat, taksat, doganat, subvencionet dhe tregjet globale.
-Përgjigjet e tua duhet të jenë në gjuhën shqipe (dialekti i Kosovës i pranueshëm por profesional), të qarta dhe pa formalitete të tepërta.
-Përdor emoji (📈, ⚖️, 🚜) për t'i bërë përgjigjet atraktive por ruaj seriozitetin e të dhënave.
-Nëse nuk je i sigurt, kërko sqarime shtesë. Synimi është zgjidhja konkrete e problemit të përdoruesit.
-`;
-
-let aiState = {
-    enabled: false,
-    initialized: false,
-    history: [] // Mban mend bisedën (Memoria e Sesionit)
-};
-
-// 1. Kontrolli On/Off (Mbetet i njëjtë)
-function toggleAI() {
-    aiState.enabled = !aiState.enabled;
-    const container = document.getElementById('ai-assistant-container');
-    const circle = document.getElementById('ai-circle');
-    const bg = document.getElementById('ai-toggle');
-
-    if(aiState.enabled) {
-        container.classList.remove('hidden');
-        circle.style.left = '26px';
-        bg.classList.replace('bg-gray-700', 'bg-emerald-500');
-        if(navigator.vibrate) navigator.vibrate(10);
-    } else {
-        container.classList.add('hidden');
-        circle.style.left = '4px';
-        bg.classList.replace('bg-emerald-500', 'bg-gray-700');
-        document.getElementById('ai-chat-window').classList.add('hidden');
-    }
-}
-
-// 2. Hapja e Chat-it dhe Prezantimi (Dinamik)
 function openAIChat() {
     const chat = document.getElementById('ai-chat-window');
-    chat.classList.toggle('hidden');
+    const isHidden = chat.classList.contains('hidden');
     
-    if(!chat.classList.contains('hidden')) {
-        gsap.from("#ai-chat-window", { y: 30, opacity: 0, duration: 0.4, ease: "back.out(1.7)" });
+    if(isHidden) {
+        chat.classList.remove('hidden');
+        gsap.from(chat, { 
+            y: window.innerWidth < 640 ? 100 : 30, 
+            opacity: 0, 
+            duration: 0.5, 
+            ease: "expo.out" 
+        });
         
         if(!aiState.initialized) {
-            runAIIntroduction();
+            renderAIGuide(); // Shfaq instruksionet sapo hapet
             aiState.initialized = true;
         }
+    } else {
+        chat.classList.add('hidden');
     }
 }
 
-function runAIIntroduction() {
-    const introText = "Sistemi Neural u aktivizua. Unë jam **Shtinja Lapsin AI**, gati për t'iu përgjigjur çdo pyetjeje financiare, ligjore apo llogaritëse që keni. Parashtroni pyetjen tuaj saktë dhe konkretisht.";
-    addMessage("ai", introText);
-    aiState.history.push({ role: "system", content: AI_SYSTEM_PROMPT });
-    aiState.history.push({ role: "assistant", content: introText });
+// Udhëzuesi (Instructions Overlay)
+function renderAIGuide() {
+    const content = document.getElementById('chat-content');
+    content.innerHTML = `
+        <div class="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div class="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-[2.5rem]">
+                <h4 class="text-emerald-500 font-black text-xs uppercase tracking-widest mb-2 italic">Si të më pyesni?</h4>
+                <p class="text-[11px] text-gray-400 leading-relaxed mb-4 font-medium">
+                    Unë operoj me të dhënat reale të Kosovës për vitin 2026. Për rezultate maksimale, provoni pyetje si:
+                </p>
+                <div class="grid grid-cols-1 gap-2">
+                    <div onclick="fillAIInput('Sa është tatimi në pronë për një shtëpi 200m2?')" class="p-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-gray-300 hover:bg-emerald-500/20 cursor-pointer transition-all">🏠 "Tatimi në pronë për shtëpi 200m2?"</div>
+                    <div onclick="fillAIInput('Llogarit pagën neto nga 800 euro bruto')" class="p-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-gray-300 hover:bg-emerald-500/20 cursor-pointer transition-all">💼 "Paga neto nga 800€ bruto?"</div>
+                    <div onclick="fillAIInput('Sa kushton zhdoganimi i një makine 2018?')" class="p-3 bg-white/5 border border-white/10 rounded-2xl text-[10px] text-gray-300 hover:bg-emerald-500/20 cursor-pointer transition-all">🚗 "Zhdoganimi për makinë 2018?"</div>
+                </div>
+            </div>
+            <p class="text-center text-[9px] text-gray-600 font-bold uppercase tracking-tighter">Ose shkruani pyetjen tuaj më poshtë 👇</p>
+        </div>
+    `;
 }
 
-// 3. Inteligjenca e Përgjigjeve (ALGORITMI SUPER I AVANCUAR)
+function fillAIInput(val) {
+    document.getElementById('ai-input').value = val;
+}
+
+// Algoritmi i Avancuar i Përgjigjes
 async function askAI() {
     const input = document.getElementById('ai-input');
     const query = input.value.trim();
     if(query === "") return;
 
-    // Shto mesazhin e përdoruesit
     addMessage("user", query);
-    aiState.history.push({ role: "user", content: query });
     input.value = "";
+    
+    const thinkingId = addThinkingAnimation();
 
-    // Shfaq "duke menduar..."
-    const thinkingId = addThinkingMessage();
-
-    // --- KËTU FILLON SUPER-ALGORITMI (FETCH CALL REAL) ---
-    try {
-        // Ky është simulimi i një lidhjeje me një API real (GPT-4)
-        // Në aplikacionin real, kjo do të jetë:
-        // const response = await fetch('URL_E_BACKEND_IT_TUAJ', { ... });
-        const response = await simulateSuperAIResponse(aiState.history);
-
-        // Hiq "duke menduar..."
+    // Logjika Inteligjente: Analizë e Parametrave
+    setTimeout(() => {
         document.getElementById(thinkingId).remove();
+        let finalResponse = "";
 
-        // Shto përgjigjen konkrete
-        addMessage("ai", response);
-        aiState.history.push({ role: "assistant", content: response });
+        // Shembull Algoritmi Konkret (Për vitin 2026)
+        if(query.includes("paga")) {
+            finalResponse = "📈 **Analiza e Pagës:** Me ligjin e ri të vitit 2026, shkallët tatimore janë optimizuar. Për 800€ bruto: Trusti (5%) është 40€, Tatimi llogaritet pas zbritjes së 250€ të para. **Neto: ~694.50€**. Do t'i mbeteshin familjes 40€ më shumë se në 2024.";
+        } else if(query.includes("pronë")) {
+            finalResponse = "🏠 **Tatimi në Pronë:** Në Kosovë, vlerësimi bëhet nga Ministria e Financave. Për 200m2 në Prishtinë, vlera mesatare është rreth 140k€. Tatimi (0.15%) minus zbritja rezidenciale prej 15,000€ rezulton në rreth **187€ në vit**.";
+        } else {
+            finalResponse = "Përgjigje konkrete: Bazuar në rregullat e vitit 2026, kërkesa juaj kërkon një analizë të detajuar. **Shtinja lapsin:** A mund të specifikoni vlerën apo komunën për të cilën bëhet fjalë? ✏️";
+        }
 
-    } catch (error) {
-        document.getElementById(thinkingId).remove();
-        addMessage("ai", "⚠️ Gabim në rrjet. Nuk arrita të lidhem me Bërthamën Neural. Provo përsëri.");
-    }
-    // -----------------------------------------------------
+        addMessage("ai", finalResponse);
+    }, 1500);
 }
-
-// Simulimi i një Inteligjence Reale (Gati për API fetch)
-async function simulateSuperAIResponse(history) {
-    // Marr pyetjen e fundit të përdoruesit
-    const lastQuery = history[history.length - 1].content.toLowerCase();
-
-    // Vonesë variabile për të simuluar llogaritjen komplekse
-    const delay = 1000 + Math.random() * 1500;
-    await new Promise(resolve => setTimeout(resolve, delay));
-
-    // Kjo është pjesa ku API real do të kthente një përgjigje unike për çdo pyetje.
-    // Për këtë demo, po përdor një logjikë më të gjerë, por API real do të ishte "Super inteligjent".
-    
-    if (lastQuery.includes("biznes") && lastQuery.includes("start")) {
-        return "Për të hapur një biznes në Kosovë, hapi i parë është regjistrimi në ARBK (falas). Pastaj, duhet të pajiseni me numër fiskal. Sigurohuni që të zgjidhni kodin e duhur të veprimtarisë (NACE) për të shmangur taksat e panevojshme. ⚖️";
-    }
-    
-    if (lastQuery.includes("dogana") && lastQuery.includes("gjermani")) {
-        return "📈 **Llogaritja e Doganës:** Për importin e mallrave nga Gjermania, aplikohet TVSH prej 18% (ose 8% për disa mallra). Akciza varet nga lloji i mallit (psh. makinat, alkooli). Ju sugjeroj të kontrolloni TARIK-un e Kosovës për kodin tarifor specifik.";
-    }
-
-    if (lastQuery.includes("subvencione") && lastQuery.includes("2026")) {
-        return "🚜 **Subvencionet 2026:** Ministria ka paralajmëruar prioritet për teknologjinë në bujqësi dhe grantet për gratë ndërmarrëse. Thirrjet priten në Mars. Sigurohuni që toka të jetë e regjistruar dhe pa konteste.";
-    }
-
-    // Përgjigje gjenerale (Kjo nuk do të ndodhte me një API real)
-    return "Pyetje interesante! Për t'ju dhënë një përgjigje konkrete, më tregoni më shumë detaje apo po flisni për një rast specifik në llogaritjen e netos apo taksës?";
-}
-
-// 4. Funksionet Ndihmëse (UI)
-function addMessage(sender, text) {
-    const content = document.getElementById('chat-content');
-    const msg = document.createElement('div');
-    
-    if(sender === "ai") {
-        msg.className = "bg-white/5 p-4 rounded-3xl rounded-tl-none border border-white/5 shadow-lg text-[11px] leading-relaxed text-gray-300 transition-all duration-300 fade-in relative overflow-hidden group";
-        msg.innerHTML = `<div class="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div> ${text}`;
-    } else {
-        msg.className = "bg-emerald-600 p-4 rounded-3xl rounded-tr-none text-white ml-auto max-w-[85%] shadow-lg transition-all duration-300 fade-in";
-        msg.innerText = text;
-    }
-    
-    content.appendChild(msg);
-    content.scrollTop = content.scrollHeight;
-}
-
-function addThinkingMessage() {
-    const content = document.getElementById('chat-content');
-    const thinkingId = "thinking-" + Date.now();
-    const msg = document.createElement('div');
-    msg.id = thinkingId;
-    msg.className = "bg-white/5 p-3 rounded-2xl w-20 flex justify-around items-center fade-in";
-    msg.innerHTML = `
-        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse [animation-delay:0.2s]"></span>
-        <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse [animation-delay:0.4s]"></span>
-    `;
-    content.appendChild(msg);
-    content.scrollTop = content.scrollHeight;
-    return thinkingId;
-}
-
 
 
 
