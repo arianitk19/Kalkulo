@@ -235,16 +235,17 @@ body {
 </div>
         </main>
 
-        <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
-            <div onclick="renderView('trusti', this)" class="mobile-nav-item active-nav min-w-[80px]">
-                <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
-                <span class="text-[9px] font-bold uppercase tracking-widest">Trusti</span>
-            </div>
+       <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
+    <div id="nav-trusti" onclick="renderView('trusti', this)" class="mobile-nav-item active-nav min-w-[80px] cursor-pointer">
+        <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+        <span class="text-[9px] font-bold uppercase tracking-widest">Trusti</span>
+    </div>
+    </nav>
 
 <div id="trusti-content" class="category-section block animate-in fade-in duration-500">
     </div>
-
-            
             <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Këmbimi</span>
@@ -1380,27 +1381,29 @@ function closeAI() {
 
 
 
-        // --- AUTO-INITIALIZE FIRST CATEGORY (TRUSTI) ---
+// --- FIX: AUTO-INITIALIZE TRUSTI ON LOAD ---
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Gjejmë butonin e parë të kategorisë (Trusti)
-    // Sigurohu që ID-ja ose klasa përputhet me kodin tënd
-    const firstCategory = document.querySelector('.category-btn') || document.getElementById('btn-trusti');
+    // 1. Gjejmë elementin e parë në navigacion që ka funksionin renderView
+    const trustiBtn = document.querySelector('div[onclick*="renderView(\'trusti\'"]');
     
-    if (firstCategory) {
-        // 2. Ekzekutojmë funksionin e shfaqjes
-        // Supozojmë se funksioni yt quhet showCategory('trusti')
-        showCategory('trusti'); 
+    if (trustiBtn) {
+        // 2. Aktivizojmë pamjen e Trustit
+        // Thërrasim renderView dhe i kalojmë 'trusti' dhe vetë elementin (this)
+        renderView('trusti', trustiBtn);
 
-        // 3. Shtojmë stilin "Active" vizualisht menjëherë
-        firstCategory.classList.add('bg-orange-500/10', 'border-orange-500/30', 'text-white');
-        
-        // 4. Një animacion i vogël "Entrance" për përmbajtjen
-        gsap.from("#trusti-content", {
-            duration: 0.8,
-            y: 20,
-            opacity: 0,
-            ease: "power2.out"
-        });
+        // 3. Sigurohemi që stili vizual "active-nav" është i vendosur
+        trustiBtn.classList.add('active-nav');
+
+        // 4. Animacioni i hyrjes për përmbajtjen që Trusti të duket "Live"
+        if (window.gsap) {
+            gsap.from("#trusti-content", {
+                duration: 0.6,
+                y: 15,
+                opacity: 0,
+                ease: "expo.out",
+                delay: 0.2
+            });
+        }
     }
 });
 </script>
