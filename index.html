@@ -1156,6 +1156,43 @@ function calcF() {
             const s = document.getElementById('settings');
             s.classList.toggle('translate-x-full');
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Gjejmë elementin e Trustit në navigacion
+    const trustiBtn = document.querySelector('[onclick*="renderView(\'trusti\'"]');
+    
+    // 2. Shfaqim përmbajtjen e Trustit menjëherë
+    // Thërrasim renderView duke i kaluar elementin që sapo gjetëm
+    if (trustiBtn) {
+        renderView('trusti', trustiBtn);
+        
+        // 3. Sigurohemi që klasa vizuale 'active-nav' është e vendosur
+        trustiBtn.classList.add('active-nav');
+    }
+
+    // 4. Inicializojmë Ticker-in
+    MarketTicker.init();
+});
+
+
+        
     </script>
 
     <script>
