@@ -24,7 +24,11 @@
 
 .animate-ticker {
     display: inline-flex;
+    /* white-space është kritik që mos të thyhet shiriti në mobile */
+    white-space: nowrap; 
     animation: ticker-scroll 30s linear infinite;
+    /* Optimizim për performancë në telefon */
+    will-change: transform;
 }
 
 .hover\:pause:hover {
@@ -33,8 +37,11 @@
 
 .ticker-item {
     display: flex;
-    items-center;
+    /* Rregullimi i gabimit të sintaksës */
+    align-items: center; 
     gap: 8px;
+    /* Shto pak padding që mos të ngjiten elementet */
+    padding: 0 20px; 
 }
 
 
