@@ -17,6 +17,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+  
+@keyframes bounce-horizontal {
+    0%, 100% {
+        transform: translateX(0);
+    }
+    50% {
+        transform: translateX(10px);
+    }
+}
+
+.animate-bounce-horizontal {
+    animation: bounce-horizontal 2s ease-in-out infinite;
+}
+
+/* Opsionale: Zhdukja e shenjes pas 5 sekondave qe te mos pengoje pamjen */
+.scroll-hint-container {
+    animation: fade-out-hint 0.5s ease forwards;
+    animation-delay: 5s;
+}
+
+@keyframes fade-out-hint {
+    to {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+   
+
+
+
+
+
+
+
+
+
+        
 @keyframes spin-slow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -302,6 +340,24 @@ body {
 </div>
         </main>
 
+
+                      <div class="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center z-50 pointer-events-none">
+    <div class="relative flex items-center justify-center">
+        <div class="absolute w-8 h-8 bg-emerald-500/30 rounded-full animate-ping"></div>
+        <div class="absolute w-12 h-12 bg-emerald-500/10 rounded-full animate-pulse"></div>
+        
+        <div class="relative bg-[#0d1117]/80 backdrop-blur-xl border border-white/10 p-2 rounded-2xl shadow-2xl flex items-center space-x-2 animate-bounce-horizontal">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+            </svg>
+            <span class="text-[8px] font-black text-white uppercase tracking-[0.2em] pr-1">Më shumë</span>
+        </div>
+    </div>
+</div>
+                  
+
+
+        
             <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
 
             <div onclick="renderView('trusti', this)" 
