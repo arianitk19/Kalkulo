@@ -17,32 +17,43 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-@keyframes bounce-horizontal {
-    0%, 100% { transform: translateX(0); }
-    50% { transform: translateX(5px); }
+<style>
+/* Fsheh scrollbar por lejon lëvizjen */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+}
+.no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
-.animate-bounce-horizontal {
-    animation: bounce-horizontal 1.5s infinite;
+/* Animacioni i tekstit 'Rrëshqit' */
+@keyframes soft-pulse {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
 }
 
-/* Kjo mundëson që scroll-i të jetë i lëmuar në telefon */
-.mobile-nav-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none; /* Fsheh scrollbar-in për Firefox */
-    -ms-overflow-style: none;  /* Fsheh scrollbar-in për IE/Edge */
+.animate-soft-pulse {
+    animation: soft-pulse 2s ease-in-out infinite;
 }
 
-.mobile-nav-container::-webkit-scrollbar {
-    display: none; /* Fsheh scrollbar-in për Chrome/Safari */
-}
-
+/* Stilimi i kategorive kur nuk janë aktive */
 .mobile-nav-item {
-    scroll-snap-align: start;
-    flex: 0 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #666;
 }
+
+/* Stilimi i kategorisë aktive */
+.active-nav {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #10b981 !important;
+    box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.3);
+}
+</style>
 
 
 
@@ -345,16 +356,21 @@ body {
 
 
 
-<div class="flex items-center justify-between px-6 mb-2 md:hidden opacity-60">
-    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Kategoritë</span>
-    <div class="flex items-center gap-1 animate-bounce-horizontal text-emerald-500">
-        <span class="text-[9px] font-black uppercase">Swipe</span>
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-        </svg>
+<div class="relative w-full overflow-hidden py-4">
+    
+    <div class="absolute right-4 top-1/2 -translate-y-1/2 z-20 pointer-events-none flex flex-col items-center opacity-40">
+        <div class="relative">
+            <div class="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75"></div>
+            <div class="relative bg-emerald-500/20 backdrop-blur-sm p-2 rounded-full border border-white/10">
+                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            </div>
+        </div>
+        <span class="text-[7px] text-white uppercase tracking-[0.3em] font-black mt-2 bg-black/20 px-2 py-1 rounded-full backdrop-blur-md">
+            Rrëshqit
+        </span>
     </div>
-</div>
-
 
 
                 
