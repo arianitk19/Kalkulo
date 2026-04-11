@@ -101,76 +101,6 @@
 
         
 
-:root {
-    /* DARK MODE - Deep & Tech */
-    --bg-app: #010204;
-    --bg-card: rgba(255, 255, 255, 0.03);
-    --bg-nav: rgba(5, 7, 10, 0.85);
-    --text-main: #ffffff;
-    --text-muted: #94a3b8;
-    --border: rgba(255, 255, 255, 0.05);
-    --accent: #f97316;
-    --input-bg: rgba(255, 255, 255, 0.02);
-    --shadow-main: 0 10px 30px rgba(0,0,0,0.5);
-    --icon-bg: rgba(255,255,255,0.05);
-}
-
-[data-theme='light'] {
-    /* LIGHT MODE - Professional & Clean */
-    --bg-app: #f8fafc; /* Ngjyrë e ftohtë, jo e bardhë e pastër që vret sytë */
-    --bg-card: #ffffff;
-    --bg-nav: rgba(255, 255, 255, 0.9);
-    --text-main: #0f172a; /* Navy e errët për seriozitet */
-    --text-muted: #64748b;
-    --border: rgba(0, 0, 0, 0.06);
-    --accent: #d97706; /* Portokalli pak më "burnt" për kontrast më të mirë */
-    --input-bg: #f1f5f9;
-    --shadow-main: 0 10px 25px rgba(15, 23, 42, 0.08); /* Hijet që bëjnë butonat të duken */
-    --icon-bg: #f1f5f9;
-}
-
-/* Rregullime Globale */
-body {
-    background-color: var(--bg-app) !important;
-    color: var(--text-main);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    font-family: 'Inter', sans-serif;
-}
-
-/* Rregullimi i Butonave dhe Kartelave (Që të shihen në Light Mode) */
-.glass-view, .btn-settings, .nav-item {
-    background: var(--bg-card) !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: var(--shadow-main); /* Kjo i bën të dukshëm */
-    transition: all 0.4s ease;
-}
-
-/* Butoni i Cilësimeve (Settings) specifikisht */
-#settings-btn, .top-bar-icon {
-    background: var(--icon-bg) !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-main);
-}
-
-/* Inputet dhe Selectet */
-input, select {
-    background: var(--input-bg) !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border) !important;
-    border-radius: 12px;
-    padding: 10px 15px;
-}
-
-/* Përmirësimi i Navigimit poshtë */
-nav {
-    background: var(--bg-nav) !important;
-    backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border) !important;
-}
-
-
-
 
 
         
@@ -496,23 +426,7 @@ nav {
 </div>    
    
 
-       <div class="flex justify-between items-center p-5 bg-white/5 backdrop-blur-xl rounded-[2rem] border border-white/10 transition-all duration-500 hover:border-orange-500/30">
-    <div class="flex items-center space-x-3">
-        <div id="theme-icon-bg" class="w-10 h-10 bg-orange-500/10 rounded-xl flex items-center justify-center border border-orange-500/20">
-            <i id="theme-icon" class="fi fi-rr-moon text-orange-500 transition-all duration-500"></i>
-        </div>
-        <div>
-            <span id="label-mode" class="block font-black text-[10px] uppercase tracking-widest text-white">Tema e Errët</span>
-            <span class="text-[8px] text-gray-500 uppercase font-bold tracking-tighter">Sistemi i dritës</span>
-        </div>
-    </div>
-
-    <div id="theme-toggle" onclick="toggleTheme()" class="w-16 h-8 bg-[#0a0a0a] rounded-full relative cursor-pointer border border-white/5 transition-all duration-500 group shadow-inner">
-        <div id="theme-circle" class="absolute left-1 top-1 w-6 h-6 bg-orange-500 rounded-full transition-all duration-500 flex items-center justify-center shadow-[0_0_15px_rgba(249,115,22,0.4)]">
-            <div class="w-1 h-1 bg-white/50 rounded-full animate-pulse"></div>
-        </div>
-    </div>
-</div>
+     
 
 <div class="flex flex-col gap-5 p-6 bg-[#0a0a0a] backdrop-blur-3xl rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all duration-700 group relative overflow-hidden mt-4">
     
@@ -563,61 +477,7 @@ nav {
     <script>
 
 
-let isDarkMode = true;
-
-function toggleTheme() {
-    isDarkMode = !isDarkMode;
-    const root = document.documentElement;
-    
-    // Haptic feedback
-    if(navigator.vibrate) navigator.vibrate(10);
-
-    // Ndryshimi i atributit kryesor
-    root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
-
-    // Update UI me animacione të lëmuara
-    updateSwitchUI();
-
-    // Ruajtja në memorie
-    localStorage.setItem('kalkulo-theme', isDarkMode ? 'dark' : 'light');
-}
-
-function updateSwitchUI() {
-    const circle = document.getElementById('theme-circle');
-    const label = document.getElementById('label-mode');
-    const icon = document.getElementById('theme-icon');
-    const toggleBg = document.getElementById('theme-toggle');
-
-    if (!isDarkMode) {
-        // LIGHT MODE UI
-        gsap.to(circle, { x: 32, backgroundColor: "#ffffff", duration: 0.4, ease: "back.out(1.7)" });
-        gsap.to(toggleBg, { backgroundColor: "#f97316", duration: 0.4 }); // Backgroundi i switchit portokalli
-        label.innerText = 'Dritë';
-        label.style.color = "#0f172a";
-        icon.classList.replace('fi-rr-moon', 'fi-rr-sun');
-        icon.style.color = "#f97316";
-    } else {
-        // DARK MODE UI
-        gsap.to(circle, { x: 0, backgroundColor: "#f97316", duration: 0.4, ease: "back.out(1.7)" });
-        gsap.to(toggleBg, { backgroundColor: "#1e293b", duration: 0.4 });
-        label.innerText = 'Errët';
-        label.style.color = "#ffffff";
-        icon.classList.replace('fi-rr-sun', 'fi-rr-moon');
-        icon.style.color = "#ffffff";
-    }
-}
-
-// Inicializimi i menjëhershëm pa lagg
-(function initTheme() {
-    const saved = localStorage.getItem('kalkulo-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
-    if(saved === 'light' || (!saved && !prefersDark)) {
-        isDarkMode = false;
-        document.documentElement.setAttribute('data-theme', 'light');
-        setTimeout(updateSwitchUI, 50);
-    }
-})();
+        
         // --- SHTINJA LAPSIN: SMART SCHEDULER v4.0 ---
 
 const NotifEngine = {
