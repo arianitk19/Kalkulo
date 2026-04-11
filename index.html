@@ -404,6 +404,59 @@
         <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl transition-colors">&times;</button>
     </div>
 
+
+
+
+
+<div class="glass-view p-5 rounded-[2.5rem] border border-white/5 bg-white/[0.02] mb-4">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <div class="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center">
+                <svg class="w-6 h-6 text-orange-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+            </div>
+            <div>
+                <h4 class="text-white text-sm font-black uppercase tracking-widest">Refinance Analyzer</h4>
+                <p class="text-[10px] text-gray-500 uppercase tracking-tighter">Bankat e Kosovës (TEB, NLB, etj.)</p>
+            </div>
+        </div>
+
+        <button onclick="toggleRefinance()" id="ref-master-toggle" class="w-14 h-7 bg-white/5 rounded-full relative transition-all duration-500">
+            <div id="ref-master-circle" class="absolute left-1 top-1 w-5 h-5 bg-gray-600 rounded-full transition-all duration-500 flex items-center justify-center text-[8px]">
+                <div class="w-2 h-2 bg-gray-800 rounded-full"></div>
+            </div>
+        </button>
+    </div>
+
+    <div id="ref-config-area" class="hidden mt-6 pt-6 border-t border-white/5 space-y-4">
+        <p class="text-[9px] text-orange-500 font-black uppercase tracking-[0.2em]">Zgjidh Bankën Preferenciale</p>
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bank-card p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center cursor-pointer hover:bg-orange-500/10 transition-all group" onclick="selectBank('TEB')">
+                <span class="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors">TEB</span>
+                <div class="w-full h-[2px] bg-emerald-500 scale-x-0 group-hover:scale-x-100 transition-transform mt-2"></div>
+            </div>
+            <div class="bank-card p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center cursor-pointer hover:bg-orange-500/10 transition-all group" onclick="selectBank('RBKO')">
+                <span class="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors">Raiffeisen</span>
+                <div class="w-full h-[2px] bg-red-600 scale-x-0 group-hover:scale-x-100 transition-transform mt-2"></div>
+            </div>
+            <div class="bank-card p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center cursor-pointer hover:bg-orange-500/10 transition-all group" onclick="selectBank('NLB')">
+                <span class="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors">NLB</span>
+                <div class="w-full h-[2px] bg-blue-600 scale-x-0 group-hover:scale-x-100 transition-transform mt-2"></div>
+            </div>
+            <div class="bank-card p-3 rounded-2xl bg-white/5 border border-white/5 flex flex-col items-center cursor-pointer hover:bg-orange-500/10 transition-all group" onclick="selectBank('PCB')">
+                <span class="text-[10px] font-bold text-gray-400 group-hover:text-white transition-colors">ProCredit</span>
+                <div class="w-full h-[2px] bg-blue-400 scale-x-0 group-hover:scale-x-100 transition-transform mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+       
        
    <div class="space-y-6">
     <div class="flex justify-between items-center p-5 bg-[#0a0a0a]/60 backdrop-blur-xl rounded-[2rem] border border-white/5 hover:border-orange-500/20 transition-all duration-500 group">
@@ -1841,6 +1894,96 @@ const MarketTicker = {
 
 // Starto kur ngarkohet App-i
 document.addEventListener('DOMContentLoaded', () => MarketTicker.init());
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // --- REFINANCE CORE LOGIC ---
+let refState = {
+    enabled: false,
+    selectedBank: null
+};
+
+function toggleRefinance() {
+    refState.enabled = !refState.enabled;
+    
+    const toggleBg = document.getElementById('ref-master-toggle');
+    const circle = document.getElementById('ref-master-circle');
+    const configArea = document.getElementById('ref-config-area');
+
+    if(refState.enabled) {
+        // Efekti Vizual ON (Orange/Emerald Hybrid)
+        toggleBg.classList.replace('bg-white/5', 'bg-orange-500');
+        gsap.to(circle, { x: 28, backgroundColor: "#fff", duration: 0.4, ease: "back.out(1.7)" });
+        
+        // Shfaq Area-n e Konfigurimit
+        configArea.classList.remove('hidden');
+        gsap.from(configArea, { 
+            height: 0, 
+            opacity: 0, 
+            duration: 0.6, 
+            ease: "expo.out" 
+        });
+
+        // Njofto AI Trurin (Shtinja Lapsin)
+        if(typeof addMessage === 'function') {
+            addMessage('ai', "🏦 **Moduli i Refinancimit u aktivizua.** Tani mund të kërkosh analizën e kredive për TEB, Raiffeisen, NLB dhe ProCredit direkt në chat.");
+        }
+    } else {
+        // Efekti Vizual OFF
+        toggleBg.classList.replace('bg-orange-500', 'bg-white/5');
+        gsap.to(circle, { x: 0, backgroundColor: "#4b5563", duration: 0.4, ease: "power2.in" });
+        
+        // Fsheh Area-n
+        gsap.to(configArea, { 
+            opacity: 0, 
+            duration: 0.3, 
+            onComplete: () => configArea.classList.add('hidden') 
+        });
+    }
+
+    if(navigator.vibrate) navigator.vibrate(15);
+}
+
+function selectBank(bank) {
+    refState.selectedBank = bank;
+    // Animacion konfirmimi
+    gsap.to(`.bank-card`, { opacity: 0.5, scale: 0.95, duration: 0.2 });
+    // Highlight bankës së zgjedhur (do të duhej një selektor më specifik në realitet)
+    
+    if(typeof addMessage === 'function') {
+        switchToChat();
+        addMessage('ai', `Analiza për **${bank}** është gati. Shëno vlerën e mbetur të kredisë dhe këstin aktual (psh: 'Kredia 12000, kesti 300') që të llogarisim kursimin neural.`);
+    }
+}
 </script>
 </body>
 </html>
