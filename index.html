@@ -291,13 +291,7 @@ body {
 
             <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
 
-
-
-
-<div class="relative w-full overflow-hidden py-4">
-    
-                
-<div onclick="renderView('trusti', this)" 
+            <div onclick="renderView('trusti', this)" 
      class="mobile-nav-item active-nav flex flex-col items-center justify-center transition-all duration-300 ease-in-out py-2 px-4 rounded-2xl active:scale-95 min-w-[80px]">
     <div class="relative">
         <svg class="w-6 h-6 mb-1 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -307,8 +301,6 @@ body {
     </div>
     <span class="text-[10px] font-black uppercase tracking-[0.15em]">Trusti</span>
 </div>
-
-                
             <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Këmbimi</span>
@@ -647,7 +639,8 @@ document.addEventListener('DOMContentLoaded', () => NotifEngine.init());
         function injectData(view, container) {
             let html = "";
             switch(view) {
-               case 'trusti':
+
+      case 'trusti':
     html = `
     <div class="space-y-8 sector-animate px-2">
         <div class="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-gray-900 to-black p-8 shadow-2xl border border-white/5">
@@ -709,7 +702,7 @@ document.addEventListener('DOMContentLoaded', () => NotifEngine.init());
         </div>
     </div>`;
     break;
-
+                    
                 case 'valuta':
                     html = `
                     <div class="space-y-10 money-bg p-8 rounded-[3rem] sector-animate">
