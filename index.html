@@ -102,53 +102,72 @@
         
 
 :root {
-    /* DARK MODE (Default) */
+    /* DARK MODE - Deep & Tech */
     --bg-app: #010204;
     --bg-card: rgba(255, 255, 255, 0.03);
-    --bg-nav: rgba(5, 7, 10, 0.8);
+    --bg-nav: rgba(5, 7, 10, 0.85);
     --text-main: #ffffff;
     --text-muted: #94a3b8;
     --border: rgba(255, 255, 255, 0.05);
-    --accent: #f97316; /* Orange */
+    --accent: #f97316;
     --input-bg: rgba(255, 255, 255, 0.02);
+    --shadow-main: 0 10px 30px rgba(0,0,0,0.5);
+    --icon-bg: rgba(255,255,255,0.05);
 }
 
 [data-theme='light'] {
-    /* LIGHT MODE */
-    --bg-app: #f1f5f9;
+    /* LIGHT MODE - Professional & Clean */
+    --bg-app: #f8fafc; /* Ngjyrë e ftohtë, jo e bardhë e pastër që vret sytë */
     --bg-card: #ffffff;
     --bg-nav: rgba(255, 255, 255, 0.9);
-    --text-main: #0f172a;
+    --text-main: #0f172a; /* Navy e errët për seriozitet */
     --text-muted: #64748b;
-    --border: rgba(0, 0, 0, 0.08);
-    --accent: #ea580c; /* Orange pak më i errët për lexim */
-    --input-bg: #e2e8f0;
+    --border: rgba(0, 0, 0, 0.06);
+    --accent: #d97706; /* Portokalli pak më "burnt" për kontrast më të mirë */
+    --input-bg: #f1f5f9;
+    --shadow-main: 0 10px 25px rgba(15, 23, 42, 0.08); /* Hijet që bëjnë butonat të duken */
+    --icon-bg: #f1f5f9;
 }
 
-/* Apliko variablat globalisht */
+/* Rregullime Globale */
 body {
     background-color: var(--bg-app) !important;
     color: var(--text-main);
-    transition: background-color 0.5s ease, color 0.5s ease;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: 'Inter', sans-serif;
 }
 
-.glass-view {
+/* Rregullimi i Butonave dhe Kartelave (Që të shihen në Light Mode) */
+.glass-view, .btn-settings, .nav-item {
     background: var(--bg-card) !important;
     border: 1px solid var(--border) !important;
-    backdrop-filter: blur(20px);
-    transition: all 0.5s ease;
+    box-shadow: var(--shadow-main); /* Kjo i bën të dukshëm */
+    transition: all 0.4s ease;
 }
 
-/* Inputet dhe Selectet që ndryshojnë automatikisht */
+/* Butoni i Cilësimeve (Settings) specifikisht */
+#settings-btn, .top-bar-icon {
+    background: var(--icon-bg) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-main);
+}
+
+/* Inputet dhe Selectet */
 input, select {
-    background: var(--input-bg);
-    color: var(--text-main);
-    border-bottom: 1px solid var(--border);
+    background: var(--input-bg) !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 12px;
+    padding: 10px 15px;
 }
 
-
-
-
+/* Përmirësimi i Navigimit poshtë */
+nav {
+    background: var(--bg-nav) !important;
+    backdrop-filter: blur(20px);
+    border-top: 1px solid var(--border) !important;
+}
 
 
 
@@ -550,16 +569,16 @@ function toggleTheme() {
     isDarkMode = !isDarkMode;
     const root = document.documentElement;
     
-    // Haptic feedback (Vibrate)
-    if(navigator.vibrate) navigator.vibrate(12);
+    // Haptic feedback
+    if(navigator.vibrate) navigator.vibrate(10);
 
-    // Ndryshimi i Temës - Ky rresht ndryshon 100% të App-it përmes CSS
+    // Ndryshimi i atributit kryesor
     root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
 
-    // UI Feedback i Switch-it
+    // Update UI me animacione të lëmuara
     updateSwitchUI();
 
-    // Ruaje preferencën që App-i ta mbajë mend kur hapet përsëri
+    // Ruajtja në memorie
     localStorage.setItem('kalkulo-theme', isDarkMode ? 'dark' : 'light');
 }
 
@@ -570,29 +589,35 @@ function updateSwitchUI() {
     const toggleBg = document.getElementById('theme-toggle');
 
     if (!isDarkMode) {
-        gsap.to(circle, { x: 32, backgroundColor: "#f97316", duration: 0.4, ease: "back.out(1.7)" });
-        gsap.to(toggleBg, { backgroundColor: "#cbd5e1", duration: 0.4 });
-        label.innerText = 'Tema e Dritës';
+        // LIGHT MODE UI
+        gsap.to(circle, { x: 32, backgroundColor: "#ffffff", duration: 0.4, ease: "back.out(1.7)" });
+        gsap.to(toggleBg, { backgroundColor: "#f97316", duration: 0.4 }); // Backgroundi i switchit portokalli
+        label.innerText = 'Dritë';
+        label.style.color = "#0f172a";
         icon.classList.replace('fi-rr-moon', 'fi-rr-sun');
+        icon.style.color = "#f97316";
     } else {
+        // DARK MODE UI
         gsap.to(circle, { x: 0, backgroundColor: "#f97316", duration: 0.4, ease: "back.out(1.7)" });
-        gsap.to(toggleBg, { backgroundColor: "#0a0a0a", duration: 0.4 });
-        label.innerText = 'Tema e Errët';
+        gsap.to(toggleBg, { backgroundColor: "#1e293b", duration: 0.4 });
+        label.innerText = 'Errët';
+        label.style.color = "#ffffff";
         icon.classList.replace('fi-rr-sun', 'fi-rr-moon');
+        icon.style.color = "#ffffff";
     }
 }
 
-// Kontrollo temën në fillim të ngarkimit
+// Inicializimi i menjëhershëm pa lagg
 (function initTheme() {
     const saved = localStorage.getItem('kalkulo-theme');
-    if(saved === 'light') {
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    if(saved === 'light' || (!saved && !prefersDark)) {
         isDarkMode = false;
         document.documentElement.setAttribute('data-theme', 'light');
-        // Këtu shtohet një timeout i vogël që UI të update-ohet pasi të jetë vizatuar DOM
-        setTimeout(updateSwitchUI, 100);
+        setTimeout(updateSwitchUI, 50);
     }
 })();
-
         // --- SHTINJA LAPSIN: SMART SCHEDULER v4.0 ---
 
 const NotifEngine = {
