@@ -17,6 +17,57 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
+@keyframes bounce-horizontal {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(5px); }
+}
+
+.animate-bounce-horizontal {
+    animation: bounce-horizontal 1.5s infinite;
+}
+
+/* Kjo mundëson që scroll-i të jetë i lëmuar në telefon */
+.mobile-nav-container {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none; /* Fsheh scrollbar-in për Firefox */
+    -ms-overflow-style: none;  /* Fsheh scrollbar-in për IE/Edge */
+}
+
+.mobile-nav-container::-webkit-scrollbar {
+    display: none; /* Fsheh scrollbar-in për Chrome/Safari */
+}
+
+.mobile-nav-item {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 @keyframes ticker-scroll {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
@@ -291,6 +342,22 @@ body {
 
             <nav class="h-24 bg-[#05070a]/80 backdrop-blur-2xl border-t border-white/5 flex overflow-x-auto no-scrollbar px-6 safe-area-bottom">
 
+
+
+
+<div class="flex items-center justify-between px-6 mb-2 md:hidden opacity-60">
+    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">Kategoritë</span>
+    <div class="flex items-center gap-1 animate-bounce-horizontal text-emerald-500">
+        <span class="text-[9px] font-black uppercase">Swipe</span>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+    </div>
+</div>
+
+
+
+                
 <div onclick="renderView('trusti', this)" 
      class="mobile-nav-item active-nav flex flex-col items-center justify-center transition-all duration-300 ease-in-out py-2 px-4 rounded-2xl active:scale-95 min-w-[80px]">
     <div class="relative">
