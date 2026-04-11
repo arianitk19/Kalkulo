@@ -301,10 +301,15 @@ body {
     </div>
     <span class="text-[10px] font-black uppercase tracking-[0.15em]">Trusti</span>
 </div>
-            <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
+
+
+
+             <div onclick="renderView('valuta', this)" class="mobile-nav-item min-w-[80px]">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Këmbimi</span>
             </div>
+
+                
             <div onclick="renderView('paga', this)" class="mobile-nav-item min-w-[80px]">
                 <svg class="w-6 h-6 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 <span class="text-[9px] font-bold uppercase tracking-widest">Paga</span>
@@ -703,22 +708,58 @@ document.addEventListener('DOMContentLoaded', () => NotifEngine.init());
     </div>`;
     break;
                     
-                case 'valuta':
-                    html = `
-                    <div class="space-y-10 money-bg p-8 rounded-[3rem] sector-animate">
-                        <h2 class="text-5xl font-black tracking-tighter">KËMBIMI <span class="text-emerald-500">GLOBAL</span></h2>
-                        <input type="number" id="v-in" oninput="calcV()" placeholder="Shuma në Euro" class="w-full text-7xl font-bold border-b-2 border-emerald-500/30 pb-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                            ${['USD', 'GBP', 'CHF', 'ALL', 'TRY', 'AUD', 'CAD', 'JPY'].map(m => `
-                                <div class="glass-view p-6 rounded-3xl flex justify-between items-center">
-                                    <span class="text-gray-500 font-black">${m}</span>
-                                    <span id="v-${m}" class="text-2xl font-bold text-emerald-500">0.00</span>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>`;
-                    break;
+               case 'valuta':
+    const currencies = [
+        { code: 'USD', name: 'Dollar Amerikan', color: 'from-blue-600 to-red-600', text: 'text-white' },
+        { code: 'GBP', name: 'Funta Britanike', color: 'from-blue-900 to-red-700', text: 'text-white' },
+        { code: 'CHF', name: 'Franga Zvicerane', color: 'from-red-500 to-white/90', text: 'text-red-900' },
+        { code: 'ALL', name: 'Lek Shqiptar', color: 'from-red-600 to-black', text: 'text-white' },
+        { code: 'TRY', name: 'Lira Turke', color: 'from-red-500 to-red-700', text: 'text-white' },
+        { code: 'JPY', name: 'Jeni Japonez', color: 'from-white to-red-500', text: 'text-gray-900' },
+        { code: 'CAD', name: 'Dollar Kanadez', color: 'from-red-600 via-white to-red-600', text: 'text-red-900' },
+        { code: 'AUD', name: 'Dollar Australian', color: 'from-blue-800 to-blue-900', text: 'text-white' }
+    ];
 
+    html = `
+    <div class="space-y-8 sector-animate pb-24">
+        <div class="bg-gradient-to-br from-gray-900 to-black p-8 rounded-[2.5rem] border border-white/5 shadow-2xl">
+            <h2 class="text-3xl font-black tracking-tighter text-white uppercase mb-6 text-center">
+                Këmbimi <span class="text-emerald-500">Valutor</span>
+            </h2>
+            
+            <div class="relative group">
+                <label class="text-[10px] uppercase tracking-[0.3em] text-emerald-500 font-black mb-3 block text-center">Shuma për konvertim (€)</label>
+                <input type="number" id="v-in" oninput="calcV()" 
+                    class="w-full text-6xl font-black bg-transparent border-none text-center focus:ring-0 text-white placeholder-gray-800" 
+                    placeholder="0.00">
+                <div class="h-[2px] w-1/2 mx-auto bg-gradient-to-r from-transparent via-emerald-500 to-transparent mt-2"></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 px-2">
+            ${currencies.map(c => `
+                <div class="relative overflow-hidden group active:scale-95 transition-transform duration-200">
+                    <div class="absolute inset-0 bg-gradient-to-br ${c.color} opacity-20 group-hover:opacity-30 transition-opacity rounded-[2rem]"></div>
+                    <div class="relative glass-view p-5 rounded-[2rem] border border-white/10 flex flex-col items-center text-center backdrop-blur-md">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br ${c.color} mb-3 shadow-lg border border-white/20 flex items-center justify-center font-black text-[10px] ${c.text}">
+                            ${c.code}
+                        </div>
+                        <span class="text-gray-400 font-bold text-[8px] uppercase tracking-widest mb-1">${c.name}</span>
+                        <span id="v-${c.code}" class="text-xl font-black text-white tracking-tighter">0.00</span>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="flex items-center justify-center space-x-3 opacity-50">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            <span class="text-[9px] font-black uppercase tracking-widest text-white">Kurset e këmbimit Live 2026</span>
+        </div>
+    </div>`;
+    break;
                 case 'paga':
                     html = `
                     <div class="space-y-12 sector-animate">
