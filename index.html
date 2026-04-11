@@ -17,68 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
-<style>
-/* Fsheh scrollbar por lejon lëvizjen */
-.no-scrollbar::-webkit-scrollbar {
-    display: none;
-}
-.no-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-}
-
-/* Animacioni i tekstit 'Rrëshqit' */
-@keyframes soft-pulse {
-    0%, 100% { opacity: 0.4; transform: scale(1); }
-    50% { opacity: 0.8; transform: scale(1.05); }
-}
-
-.animate-soft-pulse {
-    animation: soft-pulse 2s ease-in-out infinite;
-}
-
-/* Stilimi i kategorive kur nuk janë aktive */
-.mobile-nav-item {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #666;
-}
-
-/* Stilimi i kategorisë aktive */
-.active-nav {
-    background: rgba(16, 185, 129, 0.1) !important;
-    border: 1px solid rgba(16, 185, 129, 0.3) !important;
-    color: #10b981 !important;
-    box-shadow: 0 10px 20px -10px rgba(16, 185, 129, 0.3);
-}
-</style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
 @keyframes ticker-scroll {
     0% { transform: translate3d(0, 0, 0); }
     100% { transform: translate3d(-50%, 0, 0); }
@@ -358,21 +296,6 @@ body {
 
 <div class="relative w-full overflow-hidden py-4">
     
-    <div class="absolute right-4 top-1/2 -translate-y-1/2 z-20 pointer-events-none flex flex-col items-center opacity-40">
-        <div class="relative">
-            <div class="absolute inset-0 bg-emerald-500 rounded-full animate-ping opacity-75"></div>
-            <div class="relative bg-emerald-500/20 backdrop-blur-sm p-2 rounded-full border border-white/10">
-                <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-            </div>
-        </div>
-        <span class="text-[7px] text-white uppercase tracking-[0.3em] font-black mt-2 bg-black/20 px-2 py-1 rounded-full backdrop-blur-md">
-            Rrëshqit
-        </span>
-    </div>
-
-
                 
 <div onclick="renderView('trusti', this)" 
      class="mobile-nav-item active-nav flex flex-col items-center justify-center transition-all duration-300 ease-in-out py-2 px-4 rounded-2xl active:scale-95 min-w-[80px]">
