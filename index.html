@@ -101,28 +101,50 @@
 
         
 
-/* Tranzicion i lëmuar për çdo element */
+:root {
+    /* DARK MODE (Default) */
+    --bg-app: #010204;
+    --bg-card: rgba(255, 255, 255, 0.03);
+    --bg-nav: rgba(5, 7, 10, 0.8);
+    --text-main: #ffffff;
+    --text-muted: #94a3b8;
+    --border: rgba(255, 255, 255, 0.05);
+    --accent: #f97316; /* Orange */
+    --input-bg: rgba(255, 255, 255, 0.02);
+}
+
+[data-theme='light'] {
+    /* LIGHT MODE */
+    --bg-app: #f1f5f9;
+    --bg-card: #ffffff;
+    --bg-nav: rgba(255, 255, 255, 0.9);
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --border: rgba(0, 0, 0, 0.08);
+    --accent: #ea580c; /* Orange pak më i errët për lexim */
+    --input-bg: #e2e8f0;
+}
+
+/* Apliko variablat globalisht */
 body {
-    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
+    background-color: var(--bg-app) !important;
+    color: var(--text-main);
+    transition: background-color 0.5s ease, color 0.5s ease;
 }
 
-#theme-circle {
-    /* Përdorim transition-all për lëvizje fizike të switch-it */
-    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-}
-
-/* Glass-view që përshtatet me temën */
 .glass-view {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    backdrop-filter: blur(20px);
+    transition: all 0.5s ease;
 }
 
-[data-theme='light'] .glass-view {
-    background: rgba(0, 0, 0, 0.03);
-    border-color: rgba(0, 0, 0, 0.05);
+/* Inputet dhe Selectet që ndryshojnë automatikisht */
+input, select {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
 }
-
 
 
 
@@ -521,68 +543,55 @@ body {
 
     <script>
 
-// --- SISTEMI I AVANCUAR I TEMËS (Dark & Orange) ---
+
 let isDarkMode = true;
 
 function toggleTheme() {
     isDarkMode = !isDarkMode;
+    const root = document.documentElement;
     
-    const circle = document.getElementById('theme-circle');
-    const toggleBg = document.getElementById('theme-toggle');
-    const label = document.getElementById('label-mode');
-    const icon = document.getElementById('theme-icon');
-    const iconBg = document.getElementById('theme-icon-bg');
+    // Haptic feedback (Vibrate)
+    if(navigator.vibrate) navigator.vibrate(12);
 
-    // Vibrate i lehtë për ndjesi fizike
-    if(navigator.vibrate) navigator.vibrate(15);
+    // Ndryshimi i Temës - Ky rresht ndryshon 100% të App-it përmes CSS
+    root.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
 
-    if(!isDarkMode) {
-        // --- MODALITETI I DRITËS (LIGHT) ---
-        document.documentElement.setAttribute('data-theme', 'light');
-        
-        // Animacioni i switch-it
-        circle.style.transform = 'translateX(32px)';
-        circle.style.backgroundColor = '#f97316'; // Orange mbetet si theks
-        circle.style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.4)';
-        
-        toggleBg.style.backgroundColor = '#e2e8f0';
-        label.innerText = 'Tema e Dritës';
-        label.style.color = '#1e293b';
-        
-        icon.classList.replace('fi-rr-moon', 'fi-rr-sun');
-        icon.style.color = '#f97316';
-        iconBg.style.backgroundColor = '#f97316/10';
+    // UI Feedback i Switch-it
+    updateSwitchUI();
 
-        // Ndryshimi i ngjyrave globale (Custom Properties)
-        document.body.style.backgroundColor = '#f1f5f9';
-        document.body.style.color = '#0f172a';
-
-    } else {
-        // --- MODALITETI I ERRËT (DARK) ---
-        document.documentElement.setAttribute('data-theme', 'dark');
-        
-        // Animacioni i switch-it
-        circle.style.transform = 'translateX(0px)';
-        circle.style.backgroundColor = '#f97316';
-        circle.style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.6)';
-        
-        toggleBg.style.backgroundColor = '#0a0a0a';
-        label.innerText = 'Tema e Errët';
-        label.style.color = '#ffffff';
-        
-        icon.classList.replace('fi-rr-sun', 'fi-rr-moon');
-        icon.style.color = '#f97316';
-        iconBg.style.backgroundColor = 'rgba(249, 115, 22, 0.1)';
-
-        document.body.style.backgroundColor = '#010204';
-        document.body.style.color = '#ffffff';
-    }
-
-    // Efekti GSAP për tranzicion të lëmuar të background-it (opsionale)
-    gsap.to("body", { duration: 0.5, backgroundColor: isDarkMode ? "#010204" : "#f1f5f9" });
+    // Ruaje preferencën që App-i ta mbajë mend kur hapet përsëri
+    localStorage.setItem('kalkulo-theme', isDarkMode ? 'dark' : 'light');
 }
 
+function updateSwitchUI() {
+    const circle = document.getElementById('theme-circle');
+    const label = document.getElementById('label-mode');
+    const icon = document.getElementById('theme-icon');
+    const toggleBg = document.getElementById('theme-toggle');
 
+    if (!isDarkMode) {
+        gsap.to(circle, { x: 32, backgroundColor: "#f97316", duration: 0.4, ease: "back.out(1.7)" });
+        gsap.to(toggleBg, { backgroundColor: "#cbd5e1", duration: 0.4 });
+        label.innerText = 'Tema e Dritës';
+        icon.classList.replace('fi-rr-moon', 'fi-rr-sun');
+    } else {
+        gsap.to(circle, { x: 0, backgroundColor: "#f97316", duration: 0.4, ease: "back.out(1.7)" });
+        gsap.to(toggleBg, { backgroundColor: "#0a0a0a", duration: 0.4 });
+        label.innerText = 'Tema e Errët';
+        icon.classList.replace('fi-rr-sun', 'fi-rr-moon');
+    }
+}
+
+// Kontrollo temën në fillim të ngarkimit
+(function initTheme() {
+    const saved = localStorage.getItem('kalkulo-theme');
+    if(saved === 'light') {
+        isDarkMode = false;
+        document.documentElement.setAttribute('data-theme', 'light');
+        // Këtu shtohet një timeout i vogël që UI të update-ohet pasi të jetë vizatuar DOM
+        setTimeout(updateSwitchUI, 100);
+    }
+})();
 
         // --- SHTINJA LAPSIN: SMART SCHEDULER v4.0 ---
 
