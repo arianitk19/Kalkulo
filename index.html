@@ -396,39 +396,77 @@
         </nav>
     </div>
 
-   <div id="settings" class="fixed inset-y-0 right-0 w-full md:w-[400px] bg-black/95 backdrop-blur-3xl z-[1100] translate-x-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] border-l border-white/10 p-10">
-    <div class="flex justify-between items-center mb-16">
-        <div>
-            <h4 id="sett-title" class="text-3xl font-black italic tracking-tighter text-white">CILESIMET</h4>
-            <p id="sett-subtitle" class="text-emerald-500 text-[10px] font-bold tracking-[0.3em]">KONFIGURIMET E SISTEMIT</p>
+ <div id="settings" class="fixed inset-y-0 right-0 w-full md:w-[450px] bg-[#080808] backdrop-blur-[50px] z-[1100] translate-x-full transition-transform duration-[0.8s] ease-[cubic-bezier(0.16,1,0.3,1)] border-l border-white/5 shadow-[-50px_0_100px_rgba(0,0,0,0.9)] flex flex-col">
+    
+    <div class="absolute inset-0 bg-gradient-to-br from-orange-500/[0.03] to-transparent pointer-events-none"></div>
+
+    <div class="relative p-10 pb-16 flex justify-between items-start z-10">
+        <div class="space-y-1">
+            <div class="flex items-center space-x-2 mb-2">
+                <div class="w-8 h-[1px] bg-orange-500"></div>
+                <span id="sett-subtitle" class="text-orange-500 text-[9px] font-black tracking-[0.4em] uppercase">System Configuration</span>
+            </div>
+            <h4 id="sett-title" class="text-5xl font-black italic tracking-[ -0.05em] text-white leading-none">
+                Cilësimet<span class="text-orange-500">.</span>
+            </h4>
         </div>
-        <button onclick="openSettings()" class="text-gray-500 hover:text-white text-3xl transition-colors">&times;</button>
+        
+        <button onclick="openSettings()" class="group relative w-12 h-12 flex items-center justify-center rounded-full bg-white/5 border border-white/10 hover:border-orange-500/50 hover:bg-orange-500/10 transition-all duration-500 active:scale-90">
+            <div class="relative w-4 h-4">
+                <span class="absolute top-1/2 left-0 w-full h-[1.5px] bg-gray-400 group-hover:bg-white rotate-45 transition-transform duration-500"></span>
+                <span class="absolute top-1/2 left-0 w-full h-[1.5px] bg-gray-400 group-hover:bg-white -rotate-45 transition-transform duration-500"></span>
+            </div>
+        </button>
     </div>
 
+    <div class="flex-1 overflow-y-auto px-10 pb-10 space-y-8 no-scrollbar relative z-10">
+        
+        <div class="space-y-10 animate-in fade-in slide-in-from-right-10 duration-1000 delay-300">
+            </div>
+
+    </div>
+
+    <div class="p-10 border-t border-white/5 bg-black/50 backdrop-blur-md relative z-10">
+        <div class="flex justify-between items-center">
+            <div class="flex flex-col">
+                <span class="text-[8px] text-gray-600 font-black uppercase tracking-widest">Versioni i Sistemit</span>
+                <span class="text-[10px] text-gray-400 font-bold tracking-tighter mt-1">KALKULO CORE v5.0.4 (2026)</span>
+            </div>
+            <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_10px_#10b981]"></div>
+        </div>
+    </div>
+</div>
+
 
 
 
        
-       
-   <div class="space-y-6">
-    <div class="flex justify-between items-center p-5 bg-[#0a0a0a]/60 backdrop-blur-xl rounded-[2rem] border border-white/5 hover:border-orange-500/20 transition-all duration-500 group">
-        <div class="flex items-center space-x-4">
-            <div class="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center border border-white/5">
-                <i class="fi fi-rr-bell-ring text-gray-500 group-hover:text-orange-500 transition-colors"></i>
+       <div class="space-y-6">
+    <div id="notif-card" class="flex justify-between items-center p-6 bg-[#0a0a0a]/80 backdrop-blur-2xl rounded-[2.5rem] border border-white/5 hover:border-orange-500/20 transition-all duration-700 group relative overflow-hidden shadow-2xl">
+        
+        <div id="notif-bg-glow" class="absolute -right-10 -top-10 w-32 h-32 bg-orange-500/0 blur-[60px] transition-all duration-1000"></div>
+
+        <div class="flex items-center space-x-5 relative z-10">
+            <div id="notif-icon-box" class="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/5 transition-all duration-500 group-hover:scale-110">
+                <i id="notif-icon" class="fi fi-rr-bell-ring text-gray-500 transition-all duration-500 text-xl"></i>
             </div>
             <div class="flex flex-col">
-                <span id="label-notifications" class="text-[11px] font-black uppercase tracking-widest text-gray-200">Njoftimet</span>
-                <p id="notif-status-sub" class="text-[8px] text-gray-500 font-bold uppercase tracking-tighter mt-0.5">I çaktivizuar</p>
+                <span class="text-[12px] font-black uppercase tracking-[0.2em] text-white">Njoftimet Ditore</span>
+                <div class="flex items-center space-x-2 mt-1">
+                    <span id="notif-status-dot" class="w-1.5 h-1.5 bg-gray-600 rounded-full transition-all duration-500"></span>
+                    <p id="notif-status-sub" class="text-[9px] text-gray-500 font-black uppercase tracking-widest">I Çaktivizuar</p>
+                </div>
             </div>
         </div>
 
-        <div id="notif-toggle" onclick="NotifEngine.toggle()" class="w-14 h-7 bg-white/5 rounded-full relative cursor-pointer transition-all duration-500 border border-white/10 shadow-inner group-hover:border-orange-500/30">
-            <div id="notif-circle" class="absolute left-1 top-1 w-5 h-5 bg-gray-500 rounded-full transition-all duration-700 cubic-bezier(0.68, -0.55, 0.265, 1.55) shadow-lg flex items-center justify-center">
-                <div class="w-1 h-1 bg-white/20 rounded-full"></div>
+        <div id="notif-toggle" onclick="NotifEngine.toggle()" class="w-16 h-8 bg-white/5 rounded-full relative cursor-pointer transition-all duration-500 border border-white/10 shadow-inner group-hover:border-orange-500/30">
+            <div id="notif-circle" class="absolute left-1 top-1 w-6 h-6 bg-gray-600 rounded-full transition-all duration-700 shadow-xl flex items-center justify-center translate-x-0">
+                <div class="w-1.5 h-1.5 bg-black/20 rounded-full transition-all" id="notif-inner-dot"></div>
             </div>
         </div>
     </div>
-</div>    
+</div>
+ 
    
 
      <div class="flex flex-col gap-5 p-6 bg-[#0a0a0a] backdrop-blur-3xl rounded-[2.5rem] border border-white/5 hover:border-orange-500/30 transition-all duration-700 group relative overflow-hidden mt-4">
@@ -481,19 +519,22 @@
 
     <script>
 
-
-        
-        // --- SHTINJA LAPSIN: SMART SCHEDULER v4.0 ---
+// --- SHTINJA LAPSIN: SMART SCHEDULER v5.0 ---
 
 const NotifEngine = {
     state: localStorage.getItem('kalkulo_notif_active') === 'true',
     checkInterval: null,
+    
+    // Konfigurimi i orareve (100% Mekanik)
+    schedule: {
+        lunch: { hour: 13, min: 30, title: "Koha e Drekës 🍕", body: "Analizo shpenzimet e mëngjesit dhe shih sa të mbetet për pjesën tjetër të ditës." },
+        night: { hour: 21, min: 00, title: "Reflektimi i Ditës 🌙", body: "Mbylli llogaritë për sot. Një plan i mirë sonte, do të thotë më shumë kursim nesër." }
+    },
 
     init() {
-        // Kontrollon nëse përdoruesi e ka pasur të ndezur më herët
         if (this.state) {
             this.updateUI(true);
-            this.startStream();
+            this.startEngine();
         }
     },
 
@@ -504,75 +545,90 @@ const NotifEngine = {
                 this.state = true;
                 localStorage.setItem('kalkulo_notif_active', 'true');
                 this.updateUI(true);
-                this.sendImmediateUpdate("Sistemi u aktivizua!", "Do të njoftohesh në mëngjes, drekë dhe mbrëmje. 🚀");
-                this.startStream();
+                this.notify("Sistemi u aktivizua! 🚀", "Do të njoftohesh çdo ditë në 13:30 dhe 21:00.");
+                this.startEngine();
+                if(navigator.vibrate) navigator.vibrate([10, 50]);
             } else {
-                alert("Ju lutem lejoni njoftimet në settings të browser-it.");
+                alert("Duhet të lejoni njoftimet nga Browser-i.");
             }
         } else {
             this.state = false;
             localStorage.setItem('kalkulo_notif_active', 'false');
             this.updateUI(false);
-            clearInterval(this.checkInterval);
+            if (this.checkInterval) clearInterval(this.checkInterval);
         }
     },
 
     updateUI(active) {
         const circle = document.getElementById('notif-circle');
         const toggleBg = document.getElementById('notif-toggle');
-        if (!circle || !toggleBg) return;
+        const statusDot = document.getElementById('notif-status-dot');
+        const statusText = document.getElementById('notif-status-sub');
+        const icon = document.getElementById('notif-icon');
+        const iconBox = document.getElementById('notif-icon-box');
+        const bgGlow = document.getElementById('notif-bg-glow');
+        const innerDot = document.getElementById('notif-inner-dot');
 
         if (active) {
-            circle.style.transform = 'translateX(24px)';
-            circle.classList.replace('bg-gray-400', 'bg-orange-500');
-            toggleBg.classList.replace('bg-white/10', 'bg-orange-500/20');
+            gsap.to(circle, { x: 32, backgroundColor: "#fff", duration: 0.6, ease: "back.out(1.7)" });
+            gsap.to(toggleBg, { backgroundColor: "#f97316", borderColor: "rgba(249,115,22,0.4)", duration: 0.4 });
+            
+            statusDot.className = "w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse shadow-[0_0_10px_#f97316]";
+            statusText.innerText = "AKTIV (13:30 & 21:00)";
+            statusText.classList.replace('text-gray-500', 'text-orange-500');
+            
+            icon.classList.replace('text-gray-500', 'text-orange-500');
+            iconBox.style.borderColor = "rgba(249,115,22,0.3)";
+            bgGlow.style.backgroundColor = "rgba(249,115,22,0.15)";
+            innerDot.style.backgroundColor = "#f97316";
         } else {
-            circle.style.transform = 'translateX(0px)';
-            circle.classList.replace('bg-orange-500', 'bg-gray-400');
-            toggleBg.classList.replace('bg-orange-500/20', 'bg-white/10');
+            gsap.to(circle, { x: 0, backgroundColor: "#4b5563", duration: 0.5, ease: "power2.inOut" });
+            gsap.to(toggleBg, { backgroundColor: "rgba(255,255,255,0.05)", borderColor: "rgba(255,255,255,0.1)", duration: 0.4 });
+            
+            statusDot.className = "w-1.5 h-1.5 bg-gray-600 rounded-full";
+            statusText.innerText = "I ÇAKTIVIZUAR";
+            statusText.classList.replace('text-orange-500', 'text-gray-500');
+            
+            icon.classList.replace('text-orange-500', 'text-gray-500');
+            iconBox.style.borderColor = "rgba(255,255,255,0.05)";
+            bgGlow.style.backgroundColor = "transparent";
+            innerDot.style.backgroundColor = "rgba(255,255,255,0.2)";
         }
     },
 
-    startStream() {
-        console.log("Stream i njoftimeve u aktivizua...");
-        // Kontrollon çdo 1 minutë nëse është koha për njoftim
-        this.checkInterval = setInterval(() => this.scheduler(), 60000);
+    startEngine() {
+        console.log("Mekanizmi i njoftimeve po punon...");
+        // Kontrollon fiks çdo minutë
+        this.checkInterval = setInterval(() => {
+            const now = new Date();
+            const h = now.getHours();
+            const m = now.getMinutes();
+
+            // Kontrolli i drekës (13:30)
+            if (h === this.schedule.lunch.hour && m === this.schedule.lunch.min) {
+                this.notify(this.schedule.lunch.title, this.schedule.lunch.body);
+            }
+            
+            // Kontrolli i darkës (21:00)
+            if (h === this.schedule.night.hour && m === this.schedule.night.min) {
+                this.notify(this.schedule.night.title, this.schedule.night.body);
+            }
+        }, 60000);
     },
 
-    scheduler() {
-        const now = new Date();
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-
-        // Eviton dërgimin e njoftimit shumë herë brenda të njëjtës minutë
-        if (minute !== 0) return; 
-
-        // ORARET E CAKTUARA
-        if (hour === 9) {
-            this.sendImmediateUpdate("Mirëmëngjesi! ☕", "Hajde kqyri pak financat sot. Kalkulo mbarë!");
-        } else if (hour === 14) {
-            this.sendImmediateUpdate("Pauza e drekës? 🍕", "Gjej 2 minuta kohë për të parë trendet e fundit të Kategorive.");
-        } else if (hour === 21) {
-            this.sendImmediateUpdate("Reflektim i mbrëmjes 🌙", "Mbylli llogaritë e sotme dhe planifiko të nesërmen me Kalkulo.");
-        }
-    },
-
-    sendImmediateUpdate(title, body) {
+    notify(title, body) {
         if (Notification.permission === "granted") {
             new Notification(title, {
                 body: body,
-                icon: 'https://i.imgur.com/8Qj9S1f.png', // Ikona jote mahnitëse
+                icon: 'https://i.imgur.com/8Qj9S1f.png',
                 badge: 'https://i.imgur.com/8Qj9S1f.png',
-                tag: 'kalkulo-daily',
-                renotify: true
+                tag: 'kalkulo-scheduler' // Eviton duplikimin e njoftimeve
             });
         }
     }
 };
 
-// Startimi automatik kur ngarkohet faqja
 document.addEventListener('DOMContentLoaded', () => NotifEngine.init());
-
 
 
 
