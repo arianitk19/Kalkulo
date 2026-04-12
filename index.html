@@ -1661,29 +1661,82 @@ let aiState = {
     history: []
 };
 
-// 1. DYNAMIC TOGGLE
 function toggleAI() {
+    // 1. Përditëso gjendjen (state)
     aiState.enabled = !aiState.enabled;
-    const windowEl = document.getElementById('ai-window');
-    
-    if(aiState.enabled) {
-        windowEl.classList.remove('hidden');
-        windowEl.style.display = 'flex'; // Siguron që layout-i të mos thyhet
-        gsap.fromTo(windowEl, 
-            { y: 50, opacity: 0, scale: 0.95 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: "expo.out" }
-        );
-        if(navigator.vibrate) navigator.vibrate(20);
-    } else {
-        gsap.to(windowEl, { 
-            y: 50, opacity: 0, scale: 0.95, duration: 0.4, ease: "expo.in",
-            onComplete: () => { windowEl.classList.add('hidden'); windowEl.style.display = 'none'; }
-        });
-    }
-    // Sinkronizimi me elementet e jashtme (Switch-at)
-    updateExternalUI(aiState.enabled);
-}
 
+    const toggle = document.getElementById('ai-master-toggle');
+    const circle = document.getElementById('ai-master-circle');
+    const dot = document.getElementById('ai-status-dot');
+    const text = document.getElementById('ai-status-text');
+    const desc = document.getElementById('ai-status-desc');
+    const icon = document.getElementById('ai-svg-icon');
+    const penPath = document.getElementById('ai-pen-path');
+    const bgGlow = document.getElementById('neural-bg-glow');
+    const innerDot = document.getElementById('ai-inner-dot');
+
+    if (aiState.enabled) {
+        // --- GJENDJA: ON ---
+        gsap.to(circle, { 
+            x: 32, 
+            backgroundColor: "#fff", 
+            duration: 0.6, 
+            ease: "back.out(1.7)" 
+        });
+        
+        toggle.classList.replace('bg-white/5', 'bg-orange-500');
+        dot.classList.replace('bg-gray-600', 'bg-orange-500');
+        dot.classList.add('animate-pulse', 'shadow-[0_0_15px_#f97316]');
+        
+        text.innerText = "ONLINE";
+        text.classList.replace('text-gray-500', 'text-orange-500');
+        
+        desc.innerHTML = `Inteligjenca <span class="text-orange-500 font-bold">"Shtinja Lapsin"</span> është aktive.`;
+        desc.classList.replace('text-gray-500', 'text-white');
+        
+        icon.classList.replace('text-gray-500', 'text-white');
+        penPath.classList.replace('text-gray-700', 'text-orange-500');
+        penPath.classList.add('animate-pulse');
+        
+        bgGlow.style.backgroundColor = 'rgba(249, 115, 22, 0.15)';
+        innerDot.style.backgroundColor = '#f97316';
+
+        // Shfaq dritaren e AI nese eshte e mbyllur
+        document.getElementById('ai-window').classList.remove('hidden');
+        gsap.from("#ai-window", { y: 30, opacity: 0, duration: 0.5, ease: "expo.out" });
+
+        if(navigator.vibrate) navigator.vibrate([10, 30]);
+
+    } else {
+        // --- GJENDJA: OFF ---
+        gsap.to(circle, { 
+            x: 0, 
+            backgroundColor: "#4b5563", 
+            duration: 0.5, 
+            ease: "power2.inOut" 
+        });
+
+        toggle.classList.replace('bg-orange-500', 'bg-white/5');
+        dot.classList.replace('bg-orange-500', 'bg-gray-600');
+        dot.classList.remove('animate-pulse', 'shadow-[0_0_15px_#f97316]');
+        
+        text.innerText = "I Çaktivizuar";
+        text.classList.replace('text-orange-500', 'text-gray-500');
+        
+        desc.innerHTML = `Aktivizoni <span class="text-gray-400 font-bold">"Shtinja Lapsin"</span> për monitorim live.`;
+        desc.classList.replace('text-white', 'text-gray-500');
+        
+        icon.classList.replace('text-white', 'text-gray-500');
+        penPath.classList.replace('text-orange-500', 'text-gray-700');
+        penPath.classList.remove('animate-pulse');
+        
+        bgGlow.style.backgroundColor = 'transparent';
+        innerDot.style.backgroundColor = 'rgba(0,0,0,0.4)';
+
+        // Fsheh dritaren e AI
+        document.getElementById('ai-window').classList.add('hidden');
+    }
+}
 // 2. SMART CHAT ENGINE
 function addMessage(sender, text) {
     const chatArea = document.getElementById('ai-chat-area');
