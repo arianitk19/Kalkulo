@@ -2,7 +2,6 @@
 import { icon } from './core/icons.js';
 import { cfg, getHistory } from './core/store.js';
 import { RATES } from './core/finance.js';
-import { historyRow } from './views.js';
 
 const muted = 'style="color:var(--muted)"';
 
@@ -86,14 +85,4 @@ export function faq() {
     <label class="relative block mb-4"><span class="absolute left-3.5 top-1/2 -translate-y-1/2" ${muted}>${icon('search', 'w-4 h-4')}</span>
       <input id="faqSearch" type="search" placeholder="Kërko në FAQ…" class="field w-full rounded-xl pl-10 pr-4 py-3 text-sm"></label>
     <div id="faqList" class="space-y-2">${items.map(([q, a]) => acc(q, a)).join('')}</div>`;
-}
-
-export function historyPanel() {
-  const list = getHistory();
-  return `${head('Historiku', `${list.length} llogaritje`)}
-    ${list.length ? `<div class="space-y-2">${list.map(historyRow).join('')}</div>
-      <button type="button" data-action="clear-history" class="act press w-full mt-4">${icon('trash', 'w-4 h-4')} Fshi historikun</button>`
-    : `<div class="text-center py-16"><div class="w-14 h-14 rounded-2xl bg-white/5 mx-auto flex items-center justify-center mb-4" ${muted}>${icon('history', 'w-6 h-6')}</div>
-       <p class="text-sm font-semibold">Ende pa llogaritje të ruajtura</p><p class="text-xs mt-1" ${muted}>Shtypni “Ruaj” në çdo modul për t’i mbajtur këtu.</p>
-       <a href="#/calc" class="btn-primary press mt-5 inline-flex">Hap modulet</a></div>`}`;
 }

@@ -11,15 +11,18 @@ import * as V from './views.js';
 import * as Panels from './panels.js';
 import { AssistantUI, reply } from './assistant.js';
 
+// Navigimi: menuja e poshtme (telefon) dhe navigimi lart (tablet/desktop)
 const NAV = [
   { id: 'overview', href: '#/', icon: 'overview', label: 'Ballina' },
   { id: 'calc', href: '#/calc', icon: 'calc', label: 'Kalkulo' },
+  { id: 'assistant', href: '#/assistant', icon: 'assistant', label: 'Asistenti', center: true },
   { id: 'markets', href: '#/markets', icon: 'markets', label: 'Tregjet' },
-  { id: 'assistant', href: '#/assistant', icon: 'assistant', label: 'Asistenti' },
+  { id: 'history', href: '#/history', icon: 'history', label: 'Historiku' },
 ];
-const SHEETS = { settings: Panels.settings, 'settings/guide': Panels.guide, 'settings/faq': Panels.faq, history: Panels.historyPanel };
+const TITLES = { overview: 'Platforma financiare', hub: 'Kalkulatorët', markets: 'Tregjet live', history: 'Historiku', assistant: 'Asistenti' };
+const SHEETS = { settings: Panels.settings, 'settings/guide': Panels.guide, 'settings/faq': Panels.faq };
 
-const state = { base: null, baseHash: '#/', overlay: null, depth: 0, calc: null };
+const state = { base: null, baseHash: '#/', overlay: null, depth: 0, calc: null, activeNav: null };
 
 /* ---------------- routing ---------------- */
 function parse(hash) {
@@ -29,6 +32,7 @@ function parse(hash) {
   if (!parts.length) return { view: 'overview' };
   if (parts[0] === 'calc') return parts[1] && byId[parts[1]] ? { view: 'calc', id: parts[1], h: params.get('h') } : { view: 'hub' };
   if (parts[0] === 'markets') return { view: 'markets' };
+  if (parts[0] === 'history') return { view: 'history' };
   if (parts[0] === 'assistant') return { overlay: 'assistant' };
   const sheet = parts.join('/');
   if (SHEETS[sheet]) return { overlay: 'sheet', sheet };
@@ -59,23 +63,51 @@ function renderBase(r, hash) {
     mountCalculator(c, r.h);
     document.title = `${c.title} · KALKULO X`;
   } else {
-    view.innerHTML = r.view === 'hub' ? V.hub() : r.view === 'markets' ? V.markets() : V.overview();
-    document.title = 'KALKULO X — Platforma financiare';
+    view.innerHTML = renderView(r.view);
+    document.title = r.view === 'overview' ? 'KALKULO X — Platforma financiare' : `${TITLES[r.view]} · KALKULO X`;
   }
-  view.scrollTop = 0;
+  view.scrollTo({ top: 0, behavior: 'instant' });
+  $('#top').classList.remove('scrolled');
+  $('#crumb').textContent = r.view === 'calc' ? byId[r.id].short : TITLES[r.view];
   setActiveNav(r.view === 'calc' || r.view === 'hub' ? 'calc' : r.view);
 }
 
+const renderView = (v) => (v === 'hub' ? V.hub() : v === 'markets' ? V.markets() : v === 'history' ? V.historyPage() : V.overview());
+
+/** Shënon faqen aktive në të dy menutë dhe lëviz treguesin. */
 function setActiveNav(id) {
-  $$('#nav a').forEach((a) => {
-    const on = a.dataset.id === id;
+  state.activeNav = id;
+  $$('[data-nav]').forEach((a) => {
+    const on = a.dataset.nav === id;
     a.classList.toggle('on', on);
     on ? a.setAttribute('aria-current', 'page') : a.removeAttribute('aria-current');
   });
+  const dock = $('#dock');
+  const idx = NAV.findIndex((n) => n.id === id);
+  const onCenter = NAV[idx]?.center;
+  dock.style.setProperty('--i', String(Math.max(0, idx)));
+  dock.style.setProperty('--ind-o', idx < 0 || onCenter ? '0' : '1');
+  moveTopIndicator();
+}
+
+function moveTopIndicator() {
+  const ind = $('#topnav .topnav-ind');
+  const on = $('#topnav a.on');
+  if (!ind) return;
+  if (!on || !on.offsetWidth) { ind.style.opacity = '0'; return; }
+  ind.style.opacity = '1';
+  ind.style.width = `${on.offsetWidth}px`;
+  ind.style.transform = `translateX(${on.offsetLeft}px)`;
+}
+
+function updateHistoryBadge() {
+  const n = getHistory().length;
+  $$('[data-badge="history"]').forEach((b) => { b.textContent = n > 99 ? '99+' : String(n); b.hidden = !n; });
 }
 
 function openOverlay(r) {
   state.overlay = r;
+  $('#scrim').classList.add('on');
   if (r.overlay === 'assistant') {
     $('#sheet').classList.remove('open');
     AssistantUI.open();
@@ -94,6 +126,7 @@ function openOverlay(r) {
 function closeOverlays() {
   if (!state.overlay) return;
   state.overlay = null;
+  $('#scrim').classList.remove('on');
   AssistantUI.close();
   const sheet = $('#sheet');
   sheet.classList.remove('open');
@@ -176,6 +209,7 @@ const ACTIONS = {
     const s = state.calc;
     if (!s?.res.summary) { toast('Plotësoni vlerat para se ta ruani'); return; }
     addHistory({ calc: s.c.id, summary: s.res.summary, values: s.values });
+    updateHistoryBadge();
     vibrate();
     toast('U ruajt në historik');
   },
@@ -188,13 +222,15 @@ const ACTIONS = {
   'close-sheet'() { dismissOverlay(); },
   'del-history'(btn) {
     removeHistory(btn.dataset.id);
-    if (state.overlay?.sheet === 'history') openOverlay(state.overlay);
-    else if (state.base?.view === 'overview') renderBase(state.base, state.baseHash);
+    updateHistoryBadge();
+    btn.closest('.card')?.remove();
+    if (state.base?.view === 'history' && !getHistory().length) rerenderBase();
   },
   'clear-history'() {
     if (!confirm('Të fshihet i gjithë historiku?')) return;
     clearHistory();
-    openOverlay(state.overlay);
+    updateHistoryBadge();
+    rerenderBase();
     toast('Historiku u fshi');
   },
   export() {
@@ -208,6 +244,7 @@ const ACTIONS = {
     if (!confirm('Të rivendosen cilësimet dhe të fshihet historiku?')) return;
     resetAll();
     applyPrefs();
+    updateHistoryBadge();
     openOverlay(state.overlay);
     toast('Gjithçka u rivendos');
   },
@@ -262,8 +299,40 @@ function bindEvents() {
   });
 
   $('#aiClose').addEventListener('click', dismissOverlay);
-  $('#sheet').addEventListener('click', (e) => { if (e.target.id === 'sheet') dismissOverlay(); });
+  $('#scrim').addEventListener('click', dismissOverlay);
   window.addEventListener('hashchange', route);
+
+  // Header: bëhet kompakt kur faqja lëviz
+  const top = $('#top');
+  $('#view').addEventListener('scroll', (e) => top.classList.toggle('scrolled', e.target.scrollTop > 6), { passive: true });
+
+  // Prekja e faqes aktive në menu → kthehu në krye
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('[data-nav]');
+    if (!a) return;
+    vibrate(6);
+    if (a.getAttribute('href') === location.hash || (a.dataset.nav === 'overview' && !location.hash.replace('#/', ''))) {
+      e.preventDefault();
+      $('#view').scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  });
+
+  window.addEventListener('resize', moveTopIndicator, { passive: true });
+  watchKeyboard();
+}
+
+/** Fsheh menunë e poshtme kur hapet tastiera në telefon. */
+function watchKeyboard() {
+  const touch = matchMedia('(pointer: coarse)');
+  const isField = (el) => el && (/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) && !/^(checkbox|radio|range|button|submit)$/.test(el.type);
+  const sync = () => {
+    const vv = window.visualViewport;
+    const shrunk = vv ? vv.height < window.innerHeight * 0.78 : false;
+    document.body.classList.toggle('kb-open', touch.matches && (shrunk || isField(document.activeElement)));
+  };
+  document.addEventListener('focusin', sync);
+  document.addEventListener('focusout', () => setTimeout(sync, 60));
+  window.visualViewport?.addEventListener('resize', sync);
 }
 
 /* ---------------- market ---------------- */
@@ -281,15 +350,21 @@ function buildTicker() {
 function onMarketChange() {
   buildTicker();
   $$('[data-live-badge]').forEach((b) => { b.outerHTML = V.liveBadge(); });
+  $('#topLive').innerHTML = V.liveBadge();
   if (market.status === 'loading' || state.overlay) return;
-  const view = $('#view');
   const v = state.base?.view;
-  if (v === 'overview' || v === 'markets') {
-    const y = view.scrollTop;
-    view.innerHTML = v === 'markets' ? V.markets() : V.overview();
-    view.querySelectorAll('.fu,.stg').forEach((el) => el.classList.remove('fu', 'stg'));
-    view.scrollTop = y;
-  } else if (v === 'calc') rerunCalculator();
+  if (v === 'overview' || v === 'markets') rerenderBase();
+  else if (v === 'calc') rerunCalculator();
+}
+
+function rerenderBase() {
+  if (!state.base) return;
+  const view = $('#view');
+  const y = view.scrollTop;
+  if (state.base.view === 'calc') return;
+  view.innerHTML = renderView(state.base.view);
+  view.querySelectorAll('.fu,.stg').forEach((el) => el.classList.remove('fu', 'stg'));
+  view.scrollTop = y;
 }
 
 /* ---------------- shell ---------------- */
@@ -298,8 +373,14 @@ function applyPrefs() {
 }
 
 function buildShell() {
-  $('#nav').innerHTML = NAV.map((n) => `<a href="${n.href}" data-id="${n.id}" class="nav-i"><span class="nb"></span>${icon(n.icon, 'w-[22px] h-[22px]')}<span class="text-[9px] font-semibold uppercase tracking-wide">${n.label}</span></a>`).join('');
-  $('#historyBtn').innerHTML = icon('history', 'w-[18px] h-[18px]');
+  $('#dockItems').innerHTML = NAV.map((n) => (n.center
+    ? `<a href="${n.href}" data-nav="${n.id}" class="dock-ai" aria-label="${n.label}"><span class="orb">${icon(n.icon, 'w-6 h-6')}</span></a>`
+    : `<a href="${n.href}" data-nav="${n.id}" class="dock-i" aria-label="${n.label}">${icon(n.icon, 'w-[22px] h-[22px]')}<span class="lbl">${n.label}</span>${n.id === 'history' ? '<span class="dock-badge" data-badge="history" hidden></span>' : ''}</a>`)).join('');
+  $('#topnav').innerHTML = `<span class="topnav-ind" aria-hidden="true"></span>${NAV.filter((n) => !n.center)
+    .map((n) => `<a href="${n.href}" data-nav="${n.id}">${icon(n.icon, 'w-4 h-4')}${n.label}</a>`).join('')}`;
+  $('#aiTopBtn').innerHTML = `${icon('assistant', 'w-4 h-4')}Asistenti`;
+  $('#topLive').innerHTML = V.liveBadge();
+  updateHistoryBadge();
   $('#gearBtn').innerHTML = icon('settings', 'w-[18px] h-[18px]');
   AssistantUI.icons();
   AssistantUI.mount();
@@ -320,8 +401,10 @@ function boot() {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && (!market.updated || Date.now() - market.updated > 120_000)) refreshMarket();
   });
+  document.fonts?.ready.then(moveTopIndicator);
   requestAnimationFrame(() => {
     document.body.classList.add('ready');
+    moveTopIndicator();
     setTimeout(() => $('#intro')?.remove(), 700);
   });
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {

@@ -2,7 +2,7 @@
 <html lang="sq">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-visual">
 <meta name="theme-color" content="#05080d">
 <meta name="description" content="KALKULO X — kalkulator financiar për Kosovën: paga neto, Trusti, dogana e veturave, energjia, tatimi në pronë, valutat dhe kriptovalutat.">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,38 +35,50 @@
 
 <div id="frame">
   <div id="app">
-    <header class="px-5 pb-3 safe-t flex items-center justify-between relative z-30">
-      <a href="#/" class="flex items-center gap-3" aria-label="KALKULO X — Ballina">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-700 flex items-center justify-center shadow-[0_6px_18px_rgba(16,185,129,.35)]">
-          <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2"/></svg>
+    <!-- Pjesa e sipërme fikse: header + navigim (desktop) + ticker -->
+    <header id="top" class="topbar">
+      <div class="topbar-row">
+        <a href="#/" class="flex items-center gap-3 shrink-0" aria-label="KALKULO X — Ballina">
+          <div class="brand-mark">
+            <svg class="w-5 h-5 text-black" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h2M14 11h2M8 15h2M14 15h2"/></svg>
+          </div>
+          <div class="leading-none">
+            <p class="dsp text-[15px] font-bold">KALKULO <span class="text-emerald-500">X</span></p>
+            <span id="crumb" class="crumb">Platforma financiare</span>
+          </div>
+        </a>
+        <nav id="topnav" class="topnav" aria-label="Navigimi kryesor"></nav>
+        <div class="flex items-center gap-2 shrink-0">
+          <span id="topLive" class="hidden sm:inline-flex"></span>
+          <a href="#/assistant" id="aiTopBtn" class="ai-top press" aria-label="Asistenti"></a>
+          <a href="#/settings" id="gearBtn" class="icon-btn sm press" aria-label="Cilësimet"></a>
         </div>
-        <div class="leading-none">
-          <p class="dsp text-[15px] font-bold">KALKULO <span class="text-emerald-500">X</span></p>
-          <span class="text-[8px] uppercase tracking-[0.22em]" style="color:var(--muted)">Platforma financiare</span>
+      </div>
+      <div id="tbar" class="tbar" aria-label="Tregjet live">
+        <div class="tbar-label">
+          <span class="relative flex h-1.5 w-1.5"><span id="tickDot" class="relative rounded-full h-1.5 w-1.5 bg-emerald-500"></span><span class="animate-ping absolute h-full w-full rounded-full bg-emerald-500 opacity-75"></span></span>
+          <span class="text-[8px] font-bold uppercase tracking-[0.18em]">Live</span>
         </div>
-      </a>
-      <div class="flex items-center gap-2">
-        <a href="#/history" id="historyBtn" class="icon-btn sm press" aria-label="Historiku"></a>
-        <a href="#/settings" id="gearBtn" class="icon-btn sm press" aria-label="Cilësimet"></a>
+        <div class="tick" id="tick"></div>
       </div>
     </header>
 
-    <main class="flex-1 relative overflow-clip z-10">
+    <main id="main">
       <div id="view" class="nosb"></div>
     </main>
 
-    <div id="tbar" class="absolute left-0 right-0 z-20 bg-black/45 backdrop-blur-xl border-y border-white/5 flex items-center overflow-hidden" aria-label="Tregjet live">
-      <div class="relative shrink-0 px-3 h-full flex items-center gap-2 bg-[#04070b] border-r border-white/5 z-10">
-        <span class="relative flex h-1.5 w-1.5"><span id="tickDot" class="relative rounded-full h-1.5 w-1.5 bg-emerald-500"></span><span class="animate-ping absolute h-full w-full rounded-full bg-emerald-500 opacity-75"></span></span>
-        <span class="text-[8px] font-bold uppercase tracking-[0.18em]">Live</span>
+    <!-- Menuja e poshtme (telefon) -->
+    <nav id="dock" class="dock" aria-label="Navigimi kryesor">
+      <div class="dock-bar">
+        <span class="dock-ind" aria-hidden="true"></span>
+        <div id="dockItems" class="dock-items"></div>
       </div>
-      <div class="tick" id="tick"></div>
-    </div>
-
-    <nav id="nav" class="absolute bottom-0 left-0 right-0 panel border-t border-white/5 flex items-stretch px-3 z-30" aria-label="Navigimi kryesor"></nav>
+    </nav>
   </div>
 
   <!-- Asistenti -->
+  <div id="scrim" aria-hidden="true"></div>
+
   <section id="ai" class="overlay" aria-hidden="true" aria-label="Asistenti">
     <div class="px-5 pb-4 safe-t flex items-center justify-between border-b border-white/5">
       <div class="flex items-center gap-3">

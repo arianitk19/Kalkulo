@@ -5,6 +5,7 @@ Platformë financiare për Kosovën — PWA statike, pa server dhe pa llogari.
 **Modulet:** Paga (bruto ⇄ neto) · Trusti · Këmbimi valutor · Kriptovalutat · Energjia (KESCO) · Dogana e veturave · Subvencionet bujqësore · Karburanti · Tatimi në pronë · Asistenti.
 
 ## Veçoritë
+- Header dhe menu fikse: menu lundruese poshtë në telefon (fshihet kur hapet tastiera), navigim lart në tablet/desktop
 - Router me hash (`#/calc/paga`) — butoni “mbrapa” dhe linket e drejtpërdrejta punojnë
 - Historik llogaritjesh, ruajtje automatike e vlerave, ndarje e rezultatit
 - Kurse dhe kripto live (me cache offline), ticker me ndryshimet reale 24h

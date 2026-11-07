@@ -1,5 +1,5 @@
 /* Service worker — e bën aplikacionin të punojë offline. Ndrysho VERSION pas çdo publikimi. */
-const VERSION = 'kalkulo-v2.0.0';
+const VERSION = 'kalkulo-v2.1.0';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/main.js', './js/views.js', './js/panels.js', './js/assistant.js',
