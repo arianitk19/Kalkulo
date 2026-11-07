@@ -374,8 +374,8 @@ function applyPrefs() {
 
 function buildShell() {
   $('#dockItems').innerHTML = NAV.map((n) => (n.center
-    ? `<a href="${n.href}" data-nav="${n.id}" class="dock-ai" aria-label="${n.label}"><span class="orb">${icon(n.icon, 'w-6 h-6')}</span></a>`
-    : `<a href="${n.href}" data-nav="${n.id}" class="dock-i" aria-label="${n.label}">${icon(n.icon, 'w-[22px] h-[22px]')}<span class="lbl">${n.label}</span>${n.id === 'history' ? '<span class="dock-badge" data-badge="history" hidden></span>' : ''}</a>`)).join('');
+    ? `<a href="${n.href}" data-nav="${n.id}" class="dock-ai" aria-label="${n.label}"><span class="orb">${icon(n.icon, 'w-[22px] h-[22px]')}</span></a>`
+    : `<a href="${n.href}" data-nav="${n.id}" class="dock-i" aria-label="${n.label}"><span class="pill">${icon(n.icon, 'w-[22px] h-[22px]')}${n.id === 'history' ? '<span class="dock-badge" data-badge="history" hidden></span>' : ''}</span><span class="lbl">${n.label}</span></a>`)).join('');
   $('#topnav').innerHTML = `<span class="topnav-ind" aria-hidden="true"></span>${NAV.filter((n) => !n.center)
     .map((n) => `<a href="${n.href}" data-nav="${n.id}">${icon(n.icon, 'w-4 h-4')}${n.label}</a>`).join('')}`;
   $('#aiTopBtn').innerHTML = `${icon('assistant', 'w-4 h-4')}Asistenti`;
