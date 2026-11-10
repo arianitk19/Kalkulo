@@ -66,7 +66,7 @@ function renderBase(r, hash) {
     view.innerHTML = renderView(r.view);
     document.title = r.view === 'overview' ? 'KALKULO X — Platforma financiare' : `${TITLES[r.view]} · KALKULO X`;
   }
-  view.scrollTo({ top: 0, behavior: 'instant' });
+  window.scrollTo({ top: 0, behavior: 'instant' });
   $('#top').classList.remove('scrolled');
   $('#crumb').textContent = r.view === 'calc' ? byId[r.id].short : TITLES[r.view];
   setActiveNav(r.view === 'calc' || r.view === 'hub' ? 'calc' : r.view);
@@ -107,6 +107,7 @@ function updateHistoryBadge() {
 
 function openOverlay(r) {
   state.overlay = r;
+  document.documentElement.classList.add('lock');
   $('#scrim').classList.add('on');
   if (r.overlay === 'assistant') {
     $('#sheet').classList.remove('open');
@@ -126,6 +127,7 @@ function openOverlay(r) {
 function closeOverlays() {
   if (!state.overlay) return;
   state.overlay = null;
+  document.documentElement.classList.remove('lock');
   $('#scrim').classList.remove('on');
   AssistantUI.close();
   const sheet = $('#sheet');
@@ -304,7 +306,9 @@ function bindEvents() {
 
   // Header: bëhet kompakt kur faqja lëviz
   const top = $('#top');
-  $('#view').addEventListener('scroll', (e) => top.classList.toggle('scrolled', e.target.scrollTop > 6), { passive: true });
+  const onScroll = () => top.classList.toggle('scrolled', window.scrollY > 6);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   // Prekja e faqes aktive në menu → kthehu në krye
   document.addEventListener('click', (e) => {
@@ -313,7 +317,7 @@ function bindEvents() {
     vibrate(6);
     if (a.getAttribute('href') === location.hash || (a.dataset.nav === 'overview' && !location.hash.replace('#/', ''))) {
       e.preventDefault();
-      $('#view').scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   });
 
@@ -360,11 +364,11 @@ function onMarketChange() {
 function rerenderBase() {
   if (!state.base) return;
   const view = $('#view');
-  const y = view.scrollTop;
+  const y = window.scrollY;
   if (state.base.view === 'calc') return;
   view.innerHTML = renderView(state.base.view);
   view.querySelectorAll('.fu,.stg').forEach((el) => el.classList.remove('fu', 'stg'));
-  view.scrollTop = y;
+  window.scrollTo({ top: y, behavior: 'instant' });
 }
 
 /* ---------------- shell ---------------- */
@@ -408,7 +412,14 @@ function boot() {
     setTimeout(() => $('#intro')?.remove(), 700);
   });
   if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
-    navigator.serviceWorker.register('./sw.js').catch(() => { /* jo kritike */ });
+    const hadController = !!navigator.serviceWorker.controller;
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (hadController && !reloaded) { reloaded = true; location.reload(); }
+    });
+    navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' })
+      .then((reg) => reg.update())
+      .catch(() => { /* jo kritike */ });
   }
 }
 

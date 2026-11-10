@@ -33,8 +33,7 @@
   <h1 class="dsp text-4xl font-extrabold mt-7">KALKULO <span class="text-emerald-500">X</span></h1>
 </div>
 
-<div id="frame">
-  <div id="app">
+<div id="app">
     <!-- Pjesa e sipërme fikse: header + navigim (desktop) + ticker -->
     <header id="top" class="topbar">
       <div class="topbar-row">
@@ -66,15 +65,16 @@
     <main id="main">
       <div id="view" class="nosb"></div>
     </main>
+</div>
 
-    <!-- Menuja e poshtme (telefon) -->
-    <nav id="dock" class="dock" aria-label="Navigimi kryesor">
-      <div class="dock-bar">
-        <span class="dock-ind" aria-hidden="true"></span>
-        <div id="dockItems" class="dock-items"></div>
-      </div>
-    </nav>
+<!-- Menuja e poshtme (telefon) -->
+<nav id="dock" class="dock" aria-label="Navigimi kryesor">
+  <div class="dock-bar">
+    <span class="dock-ind" aria-hidden="true"></span>
+    <div id="dockItems" class="dock-items"></div>
   </div>
+</nav>
+
 
   <!-- Asistenti -->
   <div id="scrim" aria-hidden="true"></div>
@@ -102,7 +102,6 @@
   <aside id="sheet" class="overlay nosb" aria-hidden="true"></aside>
 
   <div id="toast" role="status" aria-live="polite"></div>
-</div>
 
 <noscript><p style="padding:2rem;text-align:center">KALKULO X kërkon JavaScript.</p></noscript>
 </body>

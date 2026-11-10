@@ -25,16 +25,15 @@
 
 @layer base {
   * { -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; background: var(--bg); }
+  html { background: var(--bg); -webkit-text-size-adjust: 100%; }
+  html.lock, html.lock body { overflow: hidden; }
   body {
     font-family: var(--font-sans);
     background: var(--bg);
     color: #e8edf3;
-    overflow: hidden;
-    overflow: clip;
     letter-spacing: -0.01em;
-    height: 100dvh;
-    overscroll-behavior: none;
+    min-height: 100dvh;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
   }
   h1, h2, h3, .dsp { font-family: var(--font-display); letter-spacing: -0.02em; }
@@ -51,14 +50,12 @@
   [hidden] { display: none !important; }
 }
 
-/* ---------- layout (app shell: header & menu fiks, vetëm #view lëviz) ---------- */
-#frame { position: fixed; inset: 0; overflow: hidden; overflow: clip; z-index: 10; }
-#app { position: absolute; inset: 0; overflow: clip; display: flex; flex-direction: column; opacity: 0; transition: opacity .5s ease; }
+/* ---------- layout: faqja lëviz normalisht; header ngjitet lart, menuja fiks poshtë ---------- */
+#app { position: relative; z-index: 10; min-height: 100dvh; display: flex; flex-direction: column; opacity: 0; transition: opacity .5s ease; }
 body.ready #app { opacity: 1; }
-#main { position: relative; flex: 1; min-height: 0; overflow: clip; z-index: 10; }
+#main { position: relative; flex: 1; }
 #view {
-  height: 100%; overflow-y: auto; overscroll-behavior: contain; scroll-behavior: smooth;
-  padding: 18px max(20px, env(safe-area-inset-left)) calc(var(--dockh) + var(--safeb) + 24px) max(20px, env(safe-area-inset-right));
+  padding: 18px max(20px, env(safe-area-inset-left)) calc(var(--dockh) + var(--safeb) + 28px) max(20px, env(safe-area-inset-right));
 }
 .safe-t { padding-top: calc(var(--safet) + 16px); }
 .page { width: 100%; max-width: 1120px; margin-inline: auto; }
@@ -119,10 +116,9 @@ label.card:focus-within { border-color: rgb(16 185 129 / .35); }
 
 /* ---------- header fiks ---------- */
 .topbar {
-  position: relative; z-index: 40; flex-shrink: 0;
+  position: sticky; top: 0; z-index: 40;
   padding-top: var(--safet);
-  background: linear-gradient(to bottom, rgb(5 8 13 / .92), rgb(5 8 13 / .78));
-  backdrop-filter: blur(22px) saturate(160%); -webkit-backdrop-filter: blur(22px) saturate(160%);
+  background: linear-gradient(to bottom, #05080d, #070b11);
   border-bottom: 1px solid transparent; transition: border-color .3s, box-shadow .3s;
 }
 .topbar.scrolled { border-bottom-color: var(--line); box-shadow: 0 10px 30px -12px rgb(0 0 0 / .7); }
@@ -159,6 +155,7 @@ label.card:focus-within { border-color: rgb(16 185 129 / .35); }
 .dock {
   position: fixed; z-index: 50; left: 0; right: 0; bottom: 0;
   padding: 0 env(safe-area-inset-right) var(--safeb) env(safe-area-inset-left);
+  transform: translateZ(0); -webkit-transform: translateZ(0);
   background: linear-gradient(to bottom, #0b1017, #070a0f);
   border-top: 1px solid rgb(255 255 255 / .07);
   box-shadow: 0 -12px 30px -18px rgb(0 0 0 / .9);
@@ -195,7 +192,7 @@ label.card:focus-within { border-color: rgb(16 185 129 / .35); }
 .dock-ai.on .orb { box-shadow: 0 0 0 3px rgb(16 185 129 / .25), 0 8px 20px -8px rgb(16 185 129 / .9); }
 
 /* tastiera e hapur → menuja fshihet që të mos mbulojë fushat */
-body.kb-open .dock { transform: translateY(110%); }
+body.kb-open .dock { transform: translateY(110%); pointer-events: none; }
 
 /* ---------- rezolucionet ---------- */
 @media (max-width: 359px) {
@@ -218,16 +215,16 @@ body.kb-open .dock { transform: translateY(110%); }
   .dock { display: none; }
   .topnav { display: flex; }
   .ai-top { display: inline-flex; align-items: center; gap: 6px; padding: 9px 14px; border-radius: 12px; font-size: 12px; font-weight: 700; color: #03110b; background: linear-gradient(135deg, #6ee7b7, #10b981); box-shadow: 0 8px 20px -8px rgb(16 185 129 / .8); }
-  #view { padding: 28px 32px 48px; }
+  #view { padding: 28px 32px 56px; }
   .topbar-row { padding-inline: 32px; }
   .crumb { max-width: 220px; }
 }
 
 /* ---------- overlays ---------- */
-.overlay { position: absolute; inset: 0; z-index: 1100; background: #070a10; visibility: hidden; transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .3s, visibility 0s .45s; }
+.overlay { position: fixed; inset: 0; z-index: 1100; overscroll-behavior: contain; background: #070a10; visibility: hidden; transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .3s, visibility 0s .45s; }
 .overlay.open { visibility: visible; transition: transform .45s cubic-bezier(.22, 1, .36, 1), opacity .3s, visibility 0s; }
 #sheet { transform: translateX(100%); overflow-y: auto; border-left: 1px solid var(--line); }
-#scrim { position: absolute; inset: 0; z-index: 1050; background: rgb(0 0 0 / .55); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
+#scrim { position: fixed; inset: 0; z-index: 1050; background: rgb(0 0 0 / .55); backdrop-filter: blur(4px); opacity: 0; visibility: hidden; transition: opacity .3s, visibility 0s .3s; }
 #scrim.on { opacity: 1; visibility: visible; transition: opacity .3s; }
 @media (min-width: 768px) {
   .overlay { left: auto; width: 440px; border-left: 1px solid var(--line); box-shadow: -30px 0 60px -20px rgb(0 0 0 / .8); }
@@ -249,7 +246,7 @@ body.kb-open .dock { transform: translateY(110%); }
 .mic-live { animation: ml 1s infinite; }
 @keyframes ml { from { box-shadow: 0 0 0 0 rgb(16 185 129 / .45); } to { box-shadow: 0 0 0 18px rgb(16 185 129 / 0); } }
 
-#toast { position: absolute; bottom: calc(var(--dockh) + var(--safeb) + var(--dockgap) + 16px); left: 50%; z-index: 3000; transform: translate(-50%, 18px); box-shadow: 0 14px 34px -10px rgb(0 0 0 / .8); opacity: 0; pointer-events: none; transition: .3s; background: var(--panel); backdrop-filter: blur(20px); border: 1px solid rgb(16 185 129 / .25); border-radius: .8rem; padding: .7rem 1.2rem; font-size: .8rem; font-weight: 600; white-space: nowrap; }
+#toast { position: fixed; bottom: calc(var(--dockh) + var(--safeb) + var(--dockgap) + 16px); left: 50%; z-index: 3000; transform: translate(-50%, 18px); box-shadow: 0 14px 34px -10px rgb(0 0 0 / .8); opacity: 0; pointer-events: none; transition: .3s; background: var(--panel); backdrop-filter: blur(20px); border: 1px solid rgb(16 185 129 / .25); border-radius: .8rem; padding: .7rem 1.2rem; font-size: .8rem; font-weight: 600; white-space: nowrap; }
 #toast.show { opacity: 1; transform: translate(-50%, 0); }
 
 /* accordion */

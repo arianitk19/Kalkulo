@@ -1,5 +1,5 @@
 /* Service worker — e bën aplikacionin të punojë offline. Ndrysho VERSION pas çdo publikimi. */
-const VERSION = 'kalkulo-v2.1.1';
+const VERSION = 'kalkulo-v2.2.0';
 const SHELL = [
   './', './index.html', './manifest.webmanifest', './css/styles.css',
   './js/main.js', './js/views.js', './js/panels.js', './js/assistant.js',
@@ -44,13 +44,16 @@ self.addEventListener('fetch', (e) => {
 
   if (url.origin !== location.origin) return;
 
-  // Skedarët e aplikacionit: stale-while-revalidate
-  e.respondWith(caches.open(VERSION).then(async (c) => {
-    const hit = await c.match(request, { ignoreSearch: request.mode === 'navigate' });
-    const net = fetch(request).then((res) => {
+  // Skedarët e aplikacionit: network-first (versioni i ri del menjëherë), cache vetëm offline
+  e.respondWith((async () => {
+    const c = await caches.open(VERSION);
+    try {
+      const res = await fetch(request, { cache: 'no-cache' });
       if (res.ok) c.put(request, res.clone());
       return res;
-    }).catch(() => hit || (request.mode === 'navigate' ? c.match('./index.html') : undefined));
-    return hit || net;
-  }));
+    } catch {
+      return (await c.match(request, { ignoreSearch: true }))
+        || (request.mode === 'navigate' ? c.match('./index.html') : Response.error());
+    }
+  })());
 });
